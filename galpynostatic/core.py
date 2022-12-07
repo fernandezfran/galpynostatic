@@ -17,6 +17,8 @@ import matplotlib.pyplot as plt
 
 import numpy as np
 
+import scipy.interpolate
+
 import sklearn.metrics
 
 # ============================================================================
@@ -29,7 +31,7 @@ class Galvanostatic:
 
     Parameters
     ----------
-    dataset : `pd.DataFrame`
+    dataset : pd.DataFrame
         dataset with a map of xmax as function of l and chi parameters, this can
         be loaded using `galpynostatic.dataset` load functions.
 
@@ -160,3 +162,61 @@ class Galvanostatic:
                 for c_rate in C_rates
             ]
         )
+
+    def plot_vs_data(self):
+        raise NotImplementedError
+
+    def plot_in_surface(self, C_rates, ax=None):
+        """A plot showing in which region of the map the fit is found.
+
+        Parameters
+        ----------
+        C_rates : array-like
+            C_rate samples.
+
+        ax : matplotlib.pyplot.Axis, default=None
+            current matplotlib axis
+
+        Returns
+        -------
+        matplotlib.pyplot.Axis
+        """
+        # check stackoverflow question number 39727040
+        ax = plt.gca() if ax is None else ax
+
+        # map plot
+        Z = scipy.interpolate.interp2d(
+            self.dataset.l, self.dataset.chi, self.dataset.xmax
+        )(self.dataset.l, self.dataset.chi)
+
+        im = ax.imshow(
+            Z,
+            extent=[
+                self.dataset.l.min(),
+                self.dataset.l.max(),
+                self.dataset.chi.min(),
+                self.dataset.chi.max(),
+            ],
+            origin="lower",
+        )
+        clb = plt.colorbar(im)
+        clb.ax.set_ylabel(r"x$_{max}$")
+        clb.ax.set_ylim((0, 1))
+
+        ax.scatter(self.dataset.l, self.dataset.chi, 400, facecolors="none")
+
+        ax.set_xlabel(r"log($\ell$)")
+        ax.set_ylabel(r"log($\Xi$)")
+
+        # fitted data plot
+        ax.scatter(
+            C_rates,
+            self.predict(C_rates),
+            marker="^",
+            color="k",
+            linestyle="--",
+            label="fitted data",
+        )
+        ax.legend(loc="upper center", bbox_to_anchor=(0.5, 1.05))
+
+        return ax
