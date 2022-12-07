@@ -58,7 +58,7 @@ def grid_search(y_true, d, crates, dcoeffs, k0s):
 
 def fit():
     y_true = np.array([0.375, 0.365, 0.325, 0.295, 0.235]) / 0.4
-    d = 2 * np.sqrt(0.25 * 8.04e-6 / np.pi)
+    d = np.sqrt(0.25 * 8.04e-6 / np.pi)
     crates = [2.5, 5.0, 7.5, 12.5, 25.0]
     dcoeffs = 10.**np.arange(-10, -6, 0.2)
     k0s = 10.**np.arange(-9, -5, 0.2)
