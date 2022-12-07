@@ -1,0 +1,11 @@
+include LICENSE.md
+include README.md
+include pyproject.toml
+
+recursive-include galpynostatic *.py
+recursive-include galpynostatic *.tsv
+
+exclude tox.ini
+
+recursive-exclude tests *
+recursive-exclude docs *

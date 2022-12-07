@@ -2,3 +2,5 @@
 *html
 .ipynb_checkpoints
 __pycache__/
+build/
+galpynostatic.egg-info/

@@ -1,0 +1,47 @@
+[tool.black]
+line-length = 79
+target-version = ["py310"]
+
+# =============================================================================
+# PACKAGING
+# =============================================================================
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "galpynostatic"
+version = "0.0.1"
+authors = [{name = "Francisco Fernandez", email = "fernandezfrancisco2195@gmail.com"}]
+readme = "README.md"
+license = {file = "LICENSE.md"}
+description = "Work in progress."
+keywords = [
+    "galvanostatic",
+    "computational-physics-model",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Scientific/Engineering",
+]
+urls = { Homepage = "https://github.com/fernandezfran/galpynostatic" }
+dependencies = [
+    "more-itertools",
+    "matplotlib",
+    "numpy",
+    "pandas",
+    "scikit-learn",
+    "scipy",
+]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["galpynostatic", "galpynostatic.*"]
+namespaces = false
