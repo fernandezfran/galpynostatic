@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 import sklearn.metrics
 
-DF = pd.read_csv("../sphere_150mV.dat", delimiter="\t")
+DF = pd.read_csv("../../sphere_150mV.dat", delimiter="\t")
 
 
 def l(crate, d, dcoeff):

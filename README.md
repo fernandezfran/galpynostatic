@@ -1,1 +1,3 @@
-# LMNO: an advanced lithium-ion battery cathode material
+# galpynostatic
+
+Work in progress.
