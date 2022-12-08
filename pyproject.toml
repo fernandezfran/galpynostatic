@@ -37,6 +37,7 @@ dependencies = [
     "pandas",
     "scikit-learn",
     "scipy",
+    "importlib_metadata",
 ]
 
 [tool.setuptools]
