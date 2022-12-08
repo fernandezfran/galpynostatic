@@ -163,8 +163,52 @@ class Galvanostatic:
             ]
         )
 
-    def plot_vs_data(self):
-        raise NotImplementedError
+    def plot_vs_data(
+        self, C_rates, xmaxs, ax=None, data_kws=None, predictions_kws=None
+    ):
+        """Plot predictions against data.
+
+        Parameters
+        ----------
+        C_rates : array-like
+            C_rate samples.
+
+        xmaxs : array-like
+            Data of normalized discharge capacities.
+
+        ax : matplotlib.pyplot.Axis, default=None
+            the current axes.
+
+        data_kws : dict, default=None
+            additional keyword arguments that are passed and are documented in
+            matplotlib.pyplot.plot for the data points.
+
+        predictions_kws : dict, default=None
+            additional keyword arguments that are passed and are documented in
+            matplotlib.pyplot.plot for the predictions points.
+
+        Returns
+        -------
+        matplotlib.pyplot.Axis
+            the current axes.
+        """
+        ax = plt.gca() if ax is None else ax
+
+        data_kws = {} if data_kws is None else data_kws
+        predictions_kws = {} if predictions_kws is None else predictions_kws
+
+        keys = ["marker", "linestyle", "label"]
+
+        for key, value in zip(keys, ["s", "--", "data"]):
+            data_kws.setdefault(key, value)
+
+        for key, value in zip(keys, ["o", "--", "model predictions"]):
+            predictions_kws.setdefault(key, value)
+
+        ax.plot(C_rates, xmaxs, **data_kws)
+        ax.plot(C_rates, self.predict(C_rates), **predictions_kws)
+
+        return ax
 
     def plot_in_surface(self, C_rates, ax=None):
         """A plot showing in which region of the map the fit is found.
@@ -175,16 +219,15 @@ class Galvanostatic:
             C_rate samples.
 
         ax : matplotlib.pyplot.Axis, default=None
-            current matplotlib axis
+            current matplotlib axis.
 
         Returns
         -------
         matplotlib.pyplot.Axis
         """
-        # check stackoverflow question number 39727040
         ax = plt.gca() if ax is None else ax
 
-        # map plot
+        # map plot : check stackoverflow question number 39727040
         Z = scipy.interpolate.interp2d(
             self.dataset.l, self.dataset.chi, self.dataset.xmax
         )(self.dataset.l, self.dataset.chi)
