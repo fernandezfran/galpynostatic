@@ -253,9 +253,8 @@ class GalvanostaticModel:
 
         # fitted data plot
         ax.scatter(
-            C_rates,
-            self.predict(C_rates),
-            marker="^",
+            np.log10(self._l(C_rates)),
+            np.log10(self._chi(C_rates)),
             color="k",
             linestyle="--",
             label="fitted data",

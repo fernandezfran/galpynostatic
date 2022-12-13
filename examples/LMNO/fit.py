@@ -62,6 +62,7 @@ def fit():
     crates = [2.5, 5.0, 7.5, 12.5, 25.0]
     dcoeffs = 10.**np.arange(-10, -6, 0.2)
     k0s = 10.**np.arange(-9, -5, 0.2)
+    print(dcoeffs)
     print(
         y_true,
         grid_search(y_true, d, crates, dcoeffs, k0s)
