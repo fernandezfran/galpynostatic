@@ -1,6 +1,11 @@
+__pycache__/
+.ipynb_checkpoints
 *pdf
 *html
-.ipynb_checkpoints
-__pycache__/
+
 build/
 galpynostatic.egg-info/
+
+examples/*cpp
+examples/*dat
+examples/*out

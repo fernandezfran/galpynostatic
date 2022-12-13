@@ -5,7 +5,7 @@
 # DOCS
 # ============================================================================
 
-"""Core class of galpynostatic code."""
+"""Model for a galvanostatic fitting."""
 
 # ============================================================================
 # IMPORTS
@@ -26,8 +26,8 @@ import sklearn.metrics
 # ============================================================================
 
 
-class Galvanostatic:
-    """Galvanostatic class.
+class GalvanostaticModel:
+    """Galvanostatic Model class.
 
     Parameters
     ----------
