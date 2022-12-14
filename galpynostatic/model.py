@@ -26,8 +26,8 @@ import sklearn.metrics
 # ============================================================================
 
 
-class GalvanostaticModel:
-    """Galvanostatic Model class.
+class GalvanostaticRegressor:
+    """Galvanostatic Regressor model class.
 
     Parameters
     ----------

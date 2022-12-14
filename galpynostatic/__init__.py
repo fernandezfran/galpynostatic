@@ -14,7 +14,7 @@
 import importlib_metadata
 
 from . import datasets
-from .model import GalvanostaticModel
+from .model import GalvanostaticRegressor
 
 
 # =============================================================================
