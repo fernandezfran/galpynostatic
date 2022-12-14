@@ -1,4 +1,4 @@
-include LICENSE.md
+include LICENSE
 include README.md
 include pyproject.toml
 
@@ -9,3 +9,4 @@ exclude tox.ini
 
 recursive-exclude tests *
 recursive-exclude docs *
+recursive-exclude examples *
