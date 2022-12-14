@@ -17,14 +17,23 @@ from . import datasets
 from .model import GalvanostaticRegressor
 from .preprocessing import (
     get_discharge_capacities,
-    get_resistance,
     substract_equilibrium_potential,
+    substract_resistance,
 )
 
 
 # =============================================================================
 # IMPORTS
 # =============================================================================
+
+__all__ = [
+    "datasets",
+    "GalvanostaticRegressor",
+    "get_discharge_capacities",
+    "substract_resistance",
+    "substract_equilibrium_potential",
+]
+
 
 NAME = "galpynostatic"
 

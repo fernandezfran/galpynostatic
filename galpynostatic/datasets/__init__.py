@@ -5,7 +5,7 @@
 # DOCS
 # ============================================================================
 
-"""This galpynostatic.dataset load the data needed for the fits."""
+"""The `galpynostatic.dataset` module loads the data needed for the fits."""
 
 # ============================================================================
 # IMPORTS

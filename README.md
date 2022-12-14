@@ -5,7 +5,7 @@ Work in progress.
 
 ## Requirements
 
-You need Python 3.10+ to run galpynostatic.
+You need Python 3.9+ to run galpynostatic.
 
 
 ## Installation

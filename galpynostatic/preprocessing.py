@@ -5,7 +5,7 @@
 # DOCS
 # ============================================================================
 
-"""This module provides the usual utilities for experimental data handling."""
+"""Common utilities for experimental data processing."""
 
 # ============================================================================
 # IMPORTS
@@ -18,12 +18,15 @@
 
 
 def get_discharge_capacities():
-    pass
-
-
-def get_resistance():
-    pass
+    """Obtain the discharge capacities at a given cut-off potential."""
+    raise NotImplementedError
 
 
 def substract_equilibrium_potential():
-    pass
+    """Substract the equilibrium potential of the galvanostatic profiles."""
+    raise NotImplementedError
+
+
+def substract_resistance():
+    """Substract the resistance contribution of the galvanostatic profiles."""
+    raise NotImplementedError

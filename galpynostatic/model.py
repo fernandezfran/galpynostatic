@@ -32,8 +32,8 @@ class GalvanostaticRegressor:
     Parameters
     ----------
     dataset : pd.DataFrame
-        dataset with a map of xmax as function of l and chi parameters, this can
-        be loaded using `galpynostatic.dataset` load functions.
+        dataset with a map of xmax as function of l and chi parameters, this
+        can be loaded using `galpynostatic.dataset` load functions.
 
     d : float
         characteristic diffusion length.
@@ -211,7 +211,7 @@ class GalvanostaticRegressor:
         return ax
 
     def plot_in_surface(self, C_rates, ax=None):
-        """A plot showing in which region of the map the fit is found.
+        """Plot showing in which region of the map the fit is found.
 
         Parameters
         ----------
