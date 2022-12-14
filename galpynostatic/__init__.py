@@ -15,6 +15,11 @@ import importlib_metadata
 
 from . import datasets
 from .model import GalvanostaticRegressor
+from .preprocessing import (
+    get_discharge_capacities,
+    get_resistance,
+    substract_equilibrium_potential,
+)
 
 
 # =============================================================================

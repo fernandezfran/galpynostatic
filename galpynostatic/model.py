@@ -73,7 +73,7 @@ class GalvanostaticRegressor:
 
     def _l(self, c_rate):
         """Value of l parameter."""
-        return (self.d ** 2 * c_rate) / (self.z * self.t_h * self.dcoeff_)
+        return (self.d**2 * c_rate) / (self.z * self.t_h * self.dcoeff_)
 
     def _chi(self, c_rate):
         """Value of chi parameter."""
