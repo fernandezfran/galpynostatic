@@ -5,6 +5,7 @@ __pycache__/
 
 .tox/
 build/
+docs/build/
 *.egg-info/
 
 examples/*cpp
