@@ -5,7 +5,7 @@
 # DOCS
 # ============================================================================
 
-"""Core class of galpynostatic code."""
+"""Model for a galvanostatic fitting."""
 
 # ============================================================================
 # IMPORTS
@@ -26,8 +26,8 @@ import sklearn.metrics
 # ============================================================================
 
 
-class Galvanostatic:
-    """Galvanostatic class.
+class GalvanostaticModel:
+    """Galvanostatic Model class.
 
     Parameters
     ----------
@@ -253,9 +253,8 @@ class Galvanostatic:
 
         # fitted data plot
         ax.scatter(
-            C_rates,
-            self.predict(C_rates),
-            marker="^",
+            np.log10(self._l(C_rates)),
+            np.log10(self._chi(C_rates)),
             color="k",
             linestyle="--",
             label="fitted data",
