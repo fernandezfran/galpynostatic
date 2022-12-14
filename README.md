@@ -1,5 +1,7 @@
 # galpynostatic
 
+[![galpynostatics CI](https://github.com/fernandezfran/galpynostatic/actions/workflows/CI.yml/badge.svg)](https://github.com/fernandezfran/galpynostatic/actions/workflows/CI.yml)
+
 Work in progress.
 
 
