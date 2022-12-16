@@ -20,19 +20,19 @@ import pytest
 
 
 def test_load_planar():
-    """Text the planar dataset."""
+    """Test the planar dataset."""
     with pytest.raises(NotImplementedError):
         galpynostatic.datasets.load_planar()
 
 
 def test_load_cylindrical():
-    """Text the cylindrical dataset."""
+    """Test the cylindrical dataset."""
     with pytest.raises(NotImplementedError):
         galpynostatic.datasets.load_cylindrical()
 
 
 def test_load_spherical():
-    """Text the spherical dataset."""
+    """Test the spherical dataset."""
     sph = galpynostatic.datasets.load_spherical()
 
     assert isinstance(sph, pd.DataFrame)
