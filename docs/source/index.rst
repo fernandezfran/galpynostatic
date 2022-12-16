@@ -15,7 +15,7 @@ galpynostatic
 Requirements
 ------------
 
-You need Python 3.9+ to run galpynostatic.
+You need Python 3.8+ to run galpynostatic.
 
 
 Repository

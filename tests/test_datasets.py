@@ -14,6 +14,11 @@ import pandas as pd
 import pytest
 
 
+# =============================================================================
+# TESTS
+# =============================================================================
+
+
 def test_load_planar():
     """Text the planar dataset."""
     with pytest.raises(NotImplementedError):
