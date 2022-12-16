@@ -8,7 +8,12 @@
 import galpynostatic.datasets
 import galpynostatic.model
 
+import matplotlib.pyplot as plt
+from matplotlib.testing.decorators import check_figures_equal
+
 import numpy as np
+
+import scipy.interpolate
 
 # =============================================================================
 # CONSTANTS
@@ -44,7 +49,6 @@ def test_fit():
     # fit
     greg = greg.fit(crates, xmaxs)
 
-    print(greg.predict(crates))
     # tests
     np.testing.assert_almost_equal(greg.dcoeff_, ref_dcoeff, 10)
     np.testing.assert_almost_equal(greg.k0_, ref_k0, 7)
@@ -95,3 +99,86 @@ def test_k0s():
     np.testing.assert_array_almost_equal(
         greg.k0s, 10.0 ** np.arange(-14, -5, 0.1)
     )
+
+
+@check_figures_equal(extensions=["png", "pdf"], tol=0.000001)
+def test_plot_vs_data(fig_test, fig_ref):
+    """Test the plot vs data points."""
+    # regressor obj
+    greg = galpynostatic.model.GalvanostaticRegressor(
+        DATASET, np.sqrt(0.25 * 8.04e-6 / np.pi), 3
+    )
+
+    # nishikawa fitted res
+    greg.dcoeff_ = 1.0e-09
+    greg.k0_ = 1.0e-6
+
+    # nishikawa data
+    crates = np.array([2.5, 5, 7.5, 12.5, 25.0])
+    xmaxs = np.array([0.973333, 0.946667, 0.84, 0.68, 0.52])
+
+    # g reg plot
+    test_ax = fig_test.subplots()
+    greg.plot_vs_data(crates, xmaxs, ax=test_ax)
+
+    # ref plot
+    ref_ax = fig_ref.subplots()
+    ref_ax.plot(crates, xmaxs, marker="s", linestyle="--")
+    ref_ax.plot(crates, greg.predict(crates), marker="o", linestyle="--")
+
+
+@check_figures_equal(extensions=["png", "pdf"], tol=0.000001)
+def test_plot_in_surface(fig_test, fig_ref):
+    """Test the plot vs data points."""
+    # regressor obj
+    greg = galpynostatic.model.GalvanostaticRegressor(
+        DATASET, np.sqrt(0.25 * 8.04e-6 / np.pi), 3
+    )
+
+    # nishikawa fitted res
+    greg.dcoeff_ = 1.0e-09
+    greg.k0_ = 1.0e-6
+
+    # nishikawa data
+    crates = np.array([2.5, 5, 7.5, 12.5, 25.0])
+
+    # g reg plot
+    test_ax = fig_test.subplots()
+    greg.plot_in_surface(crates, ax=test_ax)
+
+    # ref plot
+    fig_ref.axes[0].set_visible(False)
+    ref_ax = fig_ref.subplots()
+
+    # ref map
+    Z = scipy.interpolate.interp2d(DATASET.l, DATASET.chi, DATASET.xmax)(
+        DATASET.l, DATASET.chi
+    )
+    im = ref_ax.imshow(
+        Z,
+        extent=[
+            DATASET.l.min(),
+            DATASET.l.max(),
+            DATASET.chi.min(),
+            DATASET.chi.max(),
+        ],
+        origin="lower",
+    )
+    clb = plt.colorbar(im)
+    clb.ax.set_ylabel(r"x$_{max}$")
+    clb.ax.set_ylim((0, 1))
+    ref_ax.scatter(DATASET.l, DATASET.chi, 400, facecolors="none")
+
+    # ref data
+    ref_ax.scatter(
+        np.log10(greg._l(crates)),
+        np.log10(greg._chi(crates)),
+        color="k",
+        linestyle="--",
+        label="fitted data",
+    )
+
+    # ref labels and legend
+    ref_ax.set_xlabel(r"log($\ell$)")
+    ref_ax.set_ylabel(r"log($\Xi$)")
+    ref_ax.legend(loc="upper center", bbox_to_anchor=(0.5, 1.05))

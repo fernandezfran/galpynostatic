@@ -3,10 +3,12 @@ __pycache__/
 *pdf
 *html
 
-.tox/
+*.egg-info/
 build/
 docs/build/
-*.egg-info/
+
+.tox/
+result_images/
 
 examples/*cpp
 examples/*dat
