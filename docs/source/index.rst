@@ -39,7 +39,7 @@ Contact
 | **Author**
 | Francisco Fernandez
 
-For bugs or questions, pleas send an email to <fernandezfrancisco2195@gmail>
+For bugs or questions, please send an email to <fernandezfrancisco2195@gmail>
 
 
 Indices and tables
