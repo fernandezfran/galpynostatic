@@ -3,13 +3,43 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to galpynostatic's documentation!
-=========================================
+=============
+galpynostatic
+=============
+
+.. image:: https://github.com/fernandezfran/galpynostatic/actions/workflows/CI.yml/badge.svg
+   :target: https://github.com/fernandezfran/galpynostatic/actions/workflows/CI.yml
+   :alt: galpynostatic CI
+
+
+Requirements
+------------
+
+You need Python 3.9+ to run galpynostatic.
+
+
+Repository
+----------
+
+https://github.com/fernandezfran/sierras/
+
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+   install
+   tutorial.ipynb
+   galpynostatic
+
+
+Contact
+-------
+
+| **Author**
+| Francisco Fernandez
+
+For bugs or questions, pleas send an email to <fernandezfrancisco2195@gmail>
 
 
 Indices and tables
