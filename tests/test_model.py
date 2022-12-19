@@ -31,7 +31,7 @@ def test_fit():
     # reference values
     ref_dcoeff = 1e-9
     ref_k0 = 1e-6
-    ref_mse = 0.009160
+    ref_mse = 0.0098327
 
     # regressor obj
     greg = galpynostatic.model.GalvanostaticRegressor(
@@ -44,7 +44,9 @@ def test_fit():
 
     # nishikawa data
     crates = np.array([2.5, 5, 7.5, 12.5, 25.0])
-    xmaxs = np.array([0.973333, 0.946667, 0.84, 0.68, 0.52])
+    xmaxs = np.array(
+        [0.99656589, 0.97625474, 0.83079658, 0.72518132, 0.52573576]
+    )
 
     # fit
     greg = greg.fit(crates, xmaxs)
@@ -115,7 +117,9 @@ def test_plot_vs_data(fig_test, fig_ref):
 
     # nishikawa data
     crates = np.array([2.5, 5, 7.5, 12.5, 25.0])
-    xmaxs = np.array([0.973333, 0.946667, 0.84, 0.68, 0.52])
+    xmaxs = np.array(
+        [0.99656589, 0.97625474, 0.83079658, 0.72518132, 0.52573576]
+    )
 
     # g reg plot
     test_ax = fig_test.subplots()

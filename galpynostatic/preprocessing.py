@@ -48,19 +48,12 @@ def get_discharge_capacities(dfs, eq_pot, vcut=0.15, **kwargs):
         discharge capacities in the same order as the pd.DataFrame in the
         list
     """
-    xmaxs = []
-
-    for df in dfs:
-        # substract the equilibrium potential and add vcut
-        capacity = np.asarray(df.iloc[:, 0])
-        voltage = np.asarray(df.iloc[:, 1] - eq_pot + vcut)
-
-        # spline data points and get the root (when voltage = -vcut)
-        spl = scipy.interpolate.InterpolatedUnivariateSpline(
-            capacity, voltage, **kwargs
-        )
-        xmax = spl.roots()[0]
-
-        xmaxs.append(xmax)
-
-    return np.asarray(xmaxs, dtype=np.float32)
+    return np.asarray(
+        [
+            scipy.interpolate.InterpolatedUnivariateSpline(
+                df.iloc[:, 0], df.iloc[:, 1] - eq_pot + vcut, **kwargs
+            ).roots()[0]
+            for df in dfs
+        ],
+        dtype=np.float32,
+    )
