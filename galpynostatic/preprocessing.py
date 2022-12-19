@@ -36,7 +36,8 @@ def get_discharge_capacities(dfs, eq_pot, vcut=0.15, **kwargs):
         equilibrium potential in V
 
     vcut : float, default=0.15
-        cut-off potential in V
+        cut-off potential in V, the default value corresponds to 150 mV, which
+        is the one defined by the data of the distributed maps.
 
     **kwargs
         additional keyword arguments that are passed and are documented in

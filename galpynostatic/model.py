@@ -17,8 +17,6 @@ import matplotlib.pyplot as plt
 
 import numpy as np
 
-import scipy.interpolate
-
 import sklearn.metrics
 
 # ============================================================================
@@ -227,13 +225,18 @@ class GalvanostaticRegressor:
         """
         ax = plt.gca() if ax is None else ax
 
-        # map plot : check stackoverflow question number 39727040
-        Z = scipy.interpolate.interp2d(
-            self.dataset.l, self.dataset.chi, self.dataset.xmax
-        )(self.dataset.l, self.dataset.chi)
+        ls = np.unique(self.dataset.l)
+        chis = np.unique(self.dataset.chi)
+
+        Z = np.asarray(
+            [
+                self._xmax_in_map(10.0**l, 10.0**chi)
+                for l, chi in it.product(ls, chis)
+            ]
+        )
 
         im = ax.imshow(
-            Z,
+            Z.reshape(ls.size, chis.size).T,
             extent=[
                 self.dataset.l.min(),
                 self.dataset.l.max(),
@@ -245,8 +248,6 @@ class GalvanostaticRegressor:
         clb = plt.colorbar(im)
         clb.ax.set_ylabel(r"x$_{max}$")
         clb.ax.set_ylim((0, 1))
-
-        ax.scatter(self.dataset.l, self.dataset.chi, 400, facecolors="none")
 
         ax.set_xlabel(r"log($\ell$)")
         ax.set_ylabel(r"log($\Xi$)")

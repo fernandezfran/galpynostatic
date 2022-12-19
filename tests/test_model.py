@@ -5,6 +5,8 @@
 # IMPORTS
 # =============================================================================
 
+import itertools as it
+
 import galpynostatic.datasets
 import galpynostatic.model
 
@@ -12,8 +14,6 @@ import matplotlib.pyplot as plt
 from matplotlib.testing.decorators import check_figures_equal
 
 import numpy as np
-
-import scipy.interpolate
 
 # =============================================================================
 # CONSTANTS
@@ -155,11 +155,20 @@ def test_plot_in_surface(fig_test, fig_ref):
     ref_ax = fig_ref.subplots()
 
     # ref map
-    Z = scipy.interpolate.interp2d(DATASET.l, DATASET.chi, DATASET.xmax)(
-        DATASET.l, DATASET.chi
+    ls = np.unique(DATASET.l)
+    chis = np.unique(DATASET.chi)
+
+    Z = np.asarray(
+        [
+            galpynostatic.model.GalvanostaticRegressor(
+                DATASET, 1.0, 3
+            )._xmax_in_map(10.0**l, 10.0**chi)
+            for l, chi in it.product(ls, chis)
+        ]
     )
+
     im = ref_ax.imshow(
-        Z,
+        Z.reshape(ls.size, chis.size).T,
         extent=[
             DATASET.l.min(),
             DATASET.l.max(),
@@ -169,6 +178,7 @@ def test_plot_in_surface(fig_test, fig_ref):
         origin="lower",
     )
     clb = plt.colorbar(im)
+    clb.ax.set_xlabel("")
     clb.ax.set_ylabel(r"x$_{max}$")
     clb.ax.set_ylim((0, 1))
     ref_ax.scatter(DATASET.l, DATASET.chi, 400, facecolors="none")
