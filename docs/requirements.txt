@@ -1,4 +1,7 @@
-ipykernel
 Sphinx
 sphinx-rtd-theme
+
 nbsphinx
+
+ipykernel
+ipython!=8.7.0
