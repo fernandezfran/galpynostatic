@@ -141,7 +141,7 @@ class GalvanostaticRegressor:
 
         Parameters
         ----------
-        C_rates : array-like
+        C_rates : array-like of shape (n_measurements, 1).
             C-rate samples.
 
         xmaxs : array-like
@@ -171,7 +171,7 @@ class GalvanostaticRegressor:
 
         Parameters
         ----------
-        C_rates : array-like
+        C_rates : array-like of shape (n_measurements, 1).
             C_rate samples.
 
         Returns
@@ -181,7 +181,7 @@ class GalvanostaticRegressor:
         """
         return np.array(
             [
-                self._xmax_in_surface(self._l(c_rate), self._chi(c_rate))
+                self._xmax_in_surface(self._l(c_rate[0]), self._chi(c_rate[0]))
                 for c_rate in C_rates
             ]
         )

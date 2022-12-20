@@ -34,6 +34,28 @@ DATASET = galpynostatic.datasets.load_spherical()
 # =============================================================================
 
 
+def test_dcoeffs():
+    """A property test."""
+    greg = galpynostatic.model.GalvanostaticRegressor(
+        DATASET, np.sqrt(0.25 * 8.04e-6 / np.pi), 3
+    )
+
+    np.testing.assert_array_almost_equal(
+        greg.dcoeffs, 10.0 ** np.arange(-15, -6, 0.1)
+    )
+
+
+def test_k0s():
+    """A property test."""
+    greg = galpynostatic.model.GalvanostaticRegressor(
+        DATASET, np.sqrt(0.25 * 8.04e-6 / np.pi), 3
+    )
+
+    np.testing.assert_array_almost_equal(
+        greg.k0s, 10.0 ** np.arange(-14, -5, 0.1)
+    )
+
+
 def test_fit():
     """Test the fitting of the model: dcoeff, k0 and mse."""
     # reference values
@@ -51,7 +73,7 @@ def test_fit():
     greg.k0s = 10.0 ** np.arange(-9, -5, 1)
 
     # nishikawa data
-    crates = np.array([2.5, 5, 7.5, 12.5, 25.0])
+    crates = np.array([2.5, 5, 7.5, 12.5, 25.0]).reshape(-1, 1)
     xmaxs = np.array(
         [0.99656589, 0.97625474, 0.83079658, 0.72518132, 0.52573576]
     )
@@ -80,35 +102,13 @@ def test_predict():
     greg.k0_ = 1.0e-6
 
     # nishikawa data
-    crates = np.array([2.5, 5, 7.5, 12.5, 25.0])
+    crates = np.array([2.5, 5, 7.5, 12.5, 25.0]).reshape(-1, 1)
 
     # predict
     xmaxs = greg.predict(crates)
 
     # tests
     np.testing.assert_array_almost_equal(xmaxs, ref, 6)
-
-
-def test_dcoeffs():
-    """A property test."""
-    greg = galpynostatic.model.GalvanostaticRegressor(
-        DATASET, np.sqrt(0.25 * 8.04e-6 / np.pi), 3
-    )
-
-    np.testing.assert_array_almost_equal(
-        greg.dcoeffs, 10.0 ** np.arange(-15, -6, 0.1)
-    )
-
-
-def test_k0s():
-    """A property test."""
-    greg = galpynostatic.model.GalvanostaticRegressor(
-        DATASET, np.sqrt(0.25 * 8.04e-6 / np.pi), 3
-    )
-
-    np.testing.assert_array_almost_equal(
-        greg.k0s, 10.0 ** np.arange(-14, -5, 0.1)
-    )
 
 
 @check_figures_equal(extensions=["png", "pdf"], tol=0.000001)
@@ -124,7 +124,7 @@ def test_plot_vs_data(fig_test, fig_ref):
     greg.k0_ = 1.0e-6
 
     # nishikawa data
-    crates = np.array([2.5, 5, 7.5, 12.5, 25.0])
+    crates = np.array([2.5, 5, 7.5, 12.5, 25.0]).reshape(-1, 1)
     xmaxs = np.array(
         [0.99656589, 0.97625474, 0.83079658, 0.72518132, 0.52573576]
     )
@@ -152,7 +152,7 @@ def test_plot_in_surface(fig_test, fig_ref):
     greg.k0_ = 1.0e-6
 
     # nishikawa data
-    crates = np.array([2.5, 5, 7.5, 12.5, 25.0])
+    crates = np.array([2.5, 5, 7.5, 12.5, 25.0]).reshape(-1, 1)
 
     # g reg plot
     test_ax = fig_test.subplots()
