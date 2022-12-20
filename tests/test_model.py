@@ -15,6 +15,8 @@ from matplotlib.testing.decorators import check_figures_equal
 
 import numpy as np
 
+import scipy.interpolate
+
 # =============================================================================
 # CONSTANTS
 # =============================================================================
@@ -31,7 +33,7 @@ def test_fit():
     # reference values
     ref_dcoeff = 1e-9
     ref_k0 = 1e-6
-    ref_mse = 0.0098327
+    ref_mse = 0.004695
 
     # regressor obj
     greg = galpynostatic.model.GalvanostaticRegressor(
@@ -60,7 +62,7 @@ def test_fit():
 def test_predict():
     """Test the predict of the xmaxs values."""
     # reference xmaxs predictions
-    ref = np.array([0.92744, 0.86974, 0.77282, 0.76325, 0.35772])
+    ref = np.array([0.937788, 0.878488, 0.81915, 0.701, 0.427025])
 
     # regressor obj
     greg = galpynostatic.model.GalvanostaticRegressor(
@@ -158,17 +160,29 @@ def test_plot_in_surface(fig_test, fig_ref):
     ls = np.unique(DATASET.l)
     chis = np.unique(DATASET.chi)
 
-    Z = np.asarray(
-        [
-            galpynostatic.model.GalvanostaticRegressor(
-                DATASET, 1.0, 3
-            )._xmax_in_map(10.0**l, 10.0**chi)
-            for l, chi in it.product(ls, chis)
-        ]
-    )
+    k, xmaxs = 0, []
+    for l, chi in it.product(ls, chis[::-1]):
+        xmax = 0
+        try:
+            if l == DATASET.l[k] and chi == DATASET.chi[k]:
+                xmax = DATASET.xmax[k]
+                k += 1
+        except KeyError:
+            ...
+        finally:
+            xmaxs.append(xmax)
+
+    xmaxs = np.asarray(xmaxs).reshape(ls.size, chis.size)[:, ::-1]
+
+    spl = scipy.interpolate.RectBivariateSpline(ls, chis, xmaxs)
+
+    leval = np.linspace(np.min(ls), np.max(ls), num=1000)
+    chieval = np.linspace(np.min(chis), np.max(chis), num=1000)
+    z = spl(leval, chieval)
+    z[z < 0] = 0.0
 
     im = ref_ax.imshow(
-        Z.reshape(ls.size, chis.size).T,
+        z.T,
         extent=[
             DATASET.l.min(),
             DATASET.l.max(),

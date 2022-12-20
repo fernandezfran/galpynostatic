@@ -17,6 +17,8 @@ import matplotlib.pyplot as plt
 
 import numpy as np
 
+import scipy.interpolate
+
 import sklearn.metrics
 
 # ============================================================================
@@ -69,6 +71,8 @@ class GalvanostaticRegressor:
         self._dcoeffs = 10.0 ** np.arange(-15, -6, 0.1)
         self._k0s = 10.0 ** np.arange(-14, -5, 0.1)
 
+        self._surface()
+
     def _l(self, c_rate):
         """Value of l parameter."""
         return (self.d**2 * c_rate) / (self.z * self.t_h * self.dcoeff_)
@@ -77,19 +81,34 @@ class GalvanostaticRegressor:
         """Value of chi parameter."""
         return self.k0_ * np.sqrt(self.t_h / (c_rate * self.dcoeff_))
 
-    def _find_nearest(self, arr, v):
-        """Get the indices of the closest values of arr to v."""
-        diffarr = np.abs(arr - v)
-        return diffarr == diffarr.min()
+    def _surface(self):
+        """Surface spline."""
+        ls = np.unique(self.dataset.l)
+        chis = np.unique(self.dataset.chi)
 
-    def _xmax_in_map(self, l, chi):
-        """Find the xmax value in the dataset given l and chi."""
-        mask_l = self._find_nearest(self.dataset.l, np.log10(l))
-        mask_chi = self._find_nearest(self.dataset.chi[mask_l], np.log10(chi))
+        k, xmaxs = 0, []
+        for l, chi in it.product(ls, chis[::-1]):
+            xmax = 0
+            try:
+                if l == self.dataset.l[k] and chi == self.dataset.chi[k]:
+                    xmax = self.dataset.xmax[k]
+                    k += 1
+            except KeyError:
+                ...
+            finally:
+                xmaxs.append(xmax)
 
-        idx = np.argwhere(np.asarray(mask_l & mask_chi))[0][0]
+        xmaxs = np.asarray(xmaxs).reshape(ls.size, chis.size)[:, ::-1]
 
-        return self.dataset.xmax[idx]
+        self._surface_spl = scipy.interpolate.RectBivariateSpline(
+            ls, chis, xmaxs
+        )
+
+    def _xmax_in_surface(self, l, chi):
+        """Find the xmax value in the dataset surface."""
+        return max(
+            0, min(1, self._surface_spl(np.log10(l), np.log10(chi))[0][0])
+        )
 
     @property
     def dcoeffs(self):
@@ -156,7 +175,7 @@ class GalvanostaticRegressor:
         """
         return np.array(
             [
-                self._xmax_in_map(self._l(c_rate), self._chi(c_rate))
+                self._xmax_in_surface(self._l(c_rate), self._chi(c_rate))
                 for c_rate in C_rates
             ]
         )
@@ -228,15 +247,15 @@ class GalvanostaticRegressor:
         ls = np.unique(self.dataset.l)
         chis = np.unique(self.dataset.chi)
 
-        Z = np.asarray(
-            [
-                self._xmax_in_map(10.0**l, 10.0**chi)
-                for l, chi in it.product(ls, chis)
-            ]
-        )
+        leval = np.linspace(np.min(ls), np.max(ls), num=1000)
+        chieval = np.linspace(np.min(chis), np.max(chis), num=1000)
+
+        z = self._surface_spl(leval, chieval)
+        z[z > 1] = 1.0
+        z[z < 0] = 0.0
 
         im = ax.imshow(
-            Z.reshape(ls.size, chis.size).T,
+            z.T,
             extent=[
                 self.dataset.l.min(),
                 self.dataset.l.max(),
