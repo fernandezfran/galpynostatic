@@ -1,11 +1,13 @@
 Installation
 ============
 
-You can install the most recent stable release of galpynostatic with pip ::
+You can install the most recent stable release of galpynostatic with 
+`pip <https://pip.pypa.io/en/latest/>`__ ::
 
     pip install galpynostatic
 
-or you can install it from sources by cloning this `repo <https://github.com/fernandezfran/galpynostatic.git>`__ ::
+or you can install it from sources by cloning this 
+`repo <https://github.com/fernandezfran/galpynostatic.git>`__ ::
 
     git clone https://github.com/fernandezfran/galpynostatic.git
 

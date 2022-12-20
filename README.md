@@ -12,7 +12,8 @@ You need Python 3.8+ to run galpynostatic.
 
 ## Installation
 
-You can install the most recent stable release of galpynostatic with pip
+You can install the most recent stable release of galpynostatic with 
+[pip](https://pip.pypa.io/en/latest/)
 
 ```
 pip install galpynostatic

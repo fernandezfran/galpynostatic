@@ -21,7 +21,7 @@ You need Python 3.8+ to run galpynostatic.
 Repository
 ----------
 
-https://github.com/fernandezfran/sierras/
+https://github.com/fernandezfran/galpynostatic/
 
 
 .. toctree::

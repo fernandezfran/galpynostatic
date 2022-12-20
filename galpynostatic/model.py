@@ -104,10 +104,8 @@ class GalvanostaticRegressor:
             finally:
                 xmaxs.append(xmax)
 
-        xmaxs = np.asarray(xmaxs).reshape(ls.size, chis.size)[:, ::-1]
-
         self._surface_spl = scipy.interpolate.RectBivariateSpline(
-            ls, chis, xmaxs
+            ls, chis, np.asarray(xmaxs).reshape(ls.size, chis.size)[:, ::-1]
         )
 
     def _xmax_in_surface(self, l, chi):
