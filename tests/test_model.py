@@ -265,6 +265,7 @@ def test_plot_in_surface(fig_test, fig_ref, d, dcoeff, k0, C_rates):
     leval = np.linspace(np.min(ls), np.max(ls), num=1000)
     chieval = np.linspace(np.min(chis), np.max(chis), num=1000)
     z = spl(leval, chieval)
+    z[z > 1] = 1.0
     z[z < 0] = 0.0
 
     im = ref_ax.imshow(

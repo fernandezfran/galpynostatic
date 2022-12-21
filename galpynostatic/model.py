@@ -104,7 +104,7 @@ class GalvanostaticRegressor:
             finally:
                 xmaxs.append(xmax)
 
-        self._surface_spl = scipy.interpolate.RectBivariateSpline(
+        self._surf_spl = scipy.interpolate.RectBivariateSpline(
             self._ls,
             self._chis,
             np.asarray(xmaxs).reshape(self._ls.size, self._chis.size)[:, ::-1],
@@ -112,9 +112,7 @@ class GalvanostaticRegressor:
 
     def _xmax_in_surface(self, l, chi):
         """Find the xmax value in the dataset surface."""
-        return max(
-            0, min(1, self._surface_spl(np.log10(l), np.log10(chi))[0][0])
-        )
+        return max(0, min(1, self._surf_spl(np.log10(l), np.log10(chi))[0][0]))
 
     @property
     def dcoeffs(self):
@@ -253,7 +251,7 @@ class GalvanostaticRegressor:
         leval = np.linspace(np.min(self._ls), np.max(self._ls), num=1000)
         chieval = np.linspace(np.min(self._chis), np.max(self._chis), num=1000)
 
-        z = self._surface_spl(leval, chieval)
+        z = self._surf_spl(leval, chieval)
         z[z > 1] = 1.0
         z[z < 0] = 0.0
 
