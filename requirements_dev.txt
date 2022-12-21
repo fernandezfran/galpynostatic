@@ -1,0 +1,17 @@
+ipdb
+tox
+
+flake8
+flake8-import-order
+flake8-black
+flake8-builtins
+
+pydocstyle
+toml
+
+check-manifest
+
+pytest
+
+coverage
+pytest-cov

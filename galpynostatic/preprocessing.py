@@ -26,7 +26,7 @@ import scipy.interpolate
 # ============================================================================
 
 
-def get_discharge_capacities(dfs, eq_pot, vcut=0.15, **kwargs):
+def get_discharge_capacities(dataframes, eq_pot, vcut=0.15, **kwargs):
     """Obtain the discharge capacities at a given cut-off potential.
 
     It subtract from all curves the equilibrium potential to find the capacity
@@ -34,7 +34,7 @@ def get_discharge_capacities(dfs, eq_pot, vcut=0.15, **kwargs):
 
     Parameters
     ----------
-    dfs : list of pd.DataFrame
+    dataframes : list of pd.DataFrame
         having only two columns, where the first one is the capacity and the
         second one the voltage
 
@@ -43,7 +43,7 @@ def get_discharge_capacities(dfs, eq_pot, vcut=0.15, **kwargs):
 
     vcut : float, default=0.15
         cut-off potential in V, the default value corresponds to 150 mV, which
-        is the one defined by the data of the distributed maps.
+        is the one defined by the data of the distributed maps
 
     **kwargs
         additional keyword arguments that are passed and are documented in
@@ -60,7 +60,7 @@ def get_discharge_capacities(dfs, eq_pot, vcut=0.15, **kwargs):
             scipy.interpolate.InterpolatedUnivariateSpline(
                 df.iloc[:, 0], df.iloc[:, 1] - eq_pot + vcut, **kwargs
             ).roots()[0]
-            for df in dfs
+            for df in dataframes
         ],
         dtype=np.float32,
     )

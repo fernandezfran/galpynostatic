@@ -50,9 +50,7 @@ TEST_DATA_PATH = pathlib.Path(
 )
 def test_get_discharge_capacities(ref, dir_name, file_names, eq_pot):
     """Test the get of discharge capacities."""
-    dfs = [
-        pd.read_csv(TEST_DATA_PATH / dir_name / fname) for fname in file_names
-    ]
+    dfs = [pd.read_csv(TEST_DATA_PATH / dir_name / f) for f in file_names]
 
     xmaxs = galpynostatic.preprocessing.get_discharge_capacities(dfs, eq_pot)
 

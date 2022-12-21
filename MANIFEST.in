@@ -1,10 +1,12 @@
 include LICENSE
+include CHANGELOG.md
 include README.md
 include pyproject.toml
 
 recursive-include galpynostatic *.py
 recursive-include galpynostatic *.tsv
 
+exclude requirements_dev.txt
 exclude tox.ini
 
 recursive-exclude tests *
