@@ -12,10 +12,10 @@ Package contents
 ----------------
 
 
-``galpynostatic.model`` module
-------------------------------
+``galpynostatic.datasets`` module
+---------------------------------
 
-.. automodule:: galpynostatic.model
+.. automodule:: galpynostatic.datasets
    :members:
    :undoc-members:
    :show-inheritance:
@@ -32,10 +32,10 @@ Package contents
    :member-order: bysource
 
 
-``galpynostatic.datasets`` module
----------------------------------
+``galpynostatic.model`` module
+------------------------------
 
-.. automodule:: galpynostatic.datasets
+.. automodule:: galpynostatic.model
    :members:
    :undoc-members:
    :show-inheritance:

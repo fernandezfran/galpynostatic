@@ -15,7 +15,11 @@ galpynostatic
 Requirements
 ------------
 
-You need Python 3.8+ to run galpynostatic.
+You need Python 3.8+ to run galpynostatic. All other dependencies, which are the 
+usual ones of the scientific computing stack
+(`matplotlib <https://matplotlib.org/>`__, `NumPy <https://numpy.org/>`__, 
+`pandas <https://pandas.pydata.org/>`__, `scikit-learn <https://scikit-learn.org>`__
+and `SciPy <https://scipy.org/>`__), are installed automatically.
 
 
 Repository
@@ -30,7 +34,7 @@ https://github.com/fernandezfran/galpynostatic/
 
    install
    tutorial.ipynb
-   galpynostatic
+   api
 
 
 Contact

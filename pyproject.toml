@@ -39,7 +39,6 @@ classifiers = [
 ]
 urls = { Homepage = "https://github.com/fernandezfran/galpynostatic" }
 dependencies = [
-    "more-itertools",
     "matplotlib",
     "numpy",
     "pandas",

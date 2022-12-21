@@ -11,7 +11,7 @@
 # DOCS
 # ============================================================================
 
-"""Common utilities for experimental data processing."""
+"""Utilities for experimental data preprocessing."""
 
 # ============================================================================
 # IMPORTS

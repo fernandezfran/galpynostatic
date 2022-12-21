@@ -11,7 +11,20 @@
 # DOCS
 # ============================================================================
 
-"""The `galpynostatic.dataset` module loads the data needed for the fits."""
+"""The `galpynostatic.dataset` module loads the data needed for the fits.
+
+These datasets were obtained using a computational physics continuum model [1]_
+for the different geometries that allows to simulate. They come from a cutoff
+of a surface at a given cell potential, with respect to equilibrium, and from
+a grid search covering a wide range of possible experimental values for the
+diffusion coefficient and the kinetic rate constant.
+
+References
+----------
+.. [1] Gavilán-Arriazu, E.M., Barraco, D., Ein-Eli, Y. and Leiva, E.P.M., 2022.
+   Galvanostatic Fast Charging of Alkali‐Ion Battery Materials at the
+   Single‐Particle Level: A Map‐Driven Diagnosis. `ChemPhysChem`.
+"""
 
 # ============================================================================
 # IMPORTS
