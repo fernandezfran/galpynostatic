@@ -89,11 +89,11 @@ class GalvanostaticRegressor:
 
     def _surface(self):
         """Surface spline."""
-        ls = np.unique(self.dataset.l)
-        chis = np.unique(self.dataset.chi)
+        self._ls = np.unique(self.dataset.l)
+        self._chis = np.unique(self.dataset.chi)
 
         k, xmaxs = 0, []
-        for l, chi in it.product(ls, chis[::-1]):
+        for l, chi in it.product(self._ls, self._chis[::-1]):
             xmax = 0
             try:
                 if l == self.dataset.l[k] and chi == self.dataset.chi[k]:
@@ -105,7 +105,9 @@ class GalvanostaticRegressor:
                 xmaxs.append(xmax)
 
         self._surface_spl = scipy.interpolate.RectBivariateSpline(
-            ls, chis, np.asarray(xmaxs).reshape(ls.size, chis.size)[:, ::-1]
+            self._ls,
+            self._chis,
+            np.asarray(xmaxs).reshape(self._ls.size, self._chis.size)[:, ::-1],
         )
 
     def _xmax_in_surface(self, l, chi):
@@ -185,13 +187,13 @@ class GalvanostaticRegressor:
         )
 
     def plot_vs_data(
-        self, C_rates, xmaxs, ax=None, data_kws=None, predictions_kws=None
+        self, C_rates, xmaxs, ax=None, data_kws=None, pred_kws=None
     ):
         """Plot predictions against data.
 
         Parameters
         ----------
-        C_rates : array-like
+        C_rates : array-like of shape (n_measurements, 1).
             C_rate samples.
 
         xmaxs : array-like
@@ -204,7 +206,7 @@ class GalvanostaticRegressor:
             additional keyword arguments that are passed and are documented in
             matplotlib.pyplot.plot for the data points.
 
-        predictions_kws : dict, default=None
+        pred_kws : dict, default=None
             additional keyword arguments that are passed and are documented in
             matplotlib.pyplot.plot for the predictions points.
 
@@ -216,7 +218,7 @@ class GalvanostaticRegressor:
         ax = plt.gca() if ax is None else ax
 
         data_kws = {} if data_kws is None else data_kws
-        predictions_kws = {} if predictions_kws is None else predictions_kws
+        pred_kws = {} if pred_kws is None else pred_kws
 
         keys = ["marker", "linestyle", "label"]
 
@@ -224,10 +226,10 @@ class GalvanostaticRegressor:
             data_kws.setdefault(key, value)
 
         for key, value in zip(keys, ["o", "--", "model predictions"]):
-            predictions_kws.setdefault(key, value)
+            pred_kws.setdefault(key, value)
 
         ax.plot(C_rates, xmaxs, **data_kws)
-        ax.plot(C_rates, self.predict(C_rates), **predictions_kws)
+        ax.plot(C_rates, self.predict(C_rates), **pred_kws)
 
         return ax
 
@@ -248,11 +250,8 @@ class GalvanostaticRegressor:
         """
         ax = plt.gca() if ax is None else ax
 
-        ls = np.unique(self.dataset.l)
-        chis = np.unique(self.dataset.chi)
-
-        leval = np.linspace(np.min(ls), np.max(ls), num=1000)
-        chieval = np.linspace(np.min(chis), np.max(chis), num=1000)
+        leval = np.linspace(np.min(self._ls), np.max(self._ls), num=1000)
+        chieval = np.linspace(np.min(self._chis), np.max(self._chis), num=1000)
 
         z = self._surface_spl(leval, chieval)
         z[z > 1] = 1.0
@@ -260,12 +259,7 @@ class GalvanostaticRegressor:
 
         im = ax.imshow(
             z.T,
-            extent=[
-                self.dataset.l.min(),
-                self.dataset.l.max(),
-                self.dataset.chi.min(),
-                self.dataset.chi.max(),
-            ],
+            extent=[leval.min(), leval.max(), chieval.min(), chieval.max()],
             origin="lower",
         )
         clb = plt.colorbar(im)
