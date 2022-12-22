@@ -48,12 +48,12 @@ PATH = pathlib.Path(os.path.abspath(os.path.dirname(__file__)))
 
 def load_planar():
     """Galvanostatic planar map for a cut-off potential of 150 mV."""
-    raise NotImplementedError
+    return pd.read_csv(PATH / "planar.tsv", delimiter="\t")
 
 
 def load_cylindrical():
     """Galvanostatic cylindrical map for a cut-off potential of 150 mV."""
-    raise NotImplementedError
+    return pd.read_csv(PATH / "cylindrical.tsv", delimiter="\t")
 
 
 def load_spherical():
