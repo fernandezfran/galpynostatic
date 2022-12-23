@@ -11,7 +11,7 @@
 # DOCS
 # ============================================================================
 
-"""The `galpynostatic.dataset` module loads the data needed for the fits.
+"""The ``galpynostatic.dataset`` module loads the data needed for the fits.
 
 These datasets were obtained using a computational physics continuum model [1]_
 for the different geometries that allows to simulate. They come from a cutoff

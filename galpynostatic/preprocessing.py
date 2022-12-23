@@ -34,7 +34,7 @@ def get_discharge_capacities(dataframes, eq_pot, vcut=0.15, **kwargs):
 
     Parameters
     ----------
-    dataframes : list of pd.DataFrame
+    dataframes : `list` of ``pd.DataFrame``
         having only two columns, where the first one is the capacity and the
         second one the voltage
 
@@ -47,11 +47,11 @@ def get_discharge_capacities(dataframes, eq_pot, vcut=0.15, **kwargs):
 
     **kwargs
         additional keyword arguments that are passed and are documented in
-        `scipy.interpolate.InterpolatedUnivariateSpline`
+        ``scipy.interpolate.InterpolatedUnivariateSpline``
 
     Returns
     -------
-    np.array
+    ``np.array``
         discharge capacities in the same order as the pd.DataFrame in the
         list
     """

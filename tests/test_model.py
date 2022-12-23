@@ -41,7 +41,7 @@ def test_dcoeffs():
     greg = galpynostatic.model.GalvanostaticRegressor(DATASET, 1.0, 3)
 
     np.testing.assert_array_almost_equal(
-        greg.dcoeffs, 10.0 ** np.arange(-15, -6, 0.1)
+        greg.dcoeffs, np.logspace(-15, -6, num=100)
     )
 
 
@@ -50,7 +50,7 @@ def test_k0s():
     greg = galpynostatic.model.GalvanostaticRegressor(DATASET, 1.0, 3)
 
     np.testing.assert_array_almost_equal(
-        greg.k0s, 10.0 ** np.arange(-14, -5, 0.1)
+        greg.k0s, np.logspace(-14, -5, num=100)
     )
 
 

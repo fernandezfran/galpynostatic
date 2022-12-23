@@ -39,7 +39,7 @@ class GalvanostaticRegressor:
     ----------
     dataset : pd.DataFrame
         dataset with a map of xmax as function of l and chi parameters, this
-        can be loaded using `galpynostatic.dataset` load functions.
+        can be loaded using ``galpynostatic.dataset`` load functions.
 
     d : float
         characteristic diffusion length.
@@ -61,6 +61,13 @@ class GalvanostaticRegressor:
 
     mse_ : float
         mean squared error of the fitted model.
+
+    Notes
+    -----
+    By default the grid search is performed on the values of
+    ``np.logspace(-15, -6, num=100)`` and ``np.logspace(-14, -5, num=100)`` for
+    the coefficients D and k, respectively. Their range and precision can be
+    modified through the properties ``dcoeffs`` and ``k0s``, respectively.
     """
 
     def __init__(self, dataset, d, z, t_h=3600):
@@ -72,8 +79,8 @@ class GalvanostaticRegressor:
 
         self.dcoeff_, self.k0_, self.mse_ = None, None, None
 
-        self._dcoeffs = 10.0 ** np.arange(-15, -6, 0.1)
-        self._k0s = 10.0 ** np.arange(-14, -5, 0.1)
+        self._dcoeffs = np.logspace(-15, -6, num=100)
+        self._k0s = np.logspace(-14, -5, num=100)
 
     def _surface(self):
         """Surface spline."""
@@ -176,7 +183,7 @@ class GalvanostaticRegressor:
 
         Returns
         -------
-        `np.array`
+        np.array
             an array with the predicted normalized discharge capacities.
         """
         return np.array(
@@ -258,11 +265,11 @@ class GalvanostaticRegressor:
 
         data_kws : dict, default=None
             additional keyword arguments that are passed and are documented in
-            matplotlib.pyplot.plot for the data points.
+            ``matplotlib.pyplot.plot`` for the data points.
 
         pred_kws : dict, default=None
             additional keyword arguments that are passed and are documented in
-            matplotlib.pyplot.plot for the predictions points.
+            ``matplotlib.pyplot.plot`` for the predictions points.
 
         Returns
         -------
