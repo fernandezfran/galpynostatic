@@ -227,7 +227,6 @@ class GalvanostaticRegressor:
         while xmax < load_percentage:
             optlogl -= dlogl
             xmax = self._surf_spl(optlogl, logchi)
-            print(np.min(self._ls))
             if optlogl < np.min(self._ls):
                 raise ValueError(
                     "It was not possible to find the optimum value for the "
