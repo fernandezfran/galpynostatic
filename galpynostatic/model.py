@@ -184,6 +184,61 @@ class GalvanostaticRegressor:
             ]
         )
 
+    def t_minutes_lenght(
+        self, minutes=5, load_percentage=0.8, dlogl=0.01, cm_to=10000
+    ):
+        """Obtain the characteristic diffusion length to charge in t minutes.
+
+        Parameters
+        ----------
+        minutes : int or float, default=5
+            desired minutes to reach the established load
+
+        load_percentage : float, default=0.8
+            desired charge percentage between 0 and 1
+
+        dlogl : float, default=0.01
+            the delta for the decrease of the logarithm value in base 10 of the
+            l value
+
+        cm_to : float, default=10000
+            a factor to convert from cm to another unit, in this case to
+            micrometers
+
+        Returns
+        -------
+        float
+            the characteristic length necessary to charge the battery to the
+            desired percentage and in the desired time
+
+        Raises
+        ------
+        ValueError
+            if xmax was not found to be greater than load_percentage and the
+            value of the logarithm in base 10 of l is less than the minimum at
+            which the spline was fitted
+        """
+        c_rate = 60.0 / minutes
+
+        logchi = np.log10(self._chi(c_rate))
+
+        optlogl, xmax = np.log10(self._l(c_rate)), 0.0
+
+        while xmax < load_percentage:
+            optlogl -= dlogl
+            xmax = self._surf_spl(optlogl, logchi)
+            print(np.min(self._ls))
+            if optlogl < np.min(self._ls):
+                raise ValueError(
+                    "It was not possible to find the optimum value for the "
+                    "length given the established conditions and the range of "
+                    "the surface used."
+                )
+
+        return cm_to * np.sqrt(
+            (self.z * self.t_h * self.dcoeff_ * 10.0**optlogl) / c_rate
+        )
+
     def plot_vs_data(
         self, C_rates, xmaxs, ax=None, data_kws=None, pred_kws=None
     ):

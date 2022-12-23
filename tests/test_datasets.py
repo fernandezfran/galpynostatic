@@ -25,21 +25,21 @@ import pandas as pd
 
 def test_load_planar():
     """Test the planar dataset."""
-    pla = galpynostatic.datasets.load_cylindrical()
+    pla = galpynostatic.datasets.load_planar()
 
     assert isinstance(pla, pd.DataFrame)
 
     assert pla.l.min() == -4
     np.testing.assert_almost_equal(pla.l.max(), 1.75, 6)
-    np.testing.assert_almost_equal(pla.l.mean(), -1.4597826, 6)
+    np.testing.assert_almost_equal(pla.l.mean(), -1.504081, 6)
 
-    np.testing.assert_almost_equal(pla.chi.min(), -3.4, 6)
+    np.testing.assert_almost_equal(pla.chi.min(), -3.25, 6)
     np.testing.assert_almost_equal(pla.chi.max(), 2, 6)
-    np.testing.assert_almost_equal(pla.chi.mean(), -0.04983696, 6)
+    np.testing.assert_almost_equal(pla.chi.mean(), 0.017519, 6)
 
-    np.testing.assert_almost_equal(pla.xmax.min(), 0.000239, 6)
+    np.testing.assert_almost_equal(pla.xmax.min(), 6e-5, 6)
     np.testing.assert_almost_equal(pla.xmax.max(), 0.997055, 6)
-    np.testing.assert_almost_equal(pla.xmax.mean(), 0.695191, 6)
+    np.testing.assert_almost_equal(pla.xmax.mean(), 0.702871, 6)
 
 
 def test_load_cylindrical():

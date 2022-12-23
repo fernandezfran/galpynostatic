@@ -38,9 +38,7 @@ DATASET = galpynostatic.datasets.load_spherical()
 
 def test_dcoeffs():
     """A property test."""
-    greg = galpynostatic.model.GalvanostaticRegressor(
-        DATASET, np.sqrt(0.25 * 8.04e-6 / np.pi), 3
-    )
+    greg = galpynostatic.model.GalvanostaticRegressor(DATASET, 1.0, 3)
 
     np.testing.assert_array_almost_equal(
         greg.dcoeffs, 10.0 ** np.arange(-15, -6, 0.1)
@@ -49,9 +47,7 @@ def test_dcoeffs():
 
 def test_k0s():
     """A property test."""
-    greg = galpynostatic.model.GalvanostaticRegressor(
-        DATASET, np.sqrt(0.25 * 8.04e-6 / np.pi), 3
-    )
+    greg = galpynostatic.model.GalvanostaticRegressor(DATASET, 1.0, 3)
 
     np.testing.assert_array_almost_equal(
         greg.k0s, 10.0 ** np.arange(-14, -5, 0.1)
@@ -107,10 +103,11 @@ def test_fit(ref, d, C_rates, xmaxs):
 
 
 @pytest.mark.parametrize(
-    ("ref", "dcoeff", "k0", "C_rates"),
+    ("ref", "d", "dcoeff", "k0", "C_rates"),
     [
         (  # nishikawa data
             np.array([0.937788, 0.878488, 0.81915, 0.701, 0.427025]),
+            np.sqrt(0.25 * 8.04e-6 / np.pi),
             1.0e-09,
             1.0e-6,
             np.array([2.5, 5, 7.5, 12.5, 25.0]).reshape(-1, 1),
@@ -118,17 +115,18 @@ def test_fit(ref, d, C_rates, xmaxs):
         (  # mancini data
             np.array(
                 [
-                    0.97696,
-                    0.956831,
-                    0.929995,
-                    0.896439,
-                    0.795823,
-                    0.434239,
-                    0.251205,
-                    0.172261,
-                    0.118832,
+                    0.979367,
+                    0.961645,
+                    0.938008,
+                    0.908508,
+                    0.819804,
+                    0.48611,
+                    0.290725,
+                    0.197544,
+                    0.135119,
                 ]
             ),
+            0.00075,
             1e-10,
             1e-6,
             np.array(
@@ -137,11 +135,9 @@ def test_fit(ref, d, C_rates, xmaxs):
         ),
     ],
 )
-def test_predict(ref, dcoeff, k0, C_rates):
+def test_predict(ref, d, dcoeff, k0, C_rates):
     """Test the predict of the xmaxs values."""
-    greg = galpynostatic.model.GalvanostaticRegressor(
-        DATASET, np.sqrt(0.25 * 8.04e-6 / np.pi), 3
-    )
+    greg = galpynostatic.model.GalvanostaticRegressor(DATASET, d, 3)
 
     # fit results
     greg.dcoeff_ = dcoeff
@@ -150,6 +146,48 @@ def test_predict(ref, dcoeff, k0, C_rates):
     xmaxs = greg.predict(C_rates)
 
     np.testing.assert_array_almost_equal(xmaxs, ref, 6)
+
+
+@pytest.mark.parametrize(
+    ("ref", "d", "dcoeff", "k0"),
+    [
+        (  # nishikawa data
+            6.501643,
+            np.sqrt(0.25 * 8.04e-6 / np.pi),
+            1.0e-09,
+            1.0e-6,
+        ),
+        (  # mancini data
+            2.213407,
+            0.00075,
+            1e-10,
+            1e-6,
+        ),
+    ],
+)
+def test_t_minutes_lenght(ref, d, dcoeff, k0):
+    """Test the t minutes lenght."""
+    greg = galpynostatic.model.GalvanostaticRegressor(DATASET, d, 3)
+
+    # fit results
+    greg.dcoeff_ = dcoeff
+    greg.k0_ = k0
+
+    lenght = greg.t_minutes_lenght()
+
+    np.testing.assert_array_almost_equal(lenght, ref, 6)
+
+
+def test_t_minutes_raise():
+    """Test the t minutes lenght ValueError raise."""
+    greg = galpynostatic.model.GalvanostaticRegressor(DATASET, 0.005, 3)
+
+    # fictional fit results
+    greg.dcoeff_ = 3e-5
+    greg.k0_ = 1e-7
+
+    with pytest.raises(ValueError):
+        greg.t_minutes_lenght()
 
 
 @pytest.mark.parametrize(
