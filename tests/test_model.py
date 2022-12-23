@@ -315,6 +315,7 @@ def test_plot_in_surface(fig_test, fig_ref, d, dcoeff, k0, C_rates):
 
     # g reg plot
     test_ax = fig_test.subplots()
+    greg._plot_surface(ax=test_ax)
     greg.plot_in_surface(C_rates, ax=test_ax)
 
     # ref plot
@@ -364,15 +365,15 @@ def test_plot_in_surface(fig_test, fig_ref, d, dcoeff, k0, C_rates):
     ref_ax.scatter(DATASET.l, DATASET.chi, 400, facecolors="none")
 
     # ref data
-    ref_ax.scatter(
+    ref_ax.plot(
         np.log10(greg._l(C_rates)),
         np.log10(greg._chi(C_rates)),
         color="k",
+        marker="o",
         linestyle="--",
         label="fitted data",
     )
 
-    # ref labels and legend
+    # ref labels
     ref_ax.set_xlabel(r"log($\ell$)")
     ref_ax.set_ylabel(r"log($\Xi$)")
-    ref_ax.legend(loc="upper center", bbox_to_anchor=(0.5, 1.05))

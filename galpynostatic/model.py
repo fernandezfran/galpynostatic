@@ -296,21 +296,8 @@ class GalvanostaticRegressor:
 
         return ax
 
-    def plot_in_surface(self, C_rates, ax=None):
-        """Plot showing in which region of the map the fit is found.
-
-        Parameters
-        ----------
-        C_rates : array-like
-            C_rate samples.
-
-        ax : matplotlib.pyplot.Axis, default=None
-            current matplotlib axis.
-
-        Returns
-        -------
-        matplotlib.pyplot.Axis
-        """
+    def _plot_surface(self, ax=None):
+        """Plot 2D surface."""
         ax = plt.gca() if ax is None else ax
 
         leval = np.linspace(np.min(self._ls), np.max(self._ls), num=1000)
@@ -322,7 +309,12 @@ class GalvanostaticRegressor:
 
         im = ax.imshow(
             z.T,
-            extent=[leval.min(), leval.max(), chieval.min(), chieval.max()],
+            extent=[
+                leval.min(),
+                leval.max(),
+                chieval.min(),
+                chieval.max(),
+            ],
             origin="lower",
         )
         clb = plt.colorbar(im)
@@ -332,14 +324,42 @@ class GalvanostaticRegressor:
         ax.set_xlabel(r"log($\ell$)")
         ax.set_ylabel(r"log($\Xi$)")
 
+    def plot_in_surface(self, C_rates, ax=None, **kwargs):
+        """Plot showing in which region of the map the fit is found.
+
+        Parameters
+        ----------
+        C_rates : array-like
+            C_rate samples
+
+        ax : matplotlib.pyplot.Axis, default=None
+            current matplotlib axis
+
+        **kwargs
+            additional keyword arguments that are passed and are documented in
+            ``matplotlib.pyplot.plot``
+
+        Returns
+        -------
+        matplotlib.pyplot.Axis
+
+        Notes
+        -----
+        Only plot the background surface if ax is None, otherwise assume it is
+        already plotted and you just want to add the points on it, e.g., to
+        compare different systems
+        """
+        if ax is None:
+            ax = plt.gca()
+            self._plot_surface(ax)
+
         # fitted data plot
-        ax.scatter(
-            np.log10(self._l(C_rates)),
-            np.log10(self._chi(C_rates)),
-            color="k",
-            linestyle="--",
-            label="fitted data",
+        keys = ["color", "marker", "linestyle", "label"]
+        for key, value in zip(keys, ["k", "o", "--", "fitted data"]):
+            kwargs.setdefault(key, value)
+
+        ax.plot(
+            np.log10(self._l(C_rates)), np.log10(self._chi(C_rates)), **kwargs
         )
-        ax.legend(loc="upper center", bbox_to_anchor=(0.5, 1.05))
 
         return ax
