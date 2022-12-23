@@ -17,8 +17,6 @@ import numpy as np
 
 import pandas as pd
 
-import pytest
-
 
 # =============================================================================
 # TESTS
@@ -27,14 +25,40 @@ import pytest
 
 def test_load_planar():
     """Test the planar dataset."""
-    with pytest.raises(NotImplementedError):
-        galpynostatic.datasets.load_planar()
+    pla = galpynostatic.datasets.load_cylindrical()
+
+    assert isinstance(pla, pd.DataFrame)
+
+    assert pla.l.min() == -4
+    np.testing.assert_almost_equal(pla.l.max(), 1.75, 6)
+    np.testing.assert_almost_equal(pla.l.mean(), -1.4597826, 6)
+
+    np.testing.assert_almost_equal(pla.chi.min(), -3.4, 6)
+    np.testing.assert_almost_equal(pla.chi.max(), 2, 6)
+    np.testing.assert_almost_equal(pla.chi.mean(), -0.04983696, 6)
+
+    np.testing.assert_almost_equal(pla.xmax.min(), 0.000239, 6)
+    np.testing.assert_almost_equal(pla.xmax.max(), 0.997055, 6)
+    np.testing.assert_almost_equal(pla.xmax.mean(), 0.695191, 6)
 
 
 def test_load_cylindrical():
     """Test the cylindrical dataset."""
-    with pytest.raises(NotImplementedError):
-        galpynostatic.datasets.load_cylindrical()
+    cyl = galpynostatic.datasets.load_cylindrical()
+
+    assert isinstance(cyl, pd.DataFrame)
+
+    assert cyl.l.min() == -4
+    np.testing.assert_almost_equal(cyl.l.max(), 1.75, 6)
+    np.testing.assert_almost_equal(cyl.l.mean(), -1.4597826, 6)
+
+    np.testing.assert_almost_equal(cyl.chi.min(), -3.4, 6)
+    np.testing.assert_almost_equal(cyl.chi.max(), 2, 6)
+    np.testing.assert_almost_equal(cyl.chi.mean(), -0.04983696, 6)
+
+    np.testing.assert_almost_equal(cyl.xmax.min(), 0.000239, 6)
+    np.testing.assert_almost_equal(cyl.xmax.max(), 0.997055, 6)
+    np.testing.assert_almost_equal(cyl.xmax.mean(), 0.695191, 6)
 
 
 def test_load_spherical():
