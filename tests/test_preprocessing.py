@@ -45,7 +45,13 @@ TEST_DATA_PATH = pathlib.Path(
             "LMNO",
             ("1nA.csv", "2nA.csv", "3nA.csv", "5nA.csv", "10nA.csv"),
             4.739,
-        )
+        ),
+        (  # he data
+            np.array([159.23154, 153.38335, 135.33395, 104.71328, 55.44732]),
+            "LTO",
+            ("0.1C.csv", "0.5C.csv", "1C.csv", "2C.csv", "5C.csv"),
+            1.57,
+        ),
     ],
 )
 def test_get_discharge_capacities(ref, dir_name, file_names, eq_pot):
@@ -54,4 +60,4 @@ def test_get_discharge_capacities(ref, dir_name, file_names, eq_pot):
 
     xmaxs = galpynostatic.preprocessing.get_discharge_capacities(dfs, eq_pot)
 
-    np.testing.assert_array_almost_equal(xmaxs, ref, 6)
+    np.testing.assert_array_almost_equal(xmaxs, ref, 5)

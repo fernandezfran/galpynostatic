@@ -85,6 +85,12 @@ def test_k0s():
                 ]
             ),
         ),
+        (  # he data
+            {"dcoeff": 1e-11, "k0": 1e-8, "mse": 0.006482},
+            0.000175,
+            np.array([0.1, 0.5, 1.0, 2.0, 5.0]).reshape(-1, 1),
+            np.array([0.995197, 0.958646, 0.845837, 0.654458, 0.346546]),
+        ),
     ],
 )
 def test_fit(ref, d, C_rates, xmaxs):
@@ -92,12 +98,12 @@ def test_fit(ref, d, C_rates, xmaxs):
     greg = galpynostatic.model.GalvanostaticRegressor(DATASET, d, 3)
 
     # regressor configuration to make it faster
-    greg.dcoeffs = 10.0 ** np.arange(-11, -6, 1)
+    greg.dcoeffs = 10.0 ** np.arange(-12, -6, 1)
     greg.k0s = 10.0 ** np.arange(-10, -5, 1)
 
     greg = greg.fit(C_rates, xmaxs)
 
-    np.testing.assert_almost_equal(greg.dcoeff_, ref["dcoeff"], 11)
+    np.testing.assert_almost_equal(greg.dcoeff_, ref["dcoeff"], 12)
     np.testing.assert_almost_equal(greg.k0_, ref["k0"], 10)
     np.testing.assert_almost_equal(greg.mse_, ref["mse"], 6)
 
@@ -133,6 +139,13 @@ def test_fit(ref, d, C_rates, xmaxs):
                 [0.1, 0.2, 0.33333333, 0.5, 1.0, 3.0, 5.0, 7.0, 10.0]
             ).reshape(-1, 1),
         ),
+        (  # he data
+            np.array([0.978918, 0.906247, 0.815342, 0.633649, 0.179112]),
+            0.000175,
+            1.0e-11,
+            1.0e-8,
+            np.array([0.1, 0.5, 1.0, 2.0, 5.0]).reshape(-1, 1),
+        ),
     ],
 )
 def test_predict(ref, d, dcoeff, k0, C_rates):
@@ -163,6 +176,12 @@ def test_predict(ref, d, dcoeff, k0, C_rates):
             0.00075,
             1e-10,
             1e-6,
+        ),
+        (  # he data
+            0.280568,
+            0.000175,
+            1.0e-11,
+            1.0e-8,
         ),
     ],
 )
@@ -226,6 +245,13 @@ def test_t_minutes_raise():
                 ]
             ),
         ),
+        (  # he data
+            0.000175,
+            1.0e-11,
+            1.0e-8,
+            np.array([0.1, 0.5, 1.0, 2.0, 5.0]).reshape(-1, 1),
+            np.array([0.995197, 0.958646, 0.845837, 0.654458, 0.346546]),
+        ),
     ],
 )
 @check_figures_equal(extensions=["png", "pdf"], tol=0.000001)
@@ -265,6 +291,12 @@ def test_plot_vs_data(fig_test, fig_ref, d, dcoeff, k0, C_rates, xmaxs):
             np.array(
                 [0.1, 0.2, 0.33333333, 0.5, 1.0, 3.0, 5.0, 7.0, 10.0]
             ).reshape(-1, 1),
+        ),
+        (  # he data
+            0.000175,
+            1.0e-11,
+            1.0e-8,
+            np.array([0.1, 0.5, 1.0, 2.0, 5.0]).reshape(-1, 1),
         ),
     ],
 )
