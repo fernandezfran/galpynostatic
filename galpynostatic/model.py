@@ -274,16 +274,18 @@ class GalvanostaticRegressor:
         data_kws = {} if data_kws is None else data_kws
         pred_kws = {} if pred_kws is None else pred_kws
 
-        keys = ["marker", "linestyle", "label"]
+        keys = ["color", "marker", "linestyle", "label"]
 
-        for key, value in zip(keys, ["s", "--", "data"]):
+        for key, value in zip(keys, ["tab:blue", "s", "--", "data"]):
             data_kws.setdefault(key, value)
 
-        for key, value in zip(keys, ["o", "--", "model predictions"]):
+        for key, value in zip(keys, ["tab:orange", "", "-", "model"]):
             pred_kws.setdefault(key, value)
 
         ax.plot(C_rates, xmaxs, **data_kws)
-        ax.plot(C_rates, self.predict(C_rates), **pred_kws)
+
+        xeval = np.linspace(C_rates.min(), C_rates.max(), 250).reshape(-1, 1)
+        ax.plot(xeval, self.predict(xeval), **pred_kws)
 
         return ax
 

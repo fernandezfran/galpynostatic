@@ -272,7 +272,9 @@ def test_plot_vs_data(fig_test, fig_ref, d, dcoeff, k0, C_rates, xmaxs):
     # ref plot
     ref_ax = fig_ref.subplots()
     ref_ax.plot(C_rates, xmaxs, marker="s", linestyle="--")
-    ref_ax.plot(C_rates, greg.predict(C_rates), marker="o", linestyle="--")
+
+    xeval = np.linspace(C_rates.min(), C_rates.max(), 250).reshape(-1, 1)
+    ref_ax.plot(xeval, greg.predict(xeval), marker="", linestyle="-")
 
 
 @pytest.mark.parametrize(
