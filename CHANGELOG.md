@@ -6,7 +6,7 @@ First object-oriented version:
 
 - `galpynostatic.datasets` with discrete surface data from a computational physics continuum model for different geometries.
 - `galpynostatic.preprocessing.get_discharge_capacities` to obtain discharge capacities from galvanostatic profiles.
-- `galpynostatic.model.GalvanostaticRegressor` to fit experimental data to the model and plot.
+- `galpynostatic.model.GalvanostaticRegressor` to fit experimental data to the model, predict and plot.
 - examples of use with common and state-of-the-art research lithium battery systems.
 - software quality:
     - documentation with installation guide, tutorial and API.

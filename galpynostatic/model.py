@@ -82,6 +82,18 @@ class GalvanostaticRegressor:
         self._dcoeffs = np.logspace(-15, -6, num=100)
         self._k0s = np.logspace(-14, -5, num=100)
 
+    def _l(self, c_rate):
+        """Value of l parameter."""
+        return (c_rate * self.d**2) / (self.z * self.t_h * self.dcoeff_)
+
+    def _chi(self, c_rate):
+        """Value of chi parameter."""
+        return self.k0_ * np.sqrt(self.t_h / (c_rate * self.dcoeff_))
+
+    def _xmax_in_surface(self, l, chi):
+        """Find the value of xmax given the surface spline."""
+        return max(0, min(1, self._surf_spl(np.log10(l), np.log10(chi))[0][0]))
+
     def _surface(self):
         """Surface spline."""
         self._ls = np.unique(self.dataset.l)
@@ -105,17 +117,28 @@ class GalvanostaticRegressor:
             np.asarray(xmaxs).reshape(self._ls.size, self._chis.size)[:, ::-1],
         )
 
-    def _l(self, c_rate):
-        """Value of l parameter."""
-        return (self.d**2 * c_rate) / (self.z * self.t_h * self.dcoeff_)
+    def _plot_surface(self, ax=None):
+        """Plot 2D surface."""
+        ax = plt.gca() if ax is None else ax
 
-    def _chi(self, c_rate):
-        """Value of chi parameter."""
-        return self.k0_ * np.sqrt(self.t_h / (c_rate * self.dcoeff_))
+        leval = np.linspace(np.min(self._ls), np.max(self._ls), num=1000)
+        chieval = np.linspace(np.min(self._chis), np.max(self._chis), num=1000)
 
-    def _xmax_in_surface(self, l, chi):
-        """Find the value of xmax given the surface spline."""
-        return max(0, min(1, self._surf_spl(np.log10(l), np.log10(chi))[0][0]))
+        z = self._surf_spl(leval, chieval)
+        z[z > 1] = 1.0
+        z[z < 0] = 0.0
+
+        im = ax.imshow(
+            z.T,
+            extent=[leval.min(), leval.max(), chieval.min(), chieval.max()],
+            origin="lower",
+        )
+        clb = plt.colorbar(im)
+        clb.ax.set_ylabel(r"x$_{max}$")
+        clb.ax.set_ylim((0, 1))
+
+        ax.set_xlabel(r"log($\ell$)")
+        ax.set_ylabel(r"log($\Xi$)")
 
     @property
     def dcoeffs(self):
@@ -295,34 +318,6 @@ class GalvanostaticRegressor:
         ax.plot(xeval, self.predict(xeval), **pred_kws)
 
         return ax
-
-    def _plot_surface(self, ax=None):
-        """Plot 2D surface."""
-        ax = plt.gca() if ax is None else ax
-
-        leval = np.linspace(np.min(self._ls), np.max(self._ls), num=1000)
-        chieval = np.linspace(np.min(self._chis), np.max(self._chis), num=1000)
-
-        z = self._surf_spl(leval, chieval)
-        z[z > 1] = 1.0
-        z[z < 0] = 0.0
-
-        im = ax.imshow(
-            z.T,
-            extent=[
-                leval.min(),
-                leval.max(),
-                chieval.min(),
-                chieval.max(),
-            ],
-            origin="lower",
-        )
-        clb = plt.colorbar(im)
-        clb.ax.set_ylabel(r"x$_{max}$")
-        clb.ax.set_ylim((0, 1))
-
-        ax.set_xlabel(r"log($\ell$)")
-        ax.set_ylabel(r"log($\Xi$)")
 
     def plot_in_surface(self, C_rates, ax=None, **kwargs):
         """Plot showing in which region of the map the fit is found.
