@@ -70,22 +70,10 @@ class GalvanostaticRegressor:
 
         self.t_h = t_h
 
-        self.dcoeff_ = None
-        self.k0_ = None
-        self.mse_ = None
+        self.dcoeff_, self.k0_, self.mse_ = None, None, None
 
         self._dcoeffs = 10.0 ** np.arange(-15, -6, 0.1)
         self._k0s = 10.0 ** np.arange(-14, -5, 0.1)
-
-        self._surface()
-
-    def _l(self, c_rate):
-        """Value of l parameter."""
-        return (self.d**2 * c_rate) / (self.z * self.t_h * self.dcoeff_)
-
-    def _chi(self, c_rate):
-        """Value of chi parameter."""
-        return self.k0_ * np.sqrt(self.t_h / (c_rate * self.dcoeff_))
 
     def _surface(self):
         """Surface spline."""
@@ -110,8 +98,16 @@ class GalvanostaticRegressor:
             np.asarray(xmaxs).reshape(self._ls.size, self._chis.size)[:, ::-1],
         )
 
+    def _l(self, c_rate):
+        """Value of l parameter."""
+        return (self.d**2 * c_rate) / (self.z * self.t_h * self.dcoeff_)
+
+    def _chi(self, c_rate):
+        """Value of chi parameter."""
+        return self.k0_ * np.sqrt(self.t_h / (c_rate * self.dcoeff_))
+
     def _xmax_in_surface(self, l, chi):
-        """Find the xmax value in the dataset surface."""
+        """Find the value of xmax given the surface spline."""
         return max(0, min(1, self._surf_spl(np.log10(l), np.log10(chi))[0][0]))
 
     @property
@@ -150,12 +146,18 @@ class GalvanostaticRegressor:
         self : object
             Fitted model.
         """
-        dks = list(it.product(self._dcoeffs, self._k0s))
+        self._surface()
 
-        mse = [
-            sklearn.metrics.mean_squared_error(xmaxs, self.predict(C_rates))
-            for self.dcoeff_, self.k0_ in dks
-        ]
+        dks = np.asarray(list(it.product(self._dcoeffs, self._k0s)))
+
+        mse = np.asarray(
+            [
+                sklearn.metrics.mean_squared_error(
+                    xmaxs, self.predict(C_rates)
+                )
+                for self.dcoeff_, self.k0_ in dks
+            ]
+        )
 
         idx = np.argmin(mse)
 

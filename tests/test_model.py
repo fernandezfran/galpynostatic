@@ -143,6 +143,7 @@ def test_predict(ref, d, dcoeff, k0, C_rates):
     greg.dcoeff_ = dcoeff
     greg.k0_ = k0
 
+    greg._surface()
     xmaxs = greg.predict(C_rates)
 
     np.testing.assert_array_almost_equal(xmaxs, ref, 6)
@@ -173,6 +174,7 @@ def test_t_minutes_lenght(ref, d, dcoeff, k0):
     greg.dcoeff_ = dcoeff
     greg.k0_ = k0
 
+    greg._surface()
     lenght = greg.t_minutes_lenght()
 
     np.testing.assert_array_almost_equal(lenght, ref, 6)
@@ -186,6 +188,7 @@ def test_t_minutes_raise():
     greg.dcoeff_ = 3e-5
     greg.k0_ = 1e-7
 
+    greg._surface()
     with pytest.raises(ValueError):
         greg.t_minutes_lenght()
 
@@ -234,6 +237,8 @@ def test_plot_vs_data(fig_test, fig_ref, d, dcoeff, k0, C_rates, xmaxs):
     greg.dcoeff_ = dcoeff
     greg.k0_ = k0
 
+    greg._surface()
+
     # g reg plot
     test_ax = fig_test.subplots()
     greg.plot_vs_data(C_rates, xmaxs, ax=test_ax)
@@ -271,6 +276,8 @@ def test_plot_in_surface(fig_test, fig_ref, d, dcoeff, k0, C_rates):
     # nishikawa fitted res
     greg.dcoeff_ = dcoeff
     greg.k0_ = k0
+
+    greg._surface()
 
     # g reg plot
     test_ax = fig_test.subplots()
