@@ -1,6 +1,7 @@
 # galpynostatic
 
 [![galpynostatics CI](https://github.com/fernandezfran/galpynostatic/actions/workflows/CI.yml/badge.svg)](https://github.com/fernandezfran/galpynostatic/actions/workflows/CI.yml)
+[![License](https://img.shields.io/pypi/l/uttrs?color=blue)](https://www.tldrlegal.com/l/mit-license)
 
 Work in progress.
 
