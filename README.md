@@ -37,6 +37,17 @@ pip install -e .
 ```
 
 
+## License
+
+galpynostatic is under 
+[MIT License](https://github.com/fernandezfran/galpynostatic/blob/main/LICENSE).
+
+
+## Citation
+
+**TODO**: the scientific article is in the process of being written.
+
+
 ## Contact
 
 For bugs or questions, please send an email to <fernandezfrancisco2195@gmail.com>

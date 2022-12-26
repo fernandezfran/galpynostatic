@@ -140,6 +140,8 @@ class GalvanostaticRegressor:
         ax.set_xlabel(r"log($\ell$)")
         ax.set_ylabel(r"log($\Xi$)")
 
+        return ax
+
     @property
     def dcoeffs(self):
         """Diffusion coefficients to evaluate in model training."""
@@ -346,7 +348,7 @@ class GalvanostaticRegressor:
         """
         if ax is None:
             ax = plt.gca()
-            self._plot_surface(ax)
+            ax = self._plot_surface(ax)
 
         # fitted data plot
         keys = ["color", "marker", "linestyle", "label"]
