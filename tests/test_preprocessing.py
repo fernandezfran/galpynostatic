@@ -37,8 +37,8 @@ TEST_DATA_PATH = pathlib.Path(
 
 @pytest.mark.parametrize(
     ("ref", "dir_name", "file_names", "eq_pot"),
-    [
-        (  # nishikawa data
+    [  # nishikawa, he, wang, lei data
+        (
             np.array(
                 [0.37869504, 0.3709768, 0.3157027, 0.2755689, 0.19977959]
             ),
@@ -46,13 +46,13 @@ TEST_DATA_PATH = pathlib.Path(
             ("1nA.csv", "2nA.csv", "3nA.csv", "5nA.csv", "10nA.csv"),
             4.739,
         ),
-        (  # he data
+        (
             np.array([159.23154, 153.38335, 135.33395, 104.71328, 55.44732]),
             "LTO",
             ("0.1C.csv", "0.5C.csv", "1C.csv", "2C.csv", "5C.csv"),
             1.57,
         ),
-        (  # wang data
+        (
             np.array(
                 [99.417946, 96.75683, 93.01233, 83.45085, 73.432816, 56.96607]
             ),
@@ -60,11 +60,29 @@ TEST_DATA_PATH = pathlib.Path(
             ("0.5C.csv", "1C.csv", "2C.csv", "5C.csv", "10C.csv", "20C.csv"),
             3.9,
         ),
+        (
+            np.array(
+                [
+                    160.27911,
+                    141.21538,
+                    128.30042,
+                    55.622726,
+                    3.5315654,
+                    1.6230893,
+                ]
+            ),
+            "LFP",
+            ("0.2C.csv", "0.5C.csv", "1C.csv", "2C.csv", "5C.csv", "10C.csv"),
+            3.45,
+        ),
     ],
 )
 def test_get_discharge_capacities(ref, dir_name, file_names, eq_pot):
     """Test the get of discharge capacities."""
-    dfs = [pd.read_csv(TEST_DATA_PATH / dir_name / f) for f in file_names]
+    dfs = [
+        pd.read_csv(TEST_DATA_PATH / dir_name / f, header=None)
+        for f in file_names
+    ]
 
     xmaxs = galpynostatic.preprocessing.get_discharge_capacities(dfs, eq_pot)
 

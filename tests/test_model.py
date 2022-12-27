@@ -56,7 +56,7 @@ def test_k0s():
 
 @pytest.mark.parametrize(
     ("ref", "d", "C_rates", "xmaxs"),
-    [  # nishikawa, mancini, he, wang data
+    [  # nishikawa, mancini, he, wang, lei data
         (
             {"dcoeff": 1e-9, "k0": 1e-6, "mse": 0.00469549},
             np.sqrt(0.25 * 8.04e-6 / np.pi),
@@ -106,6 +106,21 @@ def test_k0s():
                 ]
             ),
         ),
+        (
+            {"dcoeff": 1e-13, "k0": 1e-8, "mse": 0.006019},
+            3.5e-5,
+            np.array([0.2, 0.5, 1.0, 2.0, 5.0, 10.0]).reshape(-1, 1),
+            np.array(
+                [
+                    0.9489587,
+                    0.8360887,
+                    0.7596236,
+                    0.32932344,
+                    0.02090921,
+                    0.00960977,
+                ]
+            ),
+        ),
     ],
 )
 def test_fit(ref, d, C_rates, xmaxs):
@@ -113,8 +128,8 @@ def test_fit(ref, d, C_rates, xmaxs):
     greg = galpynostatic.model.GalvanostaticRegressor(DATASET, d, 3)
 
     # regressor configuration to make it faster
-    greg.dcoeffs = 10.0 ** np.arange(-12, -6, 1)
-    greg.k0s = 10.0 ** np.arange(-10, -5, 1)
+    greg.dcoeffs = 10.0 ** np.arange(-13, -6, 1)
+    greg.k0s = 10.0 ** np.arange(-12, -5, 1)
 
     greg = greg.fit(C_rates, xmaxs)
 
@@ -125,7 +140,7 @@ def test_fit(ref, d, C_rates, xmaxs):
 
 @pytest.mark.parametrize(
     ("ref", "d", "dcoeff", "k0", "C_rates"),
-    [  # nishikawa, mancini, he, wang data
+    [  # nishikawa, mancini, he, wang, lei data
         (
             np.array([0.937788, 0.878488, 0.81915, 0.701, 0.427025]),
             np.sqrt(0.25 * 8.04e-6 / np.pi),
@@ -170,6 +185,15 @@ def test_fit(ref, d, C_rates, xmaxs):
             1e-6,
             np.array([0.5, 1.0, 2.0, 5.0, 10.0, 20.0]).reshape(-1, 1),
         ),
+        (
+            np.array(
+                [0.918072, 0.799457, 0.604216, 0.325994, 0.112047, 0.046371]
+            ),
+            3.5e-5,
+            1e-13,
+            1e-8,
+            np.array([0.2, 0.5, 1.0, 2.0, 5.0, 10.0]).reshape(-1, 1),
+        ),
     ],
 )
 def test_predict(ref, d, dcoeff, k0, C_rates):
@@ -188,11 +212,12 @@ def test_predict(ref, d, dcoeff, k0, C_rates):
 
 @pytest.mark.parametrize(
     ("ref", "d", "dcoeff", "k0"),
-    [  # nishikawa, mancini, he, wang data
+    [  # nishikawa, mancini, he, wang, lei data
         (6.501643, np.sqrt(0.25 * 8.04e-6 / np.pi), 1.0e-09, 1.0e-6),
         (2.213407, 0.00075, 1e-10, 1e-6),
         (0.280568, 0.000175, 1.0e-11, 1.0e-8),
         (16.25661, 0.002, 1e-8, 1e-6),
+        (0.065173, 3.5e-5, 1e-13, 1e-8),
     ],
 )
 def test_t_minutes_lenght(ref, d, dcoeff, k0):
@@ -224,7 +249,7 @@ def test_t_minutes_raise():
 
 @pytest.mark.parametrize(
     ("d", "dcoeff", "k0", "C_rates", "xmaxs"),
-    [  # nishikawa, mancini, he, wang data
+    [  # nishikawa, mancini, he, wang, lei data
         (
             np.sqrt(0.25 * 8.04e-6 / np.pi),
             1.0e-09,
@@ -278,6 +303,22 @@ def test_t_minutes_raise():
                 ]
             ),
         ),
+        (
+            3.5e-5,
+            1e-13,
+            1e-8,
+            np.array([0.2, 0.5, 1.0, 2.0, 5.0, 10.0]).reshape(-1, 1),
+            np.array(
+                [
+                    0.9489587,
+                    0.8360887,
+                    0.7596236,
+                    0.32932344,
+                    0.02090921,
+                    0.00960977,
+                ]
+            ),
+        ),
     ],
 )
 @check_figures_equal(extensions=["png", "pdf"], tol=0.000001)
@@ -305,7 +346,7 @@ def test_plot_vs_data(fig_test, fig_ref, d, dcoeff, k0, C_rates, xmaxs):
 
 @pytest.mark.parametrize(
     ("d", "dcoeff", "k0", "C_rates"),
-    [  # nishikawa, mancini, he, wang data
+    [  # nishikawa, mancini, he, wang, lei data
         (
             np.sqrt(0.25 * 8.04e-6 / np.pi),
             1.0e-09,
@@ -331,6 +372,12 @@ def test_plot_vs_data(fig_test, fig_ref, d, dcoeff, k0, C_rates, xmaxs):
             1e-8,
             1e-6,
             np.array([0.5, 1.0, 2.0, 5.0, 10.0, 20.0]).reshape(-1, 1),
+        ),
+        (
+            3.5e-5,
+            1e-13,
+            1e-8,
+            np.array([0.2, 0.5, 1.0, 2.0, 5.0, 10.0]).reshape(-1, 1),
         ),
     ],
 )

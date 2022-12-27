@@ -4,7 +4,7 @@
 [![Python version](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-ff69b4)](https://github.com/fernandezfran/galpynostatic/blob/main/LICENSE)
 
-Work in progress.
+A physics-based heuristic model for identifying the five minutes charging electrode material.
 
 
 ## Requirements
