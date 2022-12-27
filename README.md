@@ -1,8 +1,8 @@
 # galpynostatic
 
 [![galpynostatics CI](https://github.com/fernandezfran/galpynostatic/actions/workflows/CI.yml/badge.svg)](https://github.com/fernandezfran/galpynostatic/actions/workflows/CI.yml)
-[![Python version](https://img.shields.io/badge/python-3.8%2B-blue)](https://img.shields.io/badge/python-3.8%2B-blue)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/fernandezfran/galpynostatic/blob/main/LICENSE)
+[![Python version](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-ff69b4)](https://github.com/fernandezfran/galpynostatic/blob/main/LICENSE)
 
 Work in progress.
 
