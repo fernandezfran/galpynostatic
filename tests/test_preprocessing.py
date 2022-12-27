@@ -52,6 +52,14 @@ TEST_DATA_PATH = pathlib.Path(
             ("0.1C.csv", "0.5C.csv", "1C.csv", "2C.csv", "5C.csv"),
             1.57,
         ),
+        (  # wang data
+            np.array(
+                [99.417946, 96.75683, 93.01233, 83.45085, 73.432816, 56.96607]
+            ),
+            "LCO",
+            ("0.5C.csv", "1C.csv", "2C.csv", "5C.csv", "10C.csv", "20C.csv"),
+            3.9,
+        ),
     ],
 )
 def test_get_discharge_capacities(ref, dir_name, file_names, eq_pot):
