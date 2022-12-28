@@ -322,6 +322,11 @@ class GalvanostaticRegressor:
         xeval = np.linspace(C_rates.min(), C_rates.max(), 250).reshape(-1, 1)
         ax.plot(xeval, self.predict(xeval), **pred_kws)
 
+        ax.set_xlabel("C-rates")
+        ax.set_ylabel("SOC")
+
+        ax.set_xscale("log")
+
         return ax
 
     def plot_in_surface(self, C_rates, ax=None, **kwargs):

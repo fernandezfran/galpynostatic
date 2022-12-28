@@ -47,7 +47,7 @@ C_rates, dataframes, eq_pot, xmax, d = ...
 # obtain discharge capacities
 xmaxs = galpynostatic.preprocessing.get_discharge_capacities(dataframes, eq_pot)
 
-# xmax normalization by a maximum value
+# xmaxs normalization by a maximum value
 xmaxs = xmaxs / xmax
 
 # fit the model

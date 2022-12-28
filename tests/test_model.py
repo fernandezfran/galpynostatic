@@ -350,6 +350,10 @@ def test_plot_vs_data(fig_test, fig_ref, d, dcoeff, k0, C_rates, xmaxs):
     xeval = np.linspace(C_rates.min(), C_rates.max(), 250).reshape(-1, 1)
     ref_ax.plot(xeval, greg.predict(xeval), marker="", linestyle="-")
 
+    ref_ax.set_xlabel("C-rates")
+    ref_ax.set_ylabel("SOC")
+    ref_ax.set_xscale("log")
+
 
 @pytest.mark.parametrize(
     ("d", "dcoeff", "k0", "C_rates"),
