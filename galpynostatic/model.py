@@ -82,17 +82,19 @@ class GalvanostaticRegressor:
         self._dcoeffs = np.logspace(-15, -6, num=100)
         self._k0s = np.logspace(-14, -5, num=100)
 
-    def _l(self, c_rate):
-        """Value of l parameter."""
-        return (c_rate * self.d**2) / (self.z * self.t_h * self.dcoeff_)
+    def _logl(self, cr):
+        """Logarithm value of l parameter in base 10."""
+        return np.log10(
+            (cr * self.d**2) / (self.z * self.t_h * self.dcoeff_)
+        )
 
-    def _chi(self, c_rate):
-        """Value of chi parameter."""
-        return self.k0_ * np.sqrt(self.t_h / (c_rate * self.dcoeff_))
+    def _logchi(self, cr):
+        """Logarithm value of chi parameter in base 10."""
+        return np.log10(self.k0_ * np.sqrt(self.t_h / (cr * self.dcoeff_)))
 
-    def _xmax_in_surface(self, l, chi):
+    def _xmax_in_surface(self, logl, logchi):
         """Find the value of xmax given the surface spline."""
-        return max(0, min(1, self._surf_spl(np.log10(l), np.log10(chi))[0][0]))
+        return max(0, min(1, self._surf_spl(logl, logchi)[0][0]))
 
     def _surface(self):
         """Surface spline."""
@@ -100,10 +102,10 @@ class GalvanostaticRegressor:
         self._chis = np.unique(self.dataset.chi)
 
         k, xmaxs = 0, []
-        for l, chi in it.product(self._ls, self._chis[::-1]):
+        for logl, logchi in it.product(self._ls, self._chis[::-1]):
             xmax = 0
             try:
-                if l == self.dataset.l[k] and chi == self.dataset.chi[k]:
+                if logl == self.dataset.l[k] and logchi == self.dataset.chi[k]:
                     xmax = self.dataset.xmax[k]
                     k += 1
             except KeyError:
@@ -180,16 +182,13 @@ class GalvanostaticRegressor:
         """
         self._surface()
 
-        dks = np.asarray(list(it.product(self._dcoeffs, self._k0s)))
+        dks = np.array(list(it.product(self._dcoeffs, self._k0s)))
+        mse = np.full(dks.shape[0], np.inf)
 
-        mse = np.asarray(
-            [
-                sklearn.metrics.mean_squared_error(
-                    xmaxs, self.predict(C_rates)
-                )
-                for self.dcoeff_, self.k0_ in dks
-            ]
-        )
+        for k, (self.dcoeff_, self.k0_) in enumerate(dks):
+            pred = self.predict(C_rates)
+            if None not in pred:
+                mse[k] = sklearn.metrics.mean_squared_error(xmaxs, pred)
 
         idx = np.argmin(mse)
 
@@ -199,24 +198,29 @@ class GalvanostaticRegressor:
         return self
 
     def predict(self, C_rates):
-        """Predict using the galvanostatic model.
+        """Predict using the galvanostatic model in the range of the surface.
 
         Parameters
         ----------
         C_rates : array-like of shape (n_measurements, 1).
-            C_rate samples.
+            C_rate samples
 
         Returns
         -------
         np.array
-            an array with the predicted normalized discharge capacities.
+            an array with the predicted normalized discharge capacities
         """
-        return np.array(
-            [
-                self._xmax_in_surface(self._l(c_rate[0]), self._chi(c_rate[0]))
-                for c_rate in C_rates
-            ]
-        )
+        xmax = np.full(C_rates.size, None)
+        for k, c_rate in enumerate(C_rates):
+            logl = self._logl(c_rate[0])
+            logchi = self._logchi(c_rate[0])
+
+            if (self._ls.min() <= logl <= self._ls.max()) and (
+                self._chis.min() <= logchi <= self._chis.max()
+            ):
+                xmax[k] = self._xmax_in_surface(logl, logchi)
+
+        return xmax
 
     def t_minutes_lenght(
         self, minutes=5, load_percentage=0.8, dlogl=0.01, cm_to=10000
@@ -254,13 +258,12 @@ class GalvanostaticRegressor:
         """
         c_rate = 60.0 / minutes
 
-        logchi = np.log10(self._chi(c_rate))
+        logchi = self._logchi(c_rate)
 
-        optlogl, xmax = np.log10(self._l(c_rate)), 0.0
-
+        optlogl, xmax = self._logl(c_rate), 0.0
         while xmax < load_percentage:
             optlogl -= dlogl
-            xmax = self._surf_spl(optlogl, logchi)
+            xmax = self._xmax_in_surface(optlogl, logchi)
             if optlogl < np.min(self._ls):
                 raise ValueError(
                     "It was not possible to find the optimum value for the "
@@ -355,8 +358,6 @@ class GalvanostaticRegressor:
         for key, value in zip(keys, ["k", "o", "--", "fitted data"]):
             kwargs.setdefault(key, value)
 
-        ax.plot(
-            np.log10(self._l(C_rates)), np.log10(self._chi(C_rates)), **kwargs
-        )
+        ax.plot(self._logl(C_rates), self._logchi(C_rates), **kwargs)
 
         return ax

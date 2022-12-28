@@ -406,10 +406,10 @@ def test_plot_in_surface(fig_test, fig_ref, d, dcoeff, k0, C_rates):
     chis = np.unique(DATASET.chi)
 
     k, xmaxs = 0, []
-    for l, chi in it.product(ls, chis[::-1]):
+    for logl, logchi in it.product(ls, chis[::-1]):
         xmax = 0
         try:
-            if l == DATASET.l[k] and chi == DATASET.chi[k]:
+            if logl == DATASET.l[k] and logchi == DATASET.chi[k]:
                 xmax = DATASET.xmax[k]
                 k += 1
         except KeyError:
@@ -445,8 +445,8 @@ def test_plot_in_surface(fig_test, fig_ref, d, dcoeff, k0, C_rates):
 
     # ref data
     ref_ax.plot(
-        np.log10(greg._l(C_rates)),
-        np.log10(greg._chi(C_rates)),
+        greg._logl(C_rates),
+        greg._logchi(C_rates),
         color="k",
         marker="o",
         linestyle="--",
