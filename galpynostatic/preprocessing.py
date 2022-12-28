@@ -54,13 +54,25 @@ def get_discharge_capacities(dataframes, eq_pot, vcut=0.15, **kwargs):
     np.array
         discharge capacities in the same order as the pd.DataFrame in the
         list
+
+    Raises
+    ------
+    ValueError
+        When one of the galvanostatic profiles passed in `dataframes` does not
+        intersect the cut-off potential below the equilibrium potential
     """
-    return np.asarray(
-        [
+    try:
+        roots = [
             scipy.interpolate.InterpolatedUnivariateSpline(
                 df.iloc[:, 0], df.iloc[:, 1] - eq_pot + vcut, **kwargs
             ).roots()[0]
             for df in dataframes
-        ],
-        dtype=np.float32,
-    )
+        ]
+
+    except IndexError:
+        raise ValueError(
+            "A galvanostatic profile does not intersect the cut-off potential "
+            "from the equlibrium potential."
+        )
+
+    return np.array(roots, dtype=np.float32)
