@@ -45,7 +45,7 @@ pip install -e .
 import galpynostatic
 
 # experimental data definition (with numpy and pandas)
-eq_pot, C_rates, dataframes, d = ...
+C_rates, dataframes, eq_pot, xmax, d = ...
 
 # obtain discharge capacities
 xmaxs = galpynostatic.preprocessing.get_discharge_capacities(dataframes, eq_pot)
@@ -70,7 +70,8 @@ new_d = greg.t_minutes_lenght()
 The `greg` object also allows to obtain the values predicted by the model, plot 
 these predictions next to the experimental data and plot the points on the 
 surface on which they were fitted. For a broader view, please refer to the 
-documentation and/or the `examples`.
+documentation and/or the 
+[examples](https://github.com/fernandezfran/galpynostatic/tree/main/examples).
 
 
 
