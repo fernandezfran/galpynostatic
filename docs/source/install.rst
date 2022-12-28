@@ -7,10 +7,9 @@ You can install the most recent stable release of galpynostatic with
     pip install galpynostatic
 
 or you can install it from sources by cloning this 
-`repo <https://github.com/fernandezfran/galpynostatic.git>`__ ::
+`repo <https://github.com/fernandezfran/galpynostatic.git>`__ and use the 
+editable mode of pip ::
 
     git clone https://github.com/fernandezfran/galpynostatic.git
-
-and use the editable mode of pip ::
-
+    cd galpynostatic/
     pip install -e .

@@ -11,6 +11,18 @@ galpynostatic
    :target: https://github.com/fernandezfran/galpynostatic/actions/workflows/CI.yml
    :alt: galpynostatic CI
 
+.. image:: https://img.shields.io/badge/python-3.8%2B-blue
+   :target: https://www.python.org/
+   :alt: python version
+
+.. image:: https://img.shields.io/badge/License-MIT-ff69b4
+   :target: https://github.com/fernandezfran/galpynostatic/blob/main/LICENSE
+   :alt: mit license
+
+
+A physics-based heuristic model for identifying the five minutes charging 
+electrode material.
+
 
 Requirements
 ------------

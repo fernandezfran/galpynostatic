@@ -11,7 +11,8 @@
 # DOCS
 # =============================================================================
 
-"""A galvanostatic fitting program."""
+"""A physics-based heuristic model for identifying the five minutes charging \
+electrode material."""
 
 # =============================================================================
 # IMPORTS

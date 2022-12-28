@@ -1,8 +1,8 @@
 # galpynostatic
 
 [![galpynostatics CI](https://github.com/fernandezfran/galpynostatic/actions/workflows/CI.yml/badge.svg)](https://github.com/fernandezfran/galpynostatic/actions/workflows/CI.yml)
-[![Python version](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-ff69b4)](https://github.com/fernandezfran/galpynostatic/blob/main/LICENSE)
+[![python version](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/)
+[![mit license](https://img.shields.io/badge/License-MIT-ff69b4)](https://github.com/fernandezfran/galpynostatic/blob/main/LICENSE)
 
 A physics-based heuristic model for identifying the five minutes charging electrode material.
 
@@ -26,15 +26,12 @@ pip install galpynostatic
 ```
 
 or you can install it from sources by cloning this 
-[repo](https://github.com/fernandezfran/galpynostatic)
+[repo](https://github.com/fernandezfran/galpynostatic) and using the editable 
+mode of pip
 
 ```
 git clone https://github.com/fernandezfran/galpynostatic.git 
-```
-
-and using the editable mode of pip
-
-```
+cd galpynostatic/
 pip install -e .
 ```
 
