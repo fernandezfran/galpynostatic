@@ -44,7 +44,7 @@ pip install -e .
 ```python
 import galpynostatic
 
-# experimental data definition
+# experimental data definition (with numpy and pandas)
 eq_pot, C_rates, dataframes, d = ...
 
 # obtain discharge capacities
@@ -66,6 +66,12 @@ k0 = greg.k0_
 # of the electrode in 5 minutes
 new_d = greg.t_minutes_lenght()
 ```
+
+The `greg` object also allows to obtain the values predicted by the model, plot 
+these predictions next to the experimental data and plot the points on the 
+surface on which they were fitted. For a broader view, please refer to the 
+documentation and/or the `examples`.
+
 
 
 ## License
