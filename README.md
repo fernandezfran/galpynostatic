@@ -39,6 +39,35 @@ pip install -e .
 ```
 
 
+## Quickstart
+
+```python
+import galpynostatic
+
+# experimental data definition
+eq_pot, C_rates, dataframes, d = ...
+
+# obtain discharge capacities
+xmaxs = galpynostatic.preprocessing.get_discharge_capacities(dataframes, eq_pot)
+
+# xmax normalization by a maximum value
+xmaxs = xmaxs / xmax
+
+# fit the model
+dataset = galpynostatic.datasets.load_spherical()
+greg = galpynostatic.model.GalvanostaticRegressor(dataset, d, 3)
+greg.fit(C_rates, xmaxs)
+
+# get the diffusion coefficient and the kinetic rate constant
+dcoeff = greg.dcoeff_
+k0 = greg.k0_
+
+# and an estimation of the characteristic diffusion length to charge the 80%
+# of the electrode in 5 minutes
+new_d = greg.t_minutes_lenght()
+```
+
+
 ## License
 
 galpynostatic is under 
