@@ -37,7 +37,7 @@ TEST_DATA_PATH = pathlib.Path(
 
 @pytest.mark.parametrize(
     ("ref", "dir_name", "file_names", "eq_pot"),
-    [  # nishikawa, he, wang, lei data
+    [  # nishikawa, he, wang, lei, bak data
         (
             np.array(
                 [0.37869504, 0.3709768, 0.3157027, 0.2755689, 0.19977959]
@@ -74,6 +74,21 @@ TEST_DATA_PATH = pathlib.Path(
             "LFP",
             ("0.2C.csv", "0.5C.csv", "1C.csv", "2C.csv", "5C.csv", "10C.csv"),
             3.45,
+        ),
+        (
+            np.array(
+                [
+                    127.32904,
+                    124.29212,
+                    120.07357,
+                    114.329475,
+                    92.15335,
+                    55.795765,
+                ]
+            ),
+            "LMO",
+            ("1C.csv", "5C.csv", "10C.csv", "20C.csv", "50C.csv", "100C.csv"),
+            4.0,
         ),
     ],
 )

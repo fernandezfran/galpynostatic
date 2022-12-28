@@ -56,14 +56,12 @@ def test_k0s():
 
 @pytest.mark.parametrize(
     ("ref", "d", "C_rates", "xmaxs"),
-    [  # nishikawa, mancini, he, wang, lei data
+    [  # nishikawa, mancini, he, wang, lei, bak data
         (
             {"dcoeff": 1e-9, "k0": 1e-6, "mse": 0.00469549},
             np.sqrt(0.25 * 8.04e-6 / np.pi),
             np.array([2.5, 5, 7.5, 12.5, 25.0]).reshape(-1, 1),
-            np.array(
-                [0.99656589, 0.97625474, 0.83079658, 0.72518132, 0.52573576]
-            ),
+            np.array([0.996566, 0.976255, 0.830797, 0.725181, 0.525736]),
         ),
         (
             {"dcoeff": 1e-10, "k0": 1e-6, "mse": 0.00069059},
@@ -73,15 +71,15 @@ def test_k0s():
             ).reshape(-1, 1),
             np.array(
                 [
-                    0.99244268,
-                    0.98205007,
-                    0.96473524,
-                    0.93494309,
-                    0.85388692,
-                    0.54003011,
-                    0.29684304,
-                    0.19500165,
-                    0.12502474,
+                    0.992443,
+                    0.98205,
+                    0.964735,
+                    0.934943,
+                    0.853887,
+                    0.54003,
+                    0.296843,
+                    0.195002,
+                    0.125025,
                 ]
             ),
         ),
@@ -96,14 +94,7 @@ def test_k0s():
             0.002,
             np.array([0.5, 1.0, 2.0, 5.0, 10.0, 20.0]).reshape(-1, 1),
             np.array(
-                [
-                    0.99417946,
-                    0.9675683,
-                    0.9301233,
-                    0.8345085,
-                    0.73432816,
-                    0.5696607,
-                ]
+                [0.994179, 0.967568, 0.930123, 0.834509, 0.734328, 0.569661]
             ),
         ),
         (
@@ -111,15 +102,14 @@ def test_k0s():
             3.5e-5,
             np.array([0.2, 0.5, 1.0, 2.0, 5.0, 10.0]).reshape(-1, 1),
             np.array(
-                [
-                    0.9489587,
-                    0.8360887,
-                    0.7596236,
-                    0.32932344,
-                    0.02090921,
-                    0.00960977,
-                ]
+                [0.948959, 0.836089, 0.759624, 0.329323, 0.020909, 0.00961]
             ),
+        ),
+        (
+            {"dcoeff": 1e-14, "k0": 1e-8, "mse": 0.016352},
+            2.5e-6,
+            np.array([1, 5, 10, 20, 50, 100]).reshape(-1, 1),
+            np.array([0.9617, 0.938762, 0.9069, 0.863516, 0.696022, 0.421418]),
         ),
     ],
 )
@@ -128,8 +118,8 @@ def test_fit(ref, d, C_rates, xmaxs):
     greg = galpynostatic.model.GalvanostaticRegressor(DATASET, d, 3)
 
     # regressor configuration to make it faster
-    greg.dcoeffs = 10.0 ** np.arange(-13, -6, 1)
-    greg.k0s = 10.0 ** np.arange(-12, -5, 1)
+    greg.dcoeffs = 10.0 ** np.arange(-14, -6, 1)
+    greg.k0s = 10.0 ** np.arange(-13, -5, 1)
 
     greg = greg.fit(C_rates, xmaxs)
 
@@ -140,7 +130,7 @@ def test_fit(ref, d, C_rates, xmaxs):
 
 @pytest.mark.parametrize(
     ("ref", "d", "dcoeff", "k0", "C_rates"),
-    [  # nishikawa, mancini, he, wang, lei data
+    [  # nishikawa, mancini, he, wang, lei, bak data
         (
             np.array([0.937788, 0.878488, 0.81915, 0.701, 0.427025]),
             np.sqrt(0.25 * 8.04e-6 / np.pi),
@@ -194,6 +184,15 @@ def test_fit(ref, d, C_rates, xmaxs):
             1e-8,
             np.array([0.2, 0.5, 1.0, 2.0, 5.0, 10.0]).reshape(-1, 1),
         ),
+        (
+            np.array(
+                [0.976568, 0.894486, 0.791879, 0.589535, 0.235351, 0.101137]
+            ),
+            2.5e-6,
+            1e-14,
+            1e-8,
+            np.array([1, 5, 10, 20, 50, 100]).reshape(-1, 1),
+        ),
     ],
 )
 def test_predict(ref, d, dcoeff, k0, C_rates):
@@ -212,12 +211,13 @@ def test_predict(ref, d, dcoeff, k0, C_rates):
 
 @pytest.mark.parametrize(
     ("ref", "d", "dcoeff", "k0"),
-    [  # nishikawa, mancini, he, wang, lei data
+    [  # nishikawa, mancini, he, wang, lei, bak data
         (6.501643, np.sqrt(0.25 * 8.04e-6 / np.pi), 1.0e-09, 1.0e-6),
         (2.213407, 0.00075, 1e-10, 1e-6),
         (0.280568, 0.000175, 1.0e-11, 1.0e-8),
         (16.25661, 0.002, 1e-8, 1e-6),
         (0.065173, 3.5e-5, 1e-13, 1e-8),
+        (0.022026, 2.5e-6, 1e-14, 1e-8),
     ],
 )
 def test_t_minutes_lenght(ref, d, dcoeff, k0):
@@ -249,7 +249,7 @@ def test_t_minutes_raise():
 
 @pytest.mark.parametrize(
     ("d", "dcoeff", "k0", "C_rates", "xmaxs"),
-    [  # nishikawa, mancini, he, wang, lei data
+    [  # nishikawa, mancini, he, wang, lei, bak data
         (
             np.sqrt(0.25 * 8.04e-6 / np.pi),
             1.0e-09,
@@ -319,6 +319,13 @@ def test_t_minutes_raise():
                 ]
             ),
         ),
+        (
+            2.5e-6,
+            1e-14,
+            1e-8,
+            np.array([1, 5, 10, 20, 50, 100]).reshape(-1, 1),
+            np.array([0.9617, 0.938762, 0.9069, 0.863516, 0.696022, 0.421418]),
+        ),
     ],
 )
 @check_figures_equal(extensions=["png", "pdf"], tol=0.000001)
@@ -346,7 +353,7 @@ def test_plot_vs_data(fig_test, fig_ref, d, dcoeff, k0, C_rates, xmaxs):
 
 @pytest.mark.parametrize(
     ("d", "dcoeff", "k0", "C_rates"),
-    [  # nishikawa, mancini, he, wang, lei data
+    [  # nishikawa, mancini, he, wang, lei, bak data
         (
             np.sqrt(0.25 * 8.04e-6 / np.pi),
             1.0e-09,
@@ -378,6 +385,12 @@ def test_plot_vs_data(fig_test, fig_ref, d, dcoeff, k0, C_rates, xmaxs):
             1e-13,
             1e-8,
             np.array([0.2, 0.5, 1.0, 2.0, 5.0, 10.0]).reshape(-1, 1),
+        ),
+        (
+            2.5e-6,
+            1e-14,
+            1e-8,
+            np.array([1, 5, 10, 20, 50, 100]).reshape(-1, 1),
         ),
     ],
 )
