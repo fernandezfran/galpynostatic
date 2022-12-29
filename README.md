@@ -81,12 +81,12 @@ galpynostatic is under
 
 ## Citation
 
-**TODO**: the scientific article is in the process of being written.
-
 If you use galpynostatic in a scientific publication, we would appreciate it if 
 you could cite the following article:
 
 > Autores. Año. Título. Revista. DOI
+
+Bibtex entry:
 
 ```bibtex
     @article{
