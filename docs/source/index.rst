@@ -11,13 +11,21 @@ galpynostatic
    :target: https://github.com/fernandezfran/galpynostatic/actions/workflows/CI.yml
    :alt: galpynostatic CI
 
-.. image:: https://img.shields.io/badge/python-3.8%2B-blue
+.. image:: https://img.shields.io/pypi/dw/galpynostatic?label=PyPI%20Downloads
+   :target: https://pypistats.org/packages/galpynostatic
+   :alt: pypi downloads
+
+.. image:: https://img.shields.io/badge/python-3.8%2B-77b7fe
    :target: https://www.python.org/
    :alt: python version
 
-.. image:: https://img.shields.io/badge/License-MIT-ff69b4
+.. image:: https://img.shields.io/badge/License-MIT-fcf695
    :target: https://github.com/fernandezfran/galpynostatic/blob/main/LICENSE
    :alt: mit license
+
+.. image:: https://img.shields.io/badge/doi-TODO-b19cd9
+   :target: https://www.doi.org/
+   :alt: doi
 
 
 **galpynostatic** is a Python package with a physics-based heuristic model for 
