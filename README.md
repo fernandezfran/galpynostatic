@@ -68,8 +68,8 @@ new_d = greg.t_minutes_lenght()
 The `greg` object also allows to obtain the values predicted by the model, plot 
 these predictions next to the experimental data and plot the points on the 
 surface on which they were fitted. For a broader view, please refer to the 
-documentation and/or the 
-[examples](https://github.com/fernandezfran/galpynostatic/tree/main/examples).
+[documentation tutorials](https://galpynostatic.readthedocs.io/en/latest/tutorial/index.html)
+and/or the [examples](https://github.com/fernandezfran/galpynostatic/tree/main/examples).
 
 
 
