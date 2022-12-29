@@ -20,8 +20,8 @@ galpynostatic
    :alt: mit license
 
 
-A physics-based heuristic model for identifying the five minutes charging 
-electrode material.
+**galpynostatic** is a Python package with a physics-based heuristic model for 
+identifying the five minutes charging electrode material.
 
 
 Requirements
@@ -45,7 +45,7 @@ https://github.com/fernandezfran/galpynostatic/
    :caption: Contents:
 
    install
-   tutorial.ipynb
+   tutorial/index
    api
 
 
