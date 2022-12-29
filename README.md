@@ -69,7 +69,7 @@ The `greg` object also allows to obtain the values predicted by the model, plot
 these predictions next to the experimental data and plot the points on the 
 surface on which they were fitted. For a broader view, please refer to the 
 [documentation tutorials](https://galpynostatic.readthedocs.io/en/latest/tutorial/index.html)
-and/or the [examples](https://github.com/fernandezfran/galpynostatic/tree/main/examples).
+or the [examples](https://github.com/fernandezfran/galpynostatic/tree/main/examples).
 
 
 
@@ -82,6 +82,17 @@ galpynostatic is under
 ## Citation
 
 **TODO**: the scientific article is in the process of being written.
+
+If you use galpynostatic in a scientific publication, we would appreciate it if 
+you could cite the following article:
+
+> Autores. Año. Título. Revista. DOI
+
+```bibtex
+    @article{
+        ...
+    }
+```
 
 
 ## Contact
