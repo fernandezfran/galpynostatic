@@ -1,8 +1,11 @@
 # galpynostatic
 
 [![galpynostatics CI](https://github.com/fernandezfran/galpynostatic/actions/workflows/CI.yml/badge.svg)](https://github.com/fernandezfran/galpynostatic/actions/workflows/CI.yml)
-[![python version](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/)
-[![mit license](https://img.shields.io/badge/License-MIT-ff69b4)](https://github.com/fernandezfran/galpynostatic/blob/main/LICENSE)
+[![python version](https://img.shields.io/badge/python-3.8%2B-77b7fe)](https://www.python.org/)
+[![pypi downloads](https://img.shields.io/pypi/dw/galpynostatic?label=PyPI%20Downloads)](https://pypistats.org/packages/galpynostatic)
+
+[![mit license](https://img.shields.io/badge/License-MIT-fcf695)](https://github.com/fernandezfran/galpynostatic/blob/main/LICENSE)
+[![doi](https://img.shields.io/badge/doi-TODO-b19cd9)](https://www.doi.org/)
 
 **galpynostatic** is a Python package with a physics-based heuristic model for 
 identifying the five minutes charging electrode material.
@@ -84,7 +87,7 @@ galpynostatic is under
 If you use galpynostatic in a scientific publication, we would appreciate it if 
 you could cite the following article:
 
-> Autores. Año. Título. Revista. DOI
+> Autores. Año. _Título_. Revista. DOI
 
 Bibtex entry:
 
