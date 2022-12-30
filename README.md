@@ -86,7 +86,7 @@ galpynostatic is under
 If you use galpynostatic in a scientific publication, we would appreciate it if 
 you could cite the following article:
 
-> Autores. Año. _Título_. Revista. DOI
+> Autores. (Año). Título. _Revista_. DOI
 
 Bibtex entry:
 
