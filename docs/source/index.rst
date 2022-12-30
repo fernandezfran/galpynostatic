@@ -63,7 +63,7 @@ Contact
 | **Author**
 | Francisco Fernandez
 
-For bugs or questions, please send an email to <fernandezfrancisco2195@gmail>
+For bugs or questions, please send an email to fernandezfrancisco2195@gmail.com
 
 
 Indices and tables
