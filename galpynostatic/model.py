@@ -25,6 +25,7 @@ import numpy as np
 
 import scipy.interpolate
 
+import sklearn.base
 import sklearn.metrics
 
 # ============================================================================
@@ -32,7 +33,9 @@ import sklearn.metrics
 # ============================================================================
 
 
-class GalvanostaticRegressor:
+class GalvanostaticRegressor(
+    sklearn.base.BaseEstimator, sklearn.base.RegressorMixin
+):
     """Galvanostatic Regressor model class.
 
     Parameters
