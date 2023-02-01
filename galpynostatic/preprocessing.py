@@ -21,14 +21,14 @@ import numpy as np
 
 import scipy.interpolate
 
-from sklearn.base import BaseEstimator, TransformerMixin
+from sklearn.base import TransformerMixin
 
 # ============================================================================
 # CLASSES
 # ============================================================================
 
 
-class GetDischargeCapacities(BaseEstimator, TransformerMixin):
+class GetDischargeCapacities(TransformerMixin):
     """Obtain the discharge capacities at a given cut-off potential.
 
     It subtract from all curves the equilibrium potential to find the capacity
@@ -49,7 +49,7 @@ class GetDischargeCapacities(BaseEstimator, TransformerMixin):
         self.vcut = vcut
 
     def fit(self, X, y=None):
-        """Not used but necessary for the sklearn pipeline."""
+        """Not used but required for the inherited fit_transform method."""
         return self
 
     def transform(self, X, **kwargs):
