@@ -28,14 +28,10 @@ You can install the most recent stable release of galpynostatic with
 pip install galpynostatic
 ```
 
-or you can install it from sources by cloning this 
-[repo](https://github.com/fernandezfran/galpynostatic) and using the editable 
-mode of pip
-
+or you can install the development version directly from this
+[repo](https://github.com/fernandezfran/galpynostatic)
 ```
-git clone https://github.com/fernandezfran/galpynostatic.git 
-cd galpynostatic/
-pip install -e .
+pip install git+https://github.com/fernandezfran/galpynostatic
 ```
 
 
