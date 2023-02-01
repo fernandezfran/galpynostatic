@@ -11,7 +11,7 @@
 # DOCS
 # ============================================================================
 
-"""Model for a galvanostatic fitting."""
+"""Module with the galvanostatic model."""
 
 # ============================================================================
 # IMPORTS
@@ -34,34 +34,34 @@ from sklearn.base import RegressorMixin
 
 
 class GalvanostaticRegressor(RegressorMixin):
-    """Galvanostatic Regressor model class.
+    """An heuristic regressor for galvanostatic data.
 
     Parameters
     ----------
     dataset : pd.DataFrame
-        dataset with a map of xmax as function of l and chi parameters, this
+        Dataset with a map of xmax as function of l and chi parameters, this
         can be loaded using ``galpynostatic.dataset`` load functions.
 
     d : float
-        characteristic diffusion length.
+        Characteristic diffusion length.
 
     z : int
-        geometric factor: 1 for planar, 2 for cylinder and 3 for sphere.
+        Geometric factor: 1 for planar, 2 for cylinder and 3 for sphere.
 
     t_h : int or float, default=3600
-        time equivalent to one hour in suitable time units, by default in
+        Time equivalent to one hour in suitable time units, by default in
         seconds.
 
     Attributes
     ----------
     dcoeff_ : float
-        estimated diffusion coefficient.
+        Estimated diffusion coefficient.
 
     k0_ : float
-        estimated kinetic rate constant.
+        Estimated kinetic rate constant.
 
     mse_ : float
-        mean squared error of the fitted model.
+        Mean squared error of the fitted model.
 
     Notes
     -----
@@ -165,15 +165,15 @@ class GalvanostaticRegressor(RegressorMixin):
         """Kinetic rate constants to evaluate in model training setter."""
         self._k0s = k0s
 
-    def fit(self, C_rates, xmaxs):
+    def fit(self, X, y):
         """Fit the galvanostatic model.
 
         Parameters
         ----------
-        C_rates : array-like of shape (n_measurements, 1).
-            C-rate samples.
+        X : array-like of shape (n_measurements, 1)
+            C rates samples.
 
-        xmaxs : array-like
+        y : array-like
             Target normalized discharge capacities.
 
         Returns
@@ -187,9 +187,9 @@ class GalvanostaticRegressor(RegressorMixin):
         mse = np.full(dks.shape[0], np.inf)
 
         for k, (self.dcoeff_, self.k0_) in enumerate(dks):
-            pred = self.predict(C_rates)
+            pred = self.predict(X)
             if None not in pred:
-                mse[k] = sklearn.metrics.mean_squared_error(xmaxs, pred)
+                mse[k] = sklearn.metrics.mean_squared_error(y, pred)
 
         idx = np.argmin(mse)
 
@@ -198,30 +198,60 @@ class GalvanostaticRegressor(RegressorMixin):
 
         return self
 
-    def predict(self, C_rates):
+    def predict(self, X):
         """Predict using the galvanostatic model in the range of the surface.
 
         Parameters
         ----------
-        C_rates : array-like of shape (n_measurements, 1).
-            C_rate samples
+        X : array-like of shape (n_measurements, 1)
+            C rates samples.
 
         Returns
         -------
-        np.array
-            an array with the predicted normalized discharge capacities
+        y : ndarray
+            The predicted normalized discharge capacities
         """
-        xmax = np.full(C_rates.size, None)
-        for k, c_rate in enumerate(C_rates):
-            logl = self._logl(c_rate[0])
-            logchi = self._logchi(c_rate[0])
+        y = np.full(X.size, None)
+        for k, x in enumerate(X):
+            logl = self._logl(x[0])
+            logchi = self._logchi(x[0])
 
             if (self._ls.min() <= logl <= self._ls.max()) and (
                 self._chis.min() <= logchi <= self._chis.max()
             ):
-                xmax[k] = self._xmax_in_surface(logl, logchi)
+                y[k] = self._xmax_in_surface(logl, logchi)
 
-        return xmax
+        return y
+
+    def score(self, X, y, sample_weight=None):
+        r"""Return the coefficient of determination of the prediction.
+
+        The coefficient of determination :math:`R^2` is defined as
+        :math:`(1 - \\frac{u}{v})`, where :math:`u` is the residual
+        sum of squares ``((y_true - y_pred)** 2).sum()`` and :math:`v`
+        is the total sum of squares ``((y_true - y_true.mean()) ** 2).sum()``.
+        The best possible score is 1.0 and it can be negative (because the
+        model can be arbitrarily worse). A constant model that always predicts
+        the expected value of `y`, disregarding the input features, would get
+        a :math:`R^2` score of 0.0.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_measurements, 1)
+            C rates samples.
+
+        y : array-like
+            True normalized discharge capacities.
+
+        sample_weight : Ignored
+            Not used, presented for sklearn API consistency by convention.
+
+        Returns
+        -------
+        score : float
+            :math:`R^2` of ``self.predict(X)`` wrt. `y`.
+        """
+        return super(GalvanostaticRegressor, self).score(X, y, sample_weight)
 
     def t_minutes_lenght(
         self, minutes=5, load_percentage=0.8, dlogl=0.01, cm_to=10000
@@ -231,31 +261,31 @@ class GalvanostaticRegressor(RegressorMixin):
         Parameters
         ----------
         minutes : int or float, default=5
-            desired minutes to reach the established load
+            Desired minutes to reach the established load.
 
         load_percentage : float, default=0.8
-            desired charge percentage between 0 and 1
+            Desired charge percentage between 0 and 1.
 
         dlogl : float, default=0.01
-            the delta for the decrease of the logarithm value in base 10 of the
-            l value
+            The delta for the decrease of the logarithm value in base 10 of the
+            l value.
 
         cm_to : float, default=10000
-            a factor to convert from cm to another unit, in this case to
-            micrometers
+            A factor to convert from cm to another unit, in this case to
+            micrometers.
 
         Returns
         -------
-        float
-            the characteristic length necessary to charge the battery to the
-            desired percentage and in the desired time
+        length : float
+            The characteristic length necessary to charge the battery to the
+            desired percentage and in the desired time.
 
         Raises
         ------
         ValueError
-            if xmax was not found to be greater than load_percentage and the
-            value of the logarithm in base 10 of l is less than the minimum at
-            which the spline was fitted
+            If the normalized discharge capacity was not found to be greater
+            than load_percentage and the value of the logarithm in base 10 of
+            l is less than the minimum at which the spline was fitted.
         """
         c_rate = 60.0 / minutes
 
@@ -272,38 +302,38 @@ class GalvanostaticRegressor(RegressorMixin):
                     "the surface used."
                 )
 
-        return cm_to * np.sqrt(
+        length = cm_to * np.sqrt(
             (self.z * self.t_h * self.dcoeff_ * 10.0**optlogl) / c_rate
         )
 
-    def plot_vs_data(
-        self, C_rates, xmaxs, ax=None, data_kws=None, pred_kws=None
-    ):
+        return length
+
+    def plot_vs_data(self, X, y, ax=None, data_kws=None, pred_kws=None):
         """Plot predictions against data.
 
         Parameters
         ----------
-        C_rates : array-like of shape (n_measurements, 1).
-            C_rate samples.
+        X : array-like of shape (n_measurements, 1)
+            C rates samples.
 
-        xmaxs : array-like
-            Data of normalized discharge capacities.
+        y : array-like
+            Target normalized discharge capacities.
 
-        ax : matplotlib.pyplot.Axis, default=None
-            the current axes.
+        ax : matplotlib.axes.Axes, default=None
+            The current axes.
 
         data_kws : dict, default=None
-            additional keyword arguments that are passed and are documented in
+            Additional keyword arguments that are passed and are documented in
             ``matplotlib.pyplot.plot`` for the data points.
 
         pred_kws : dict, default=None
-            additional keyword arguments that are passed and are documented in
-            ``matplotlib.pyplot.plot`` for the predictions points.
+            Additional keyword arguments that are passed and are documented in
+            ``matplotlib.pyplot.plot`` for the predictions values.
 
         Returns
         -------
-        matplotlib.pyplot.Axis
-            the current axes.
+        ax : matplotlib.axes.Axes
+            The current axes.
         """
         ax = plt.gca() if ax is None else ax
 
@@ -318,9 +348,9 @@ class GalvanostaticRegressor(RegressorMixin):
         for key, value in zip(keys, ["tab:orange", "", "-", "model"]):
             pred_kws.setdefault(key, value)
 
-        ax.plot(C_rates, xmaxs, **data_kws)
+        ax.plot(X, y, **data_kws)
 
-        xeval = np.linspace(C_rates.min(), C_rates.max(), 250).reshape(-1, 1)
+        xeval = np.linspace(X.min(), X.max(), 250).reshape(-1, 1)
         ax.plot(xeval, self.predict(xeval), **pred_kws)
 
         ax.set_xlabel("C-rates")
@@ -330,30 +360,31 @@ class GalvanostaticRegressor(RegressorMixin):
 
         return ax
 
-    def plot_in_surface(self, C_rates, ax=None, **kwargs):
+    def plot_in_surface(self, X, ax=None, **kwargs):
         """Plot showing in which region of the map the fit is found.
 
         Parameters
         ----------
-        C_rates : array-like
-            C_rate samples
+        X : array-like
+            C rates samples.
 
-        ax : matplotlib.pyplot.Axis, default=None
-            current matplotlib axis
+        ax : matplotlib.axes.Axes, default=None
+            The current matplotlib axes.
 
         **kwargs
-            additional keyword arguments that are passed and are documented in
+            Additional keyword arguments that are passed and are documented in
             ``matplotlib.pyplot.plot``
 
         Returns
         -------
-        matplotlib.pyplot.Axis
+        ax : matplotlib.axes.Axes
+            The current axes.
 
         Notes
         -----
         Only plot the background surface if ax is None, otherwise assume it is
         already plotted and you just want to add the points on it, e.g., to
-        compare different systems
+        compare different systems.
         """
         if ax is None:
             ax = plt.gca()
@@ -364,6 +395,6 @@ class GalvanostaticRegressor(RegressorMixin):
         for key, value in zip(keys, ["k", "o", "--", "fitted data"]):
             kwargs.setdefault(key, value)
 
-        ax.plot(self._logl(C_rates), self._logchi(C_rates), **kwargs)
+        ax.plot(self._logl(X), self._logchi(X), **kwargs)
 
         return ax
