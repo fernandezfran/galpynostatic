@@ -25,17 +25,15 @@ import numpy as np
 
 import scipy.interpolate
 
-import sklearn.base
 import sklearn.metrics
+from sklearn.base import BaseEstimator, RegressorMixin
 
 # ============================================================================
 # CLASSES
 # ============================================================================
 
 
-class GalvanostaticRegressor(
-    sklearn.base.BaseEstimator, sklearn.base.RegressorMixin
-):
+class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
     """Galvanostatic Regressor model class.
 
     Parameters

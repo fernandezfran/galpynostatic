@@ -22,14 +22,14 @@ import importlib_metadata
 
 from . import datasets
 from .model import GalvanostaticRegressor
-from .preprocessing import get_discharge_capacities
+from .preprocessing import GetDischargeCapacities
 
 
 # =============================================================================
 # IMPORTS
 # =============================================================================
 
-__all__ = ["datasets", "GalvanostaticRegressor", "get_discharge_capacities"]
+__all__ = ["datasets", "GalvanostaticRegressor", "GetDischargeCapacities"]
 
 
 NAME = "galpynostatic"

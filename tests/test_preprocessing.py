@@ -99,20 +99,22 @@ def test_get_discharge_capacities(ref, dir_name, file_names, eq_pot):
         for f in file_names
     ]
 
-    xmaxs = galpynostatic.preprocessing.get_discharge_capacities(dfs, eq_pot)
+    gdc = galpynostatic.preprocessing.GetDischargeCapacities(eq_pot)
+    xmaxs = gdc.fit_transform(dfs)
 
     np.testing.assert_array_almost_equal(xmaxs, ref, 5)
 
 
 def test_get_discharge_capacities_raise():
     """Test the get of discharge capacities ValueError raise."""
-    dfs = [
-        pd.DataFrame(
-            {
-                0: np.array([0.0, 0.25, 0.5, 0.75, 1.0]),
-                1: np.array([0.8, 0.75, 0.62, 0.43, 0.26]),
-            }
-        )
-    ]
     with pytest.raises(ValueError):
-        galpynostatic.preprocessing.get_discharge_capacities(dfs, 1.0)
+        galpynostatic.preprocessing.GetDischargeCapacities(1.0).fit_transform(
+            [
+                pd.DataFrame(
+                    {
+                        0: np.array([0.0, 0.25, 0.5, 0.75, 1.0]),
+                        1: np.array([0.8, 0.75, 0.62, 0.43, 0.26]),
+                    }
+                )
+            ]
+        )

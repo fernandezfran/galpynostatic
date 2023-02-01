@@ -21,58 +21,76 @@ import numpy as np
 
 import scipy.interpolate
 
+from sklearn.base import BaseEstimator, TransformerMixin
+
 # ============================================================================
-# FUNCTIONS
+# CLASSES
 # ============================================================================
 
 
-def get_discharge_capacities(dataframes, eq_pot, vcut=0.15, **kwargs):
+class GetDischargeCapacities(BaseEstimator, TransformerMixin):
     """Obtain the discharge capacities at a given cut-off potential.
 
     It subtract from all curves the equilibrium potential to find the capacity
-    at which the potential is cut off 150mV below.
+    at which the potential is cut off below `vcut`.
 
     Parameters
     ----------
-    dataframes : `list` of `pd.DataFrame`
-        having only two columns, where the first one is the capacity and the
-        second one the voltage
-
     eq_pot : float
         equilibrium potential in V
 
     vcut : float, default=0.15
         cut-off potential in V, the default value corresponds to 150 mV, which
         is the one defined by the data of the distributed maps
-
-    **kwargs
-        additional keyword arguments that are passed and are documented in
-        ``scipy.interpolate.InterpolatedUnivariateSpline``
-
-    Returns
-    -------
-    np.array
-        discharge capacities in the same order as the pd.DataFrame in the
-        list
-
-    Raises
-    ------
-    ValueError
-        When one of the galvanostatic profiles passed in `dataframes` does not
-        intersect the cut-off potential below the equilibrium potential
     """
-    try:
-        roots = [
-            scipy.interpolate.InterpolatedUnivariateSpline(
-                df.iloc[:, 0], df.iloc[:, 1] - eq_pot + vcut, **kwargs
-            ).roots()[0]
-            for df in dataframes
-        ]
 
-    except IndexError:
-        raise ValueError(
-            "A galvanostatic profile does not intersect the cut-off potential "
-            "from the equlibrium potential."
-        )
+    def __init__(self, eq_pot, vcut=0.15):
+        self.eq_pot = eq_pot
+        self.vcut = vcut
 
-    return np.array(roots, dtype=np.float32)
+    def fit(self, X, y=None):
+        """Not used but necessary for the sklearn pipeline."""
+        return self
+
+    def transform(self, X, **kwargs):
+        """Perform the substraction of the X curves.
+
+        Parameters
+        ----------
+        X : `list` of `pd.DataFrame`
+            having only two columns, where the first one is the capacity and
+            the second one the voltage
+
+        **kwargs
+            additional keyword arguments that are passed and are documented in
+            ``scipy.interpolate.InterpolatedUnivariateSpline``
+
+        Returns
+        -------
+        np.array
+            discharge capacities in the same order as the pd.DataFrame in the
+            list
+
+        Raises
+        ------
+        ValueError
+            When one of the galvanostatic profiles passed in `X` does not
+            intersect the cut-off potential below the equilibrium potential
+        """
+        try:
+            roots = [
+                scipy.interpolate.InterpolatedUnivariateSpline(
+                    df.iloc[:, 0],
+                    df.iloc[:, 1] - self.eq_pot + self.vcut,
+                    **kwargs,
+                ).roots()[0]
+                for df in X
+            ]
+
+        except IndexError:
+            raise ValueError(
+                "A galvanostatic profile does not intersect the cut-off "
+                "potential from the equlibrium potential."
+            )
+
+        return np.array(roots, dtype=np.float32)
