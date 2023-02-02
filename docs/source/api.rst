@@ -41,3 +41,13 @@ Package contents
    :show-inheritance:
    :inherited-members:
    :member-order: bysource
+
+
+``galpynostatic.plot`` module
+-----------------------------
+
+.. automodule:: galpynostatic.plot
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :member-order: bysource

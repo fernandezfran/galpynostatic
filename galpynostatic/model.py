@@ -19,14 +19,14 @@
 
 import itertools as it
 
-import matplotlib.pyplot as plt
-
 import numpy as np
 
 import scipy.interpolate
 
 import sklearn.metrics
 from sklearn.base import RegressorMixin
+
+from .plot import GalvanostaticPlotter
 
 # ============================================================================
 # CLASSES
@@ -119,31 +119,6 @@ class GalvanostaticRegressor(RegressorMixin):
             self._chis,
             np.asarray(xmaxs).reshape(self._ls.size, self._chis.size)[:, ::-1],
         )
-
-    def _plot_surface(self, ax=None):
-        """Plot 2D surface."""
-        ax = plt.gca() if ax is None else ax
-
-        leval = np.linspace(np.min(self._ls), np.max(self._ls), num=1000)
-        chieval = np.linspace(np.min(self._chis), np.max(self._chis), num=1000)
-
-        z = self._surf_spl(leval, chieval)
-        z[z > 1] = 1.0
-        z[z < 0] = 0.0
-
-        im = ax.imshow(
-            z.T,
-            extent=[leval.min(), leval.max(), chieval.min(), chieval.max()],
-            origin="lower",
-        )
-        clb = plt.colorbar(im)
-        clb.ax.set_ylabel(r"x$_{max}$")
-        clb.ax.set_ylim((0, 1))
-
-        ax.set_xlabel(r"log($\ell$)")
-        ax.set_ylabel(r"log($\Xi$)")
-
-        return ax
 
     @property
     def dcoeffs(self):
@@ -253,6 +228,11 @@ class GalvanostaticRegressor(RegressorMixin):
         """
         return super(GalvanostaticRegressor, self).score(X, y, sample_weight)
 
+    @property
+    def plot(self):
+        """Plot accessor."""
+        return GalvanostaticPlotter(self)
+
     def t_minutes_lenght(
         self, minutes=5, load_percentage=0.8, dlogl=0.01, cm_to=10000
     ):
@@ -307,94 +287,3 @@ class GalvanostaticRegressor(RegressorMixin):
         )
 
         return length
-
-    def plot_vs_data(self, X, y, ax=None, data_kws=None, pred_kws=None):
-        """Plot predictions against data.
-
-        Parameters
-        ----------
-        X : array-like of shape (n_measurements, 1)
-            C rates samples.
-
-        y : array-like
-            Target normalized discharge capacities.
-
-        ax : matplotlib.axes.Axes, default=None
-            The current axes.
-
-        data_kws : dict, default=None
-            Additional keyword arguments that are passed and are documented in
-            ``matplotlib.pyplot.plot`` for the data points.
-
-        pred_kws : dict, default=None
-            Additional keyword arguments that are passed and are documented in
-            ``matplotlib.pyplot.plot`` for the predictions values.
-
-        Returns
-        -------
-        ax : matplotlib.axes.Axes
-            The current axes.
-        """
-        ax = plt.gca() if ax is None else ax
-
-        data_kws = {} if data_kws is None else data_kws
-        pred_kws = {} if pred_kws is None else pred_kws
-
-        keys = ["color", "marker", "linestyle", "label"]
-
-        for key, value in zip(keys, ["tab:blue", "s", "--", "data"]):
-            data_kws.setdefault(key, value)
-
-        for key, value in zip(keys, ["tab:orange", "", "-", "model"]):
-            pred_kws.setdefault(key, value)
-
-        ax.plot(X, y, **data_kws)
-
-        xeval = np.linspace(X.min(), X.max(), 250).reshape(-1, 1)
-        ax.plot(xeval, self.predict(xeval), **pred_kws)
-
-        ax.set_xlabel("C-rates")
-        ax.set_ylabel("SOC")
-
-        ax.set_xscale("log")
-
-        return ax
-
-    def plot_in_surface(self, X, ax=None, **kwargs):
-        """Plot showing in which region of the map the fit is found.
-
-        Parameters
-        ----------
-        X : array-like
-            C rates samples.
-
-        ax : matplotlib.axes.Axes, default=None
-            The current matplotlib axes.
-
-        **kwargs
-            Additional keyword arguments that are passed and are documented in
-            ``matplotlib.pyplot.plot``
-
-        Returns
-        -------
-        ax : matplotlib.axes.Axes
-            The current axes.
-
-        Notes
-        -----
-        Only plot the background surface if ax is None, otherwise assume it is
-        already plotted and you just want to add the points on it, e.g., to
-        compare different systems.
-        """
-        if ax is None:
-            ax = plt.gca()
-            ax = self._plot_surface(ax)
-
-        # fitted data plot
-        keys = ["color", "marker", "linestyle", "label"]
-        for key, value in zip(keys, ["k", "o", "--", "fitted data"]):
-            kwargs.setdefault(key, value)
-
-        ax.plot(self._logl(X), self._logchi(X), **kwargs)
-
-        return ax
