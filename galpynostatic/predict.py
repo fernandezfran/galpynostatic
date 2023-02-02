@@ -24,7 +24,7 @@ import numpy as np
 # ============================================================================
 
 
-def t_minutes_lenght(greg, minutes=5, loaded=0.8, dlogl=0.01, cm_to=10000):
+def t_minutes_length(greg, minutes=5, loaded=0.8, dlogl=0.01, cm_to=10000):
     """Obtain the characteristic diffusion length to charge in t minutes.
 
     Parameters

@@ -22,6 +22,7 @@ import importlib_metadata
 
 from . import datasets
 from .model import GalvanostaticRegressor
+from .predict import t_minutes_length
 from .preprocessing import GetDischargeCapacities
 
 
@@ -29,7 +30,12 @@ from .preprocessing import GetDischargeCapacities
 # IMPORTS
 # =============================================================================
 
-__all__ = ["datasets", "GalvanostaticRegressor", "GetDischargeCapacities"]
+__all__ = [
+    "datasets",
+    "GalvanostaticRegressor",
+    "GetDischargeCapacities",
+    "t_minutes_length",
+]
 
 
 NAME = "galpynostatic"
