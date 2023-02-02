@@ -1,4 +1,4 @@
-C_rates,xmaxs_true,xmaxs_pred
+C_rates,SOC_true,SOC_pred
 0.5,0.994179,0.9859378
 1.0,0.967568,0.97477895
 2.0,0.930123,0.95247746

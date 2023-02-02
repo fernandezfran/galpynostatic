@@ -100,9 +100,9 @@ def test_get_discharge_capacities(ref, dir_name, file_names, eq_pot):
     ]
 
     gdc = galpynostatic.preprocessing.GetDischargeCapacities(eq_pot)
-    xmaxs = gdc.fit_transform(dfs)
+    soc = gdc.fit_transform(dfs)
 
-    np.testing.assert_array_almost_equal(xmaxs, ref, 5)
+    np.testing.assert_array_almost_equal(soc, ref, 5)
 
 
 def test_get_discharge_capacities_raise():

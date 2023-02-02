@@ -36,7 +36,7 @@ def t_minutes_length(greg, minutes=5, loaded=0.8, dlogl=0.01, cm_to=10000):
         Desired minutes to reach the established load.
 
     loaded : float, default=0.8
-        Desired charge percentage between 0 and 1.
+        Desired State of Charge (SOC), between 0 and 1.
 
     dlogl : float, default=0.01
         The delta for the decrease of the logarithm value in base 10 of the l
@@ -55,18 +55,18 @@ def t_minutes_length(greg, minutes=5, loaded=0.8, dlogl=0.01, cm_to=10000):
     Raises
     ------
     ValueError
-        If the normalized discharge capacity was not found to be greater than
-        loaded and the value of the logarithm in base 10 of l is less than the
-        minimum at which the spline was fitted.
+        If the SOC was not found to be greater than loaded and the value of the
+        logarithm in base 10 of l is less than the minimum at which the spline
+        was fitted.
     """
     c_rate = 60.0 / minutes
 
     logchi = greg._logchi(c_rate)
 
-    optlogl, xmax = greg._logl(c_rate), 0.0
-    while xmax < loaded:
+    optlogl, soc = greg._logl(c_rate), 0.0
+    while soc < loaded:
         optlogl -= dlogl
-        xmax = greg._xmax_in_surface(optlogl, logchi)
+        soc = greg._soc_in_surface(optlogl, logchi)
         if optlogl < np.min(greg._ls):
             raise ValueError(
                 "It was not possible to find the optimum value for the "

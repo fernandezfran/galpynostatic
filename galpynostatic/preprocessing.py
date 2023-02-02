@@ -31,8 +31,12 @@ from sklearn.base import TransformerMixin
 class GetDischargeCapacities(TransformerMixin):
     """Obtain the discharge capacities at a given cut-off potential.
 
-    It subtract from all curves the equilibrium potential to find the capacity
-    at which the potential is cut off below `vcut`.
+    Discharge capacities are useful to define the State of Charge (SOC) of the
+    electrode material by dividing the former by the maximum possible discharge
+    capacity for that particular system.
+
+    This Transformer will subtract from all curves the equilibrium potential
+    to find the capacity at which the potential is cut off below `vcut`.
 
     Parameters
     ----------

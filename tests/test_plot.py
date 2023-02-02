@@ -37,7 +37,7 @@ DATASET = galpynostatic.datasets.load_spherical()
 
 
 @pytest.mark.parametrize(
-    ("d", "dcoeff", "k0", "C_rates", "xmaxs"),
+    ("d", "dcoeff", "k0", "C_rates", "soc"),
     [  # nishikawa, mancini, he, wang, lei, bak data
         (
             np.sqrt(0.25 * 8.04e-6 / np.pi),
@@ -118,7 +118,7 @@ DATASET = galpynostatic.datasets.load_spherical()
     ],
 )
 @check_figures_equal(extensions=["png", "pdf"], tol=0.000001)
-def test_plot_versus_data(fig_test, fig_ref, d, dcoeff, k0, C_rates, xmaxs):
+def test_plot_versus_data(fig_test, fig_ref, d, dcoeff, k0, C_rates, soc):
     """Test the plot vs data points."""
     greg = galpynostatic.model.GalvanostaticRegressor(DATASET, d, 3)
 
@@ -130,11 +130,11 @@ def test_plot_versus_data(fig_test, fig_ref, d, dcoeff, k0, C_rates, xmaxs):
 
     # g reg plot
     test_ax = fig_test.subplots()
-    greg.plot.versus_data(C_rates, xmaxs, ax=test_ax)
+    greg.plot.versus_data(C_rates, soc, ax=test_ax)
 
     # ref plot
     ref_ax = fig_ref.subplots()
-    ref_ax.plot(C_rates, xmaxs, marker="s", linestyle="--")
+    ref_ax.plot(C_rates, soc, marker="s", linestyle="--")
 
     xeval = np.linspace(C_rates.min(), C_rates.max(), 250).reshape(-1, 1)
     ref_ax.plot(xeval, greg.predict(xeval), marker="", linestyle="-")
@@ -211,7 +211,7 @@ def test_plot_in_surface(fig_test, fig_ref, d, dcoeff, k0, C_rates):
     ls = np.unique(DATASET.l)
     chis = np.unique(DATASET.chi)
 
-    k, xmaxs = 0, []
+    k, soc = 0, []
     for logl, logchi in it.product(ls, chis[::-1]):
         xmax = 0
         try:
@@ -221,11 +221,11 @@ def test_plot_in_surface(fig_test, fig_ref, d, dcoeff, k0, C_rates):
         except KeyError:
             ...
         finally:
-            xmaxs.append(xmax)
+            soc.append(xmax)
 
-    xmaxs = np.asarray(xmaxs).reshape(ls.size, chis.size)[:, ::-1]
+    soc = np.asarray(soc).reshape(ls.size, chis.size)[:, ::-1]
 
-    spl = scipy.interpolate.RectBivariateSpline(ls, chis, xmaxs)
+    spl = scipy.interpolate.RectBivariateSpline(ls, chis, soc)
 
     leval = np.linspace(np.min(ls), np.max(ls), num=1000)
     chieval = np.linspace(np.min(chis), np.max(chis), num=1000)

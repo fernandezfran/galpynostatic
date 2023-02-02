@@ -85,7 +85,7 @@ class GalvanostaticPlotter:
         Parameters
         ----------
         X : array-like of shape (n_measurements, 1)
-            C rates samples.
+            C rates measurements.
 
         ax : matplotlib.axes.Axes, default=None
             The current matplotlib axes.
@@ -105,10 +105,7 @@ class GalvanostaticPlotter:
         already plotted and you just want to add the points on it, e.g., to
         compare different systems.
         """
-        no_ax = True if ax is None else False
-
-        ax = plt.gca() if ax is None else ax
-        ax = self.surface(ax) if no_ax else ax
+        ax = self.surface() if ax is None else ax
 
         keys = ["color", "marker", "linestyle", "label"]
         for key, value in zip(keys, ["k", "o", "--", "fitted data"]):
@@ -124,10 +121,10 @@ class GalvanostaticPlotter:
         Parameters
         ----------
         X : array-like of shape (n_measurements, 1)
-            C rates samples.
+            C rates measurements.
 
         y : array-like
-            Target normalized discharge capacities.
+            Target State of Charge (SOC).
 
         ax : matplotlib.axes.Axes, default=None
             The current axes.

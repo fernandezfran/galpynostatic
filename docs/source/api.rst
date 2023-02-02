@@ -11,6 +11,7 @@ galpynostatic API
 Package contents
 ----------------
 
+.. _galpynostatic.datasets:
 
 ``galpynostatic.datasets`` module
 ---------------------------------

@@ -57,7 +57,7 @@ def test_k0s():
 
 
 @pytest.mark.parametrize(
-    ("ref", "d", "C_rates", "xmaxs"),
+    ("ref", "d", "C_rates", "soc"),
     [  # nishikawa, mancini, he, wang, lei, bak data
         (
             {"dcoeff": 1e-9, "k0": 1e-6, "mse": 0.00469549},
@@ -115,7 +115,7 @@ def test_k0s():
         ),
     ],
 )
-def test_fit(ref, d, C_rates, xmaxs):
+def test_fit(ref, d, C_rates, soc):
     """Test the fitting of the model: dcoeff, k0 and mse."""
     greg = galpynostatic.model.GalvanostaticRegressor(DATASET, d, 3)
 
@@ -123,7 +123,7 @@ def test_fit(ref, d, C_rates, xmaxs):
     greg.dcoeffs = 10.0 ** np.arange(-14, -6, 1)
     greg.k0s = 10.0 ** np.arange(-13, -5, 1)
 
-    greg = greg.fit(C_rates, xmaxs)
+    greg = greg.fit(C_rates, soc)
 
     np.testing.assert_almost_equal(greg.dcoeff_, ref["dcoeff"], 12)
     np.testing.assert_almost_equal(greg.k0_, ref["k0"], 10)
@@ -198,7 +198,7 @@ def test_fit(ref, d, C_rates, xmaxs):
     ],
 )
 def test_predict(ref, d, dcoeff, k0, C_rates):
-    """Test the predict of the xmaxs values."""
+    """Test the predict of the soc values."""
     greg = galpynostatic.model.GalvanostaticRegressor(DATASET, d, 3)
 
     # fit results
@@ -206,13 +206,13 @@ def test_predict(ref, d, dcoeff, k0, C_rates):
     greg.k0_ = k0
 
     greg._surface()
-    xmaxs = greg.predict(C_rates)
+    soc = greg.predict(C_rates)
 
-    np.testing.assert_array_almost_equal(xmaxs, ref, 6)
+    np.testing.assert_array_almost_equal(soc, ref, 6)
 
 
 @pytest.mark.parametrize(
-    ("ref", "d", "C_rates", "xmaxs"),
+    ("ref", "d", "C_rates", "soc"),
     [  # nishikawa, mancini, he, wang, lei, bak data
         (
             0.8443919,
@@ -270,7 +270,7 @@ def test_predict(ref, d, dcoeff, k0, C_rates):
         ),
     ],
 )
-def test_score(ref, d, C_rates, xmaxs):
+def test_score(ref, d, C_rates, soc):
     """Test the r2 score of the model."""
     greg = galpynostatic.model.GalvanostaticRegressor(DATASET, d, 3)
 
@@ -278,15 +278,15 @@ def test_score(ref, d, C_rates, xmaxs):
     greg.dcoeffs = 10.0 ** np.arange(-14, -6, 1)
     greg.k0s = 10.0 ** np.arange(-13, -5, 1)
 
-    greg = greg.fit(C_rates, xmaxs)
+    greg = greg.fit(C_rates, soc)
 
-    r2 = greg.score(C_rates, xmaxs)
+    r2 = greg.score(C_rates, soc)
 
     np.testing.assert_almost_equal(r2, ref)
 
 
 @pytest.mark.parametrize(
-    ("path", "d", "C_rates", "xmaxs"),
+    ("path", "d", "C_rates", "soc"),
     [  # nishikawa, mancini, he, wang, lei, bak data
         (
             "LMNO",
@@ -344,7 +344,7 @@ def test_score(ref, d, C_rates, xmaxs):
         ),
     ],
 )
-def test_to_dataframe(path, d, C_rates, xmaxs):
+def test_to_dataframe(path, d, C_rates, soc):
     """Test the dataframe."""
     df_ref = pd.read_csv(TEST_DATA_PATH / path / "df.csv", dtype=np.float32)
 
@@ -354,8 +354,8 @@ def test_to_dataframe(path, d, C_rates, xmaxs):
     greg.dcoeffs = 10.0 ** np.arange(-14, -6, 1)
     greg.k0s = 10.0 ** np.arange(-13, -5, 1)
 
-    greg = greg.fit(C_rates, xmaxs)
+    greg = greg.fit(C_rates, soc)
 
-    df = greg.to_dataframe(C_rates, y=xmaxs)
+    df = greg.to_dataframe(C_rates, y=soc)
 
     pd.testing.assert_frame_equal(df, df_ref)

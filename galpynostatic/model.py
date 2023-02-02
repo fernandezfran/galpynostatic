@@ -41,8 +41,9 @@ class GalvanostaticRegressor(RegressorMixin):
     Parameters
     ----------
     dataset : pd.DataFrame
-        Dataset with a map of xmax as function of l and chi parameters, this
-        can be loaded using ``galpynostatic.dataset`` load functions.
+        Dataset with a map of State of Charge (SOC) as function of l and chi
+        parameters, this can be loaded using :ref:`galpynostatic.datasets`
+        load functions.
 
     d : float
         Characteristic diffusion length.
@@ -95,8 +96,8 @@ class GalvanostaticRegressor(RegressorMixin):
         """Logarithm value of chi parameter in base 10."""
         return np.log10(self.k0_ * np.sqrt(self.t_h / (cr * self.dcoeff_)))
 
-    def _xmax_in_surface(self, logl, logchi):
-        """Find the value of xmax given the surface spline."""
+    def _soc_in_surface(self, logl, logchi):
+        """Find the value of soc given the surface spline."""
         return max(0, min(1, self._surf_spl(logl, logchi)[0][0]))
 
     def _surface(self):
@@ -104,22 +105,22 @@ class GalvanostaticRegressor(RegressorMixin):
         self._ls = np.unique(self.dataset.l)
         self._chis = np.unique(self.dataset.chi)
 
-        k, xmaxs = 0, []
+        k, socs = 0, []
         for logl, logchi in it.product(self._ls, self._chis[::-1]):
-            xmax = 0
+            soc = 0
             try:
                 if logl == self.dataset.l[k] and logchi == self.dataset.chi[k]:
-                    xmax = self.dataset.xmax[k]
+                    soc = self.dataset.xmax[k]
                     k += 1
             except KeyError:
                 ...
             finally:
-                xmaxs.append(xmax)
+                socs.append(soc)
 
         self._surf_spl = scipy.interpolate.RectBivariateSpline(
             self._ls,
             self._chis,
-            np.asarray(xmaxs).reshape(self._ls.size, self._chis.size)[:, ::-1],
+            np.asarray(socs).reshape(self._ls.size, self._chis.size)[:, ::-1],
         )
 
     @property
@@ -148,10 +149,10 @@ class GalvanostaticRegressor(RegressorMixin):
         Parameters
         ----------
         X : array-like of shape (n_measurements, 1)
-            C rates samples.
+            C rates measurements.
 
         y : array-like
-            Target normalized discharge capacities.
+            Target State of Charge (SOC).
 
         Returns
         -------
@@ -181,12 +182,12 @@ class GalvanostaticRegressor(RegressorMixin):
         Parameters
         ----------
         X : array-like of shape (n_measurements, 1)
-            C rates samples.
+            C rates measurements.
 
         Returns
         -------
         y : ndarray
-            The predicted normalized discharge capacities
+            The predicted SOC for the C rates inputs.
         """
         y = np.full(X.size, None)
         for k, x in enumerate(X):
@@ -196,7 +197,7 @@ class GalvanostaticRegressor(RegressorMixin):
             if (self._ls.min() <= logl <= self._ls.max()) and (
                 self._chis.min() <= logchi <= self._chis.max()
             ):
-                y[k] = self._xmax_in_surface(logl, logchi)
+                y[k] = self._soc_in_surface(logl, logchi)
 
         return y
 
@@ -204,7 +205,7 @@ class GalvanostaticRegressor(RegressorMixin):
         r"""Return the coefficient of determination of the prediction.
 
         The coefficient of determination :math:`R^2` is defined as
-        :math:`(1 - \\frac{u}{v})`, where :math:`u` is the residual
+        :math:`(1 - \frac{u}{v})`, where :math:`u` is the residual
         sum of squares ``((y_true - y_pred)** 2).sum()`` and :math:`v`
         is the total sum of squares ``((y_true - y_true.mean()) ** 2).sum()``.
         The best possible score is 1.0 and it can be negative (because the
@@ -215,10 +216,10 @@ class GalvanostaticRegressor(RegressorMixin):
         Parameters
         ----------
         X : array-like of shape (n_measurements, 1)
-            C rates samples.
+            C rates measurements.
 
         y : array-like
-            True normalized discharge capacities.
+            True SOC.
 
         sample_weight : Ignored
             Not used, presented for sklearn API consistency by convention.
@@ -239,12 +240,12 @@ class GalvanostaticRegressor(RegressorMixin):
         """Convert the train or the evaluation set to a dataframe.
 
         You can transform the training dataset, in case you pass in the y
-        values, you will have a dataframe with three columns: C_rates,
-        xmaxs_true & xmaxs_pred.
+        values, you will have a dataframe with three columns: `C_rates`,
+        `SOC_true` & `SOC_pred`.
 
         In the default case, in which `y` is `None`, you can pass any value of
         `X` with physical meaning and predict on it, in that case the dataframe
-        will have only two columns: C_rates & xmaxs_pred.
+        will have only two columns: `C_rates` & `SOC_pred`.
 
         Parameters
         ----------
@@ -252,7 +253,7 @@ class GalvanostaticRegressor(RegressorMixin):
             C rates.
 
         y : array-like, default=None
-            Normalized discharge capacities.
+            SOC.
 
         Returns
         -------
@@ -262,8 +263,8 @@ class GalvanostaticRegressor(RegressorMixin):
         dict_ = {"C_rates": X.ravel()}
 
         if y is not None:
-            dict_["xmaxs_true"] = y
+            dict_["SOC_true"] = y
 
-        dict_["xmaxs_pred"] = self.predict(X)
+        dict_["SOC_pred"] = self.predict(X)
 
         return pd.DataFrame(dict_, dtype=np.float32)
