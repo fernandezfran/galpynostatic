@@ -66,8 +66,8 @@ def t_minutes_length(greg, minutes=5, loaded=0.8, dlogl=0.01, cm_to=10000):
     optlogl, soc = greg._logl(c_rate), 0.0
     while soc < loaded:
         optlogl -= dlogl
-        soc = greg._soc_in_surface(optlogl, logchi)
-        if optlogl < np.min(greg._ls):
+        soc = greg._soc_approx(optlogl, logchi)
+        if optlogl < np.min(greg._surface.ls):
             raise ValueError(
                 "It was not possible to find the optimum value for the "
                 "length given the established conditions and the range of "

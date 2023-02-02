@@ -126,8 +126,6 @@ def test_plot_versus_data(fig_test, fig_ref, d, dcoeff, k0, C_rates, soc):
     greg.dcoeff_ = dcoeff
     greg.k0_ = k0
 
-    greg._surface()
-
     # g reg plot
     test_ax = fig_test.subplots()
     greg.plot.versus_data(C_rates, soc, ax=test_ax)
@@ -195,8 +193,6 @@ def test_plot_in_surface(fig_test, fig_ref, d, dcoeff, k0, C_rates):
     # nishikawa fitted res
     greg.dcoeff_ = dcoeff
     greg.k0_ = k0
-
-    greg._surface()
 
     # g reg plot
     test_ax = fig_test.subplots()

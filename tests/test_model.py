@@ -205,7 +205,6 @@ def test_predict(ref, d, dcoeff, k0, C_rates):
     greg.dcoeff_ = dcoeff
     greg.k0_ = k0
 
-    greg._surface()
     soc = greg.predict(C_rates)
 
     np.testing.assert_array_almost_equal(soc, ref, 6)

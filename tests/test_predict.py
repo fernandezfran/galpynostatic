@@ -49,7 +49,6 @@ def test_t_minutes_lenght(ref, d, dcoeff, k0):
     greg.dcoeff_ = dcoeff
     greg.k0_ = k0
 
-    greg._surface()
     lenght = galpynostatic.predict.t_minutes_length(greg)
 
     np.testing.assert_array_almost_equal(lenght, ref, 6)
@@ -63,6 +62,5 @@ def test_t_minutes_raise():
     greg.dcoeff_ = 3e-5
     greg.k0_ = 1e-7
 
-    greg._surface()
     with pytest.raises(ValueError):
         galpynostatic.predict.t_minutes_length(greg)

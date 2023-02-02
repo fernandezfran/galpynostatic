@@ -23,11 +23,10 @@ import numpy as np
 
 import pandas as pd
 
-import scipy.interpolate
-
 import sklearn.metrics
 from sklearn.base import RegressorMixin
 
+from ._surface import SurfaceSpline
 from .plot import GalvanostaticPlotter
 
 # ============================================================================
@@ -86,6 +85,8 @@ class GalvanostaticRegressor(RegressorMixin):
         self._dcoeffs = np.logspace(-15, -6, num=100)
         self._k0s = np.logspace(-14, -5, num=100)
 
+        self._surface = SurfaceSpline(dataset)
+
     def _logl(self, cr):
         """Logarithm value of l parameter in base 10."""
         return np.log10(
@@ -96,32 +97,13 @@ class GalvanostaticRegressor(RegressorMixin):
         """Logarithm value of chi parameter in base 10."""
         return np.log10(self.k0_ * np.sqrt(self.t_h / (cr * self.dcoeff_)))
 
-    def _soc_in_surface(self, logl, logchi):
-        """Find the value of soc given the surface spline."""
-        return max(0, min(1, self._surf_spl(logl, logchi)[0][0]))
+    def _soc_approx(self, logl, logchi):
+        """Find the value of soc given the surface spline.
 
-    def _surface(self):
-        """Surface spline."""
-        self._ls = np.unique(self.dataset.l)
-        self._chis = np.unique(self.dataset.chi)
-
-        k, socs = 0, []
-        for logl, logchi in it.product(self._ls, self._chis[::-1]):
-            soc = 0
-            try:
-                if logl == self.dataset.l[k] and logchi == self.dataset.chi[k]:
-                    soc = self.dataset.xmax[k]
-                    k += 1
-            except KeyError:
-                ...
-            finally:
-                socs.append(soc)
-
-        self._surf_spl = scipy.interpolate.RectBivariateSpline(
-            self._ls,
-            self._chis,
-            np.asarray(socs).reshape(self._ls.size, self._chis.size)[:, ::-1],
-        )
+        This is a linear function bounded in [0, 1], values exceeding this
+        range are taken to the corresponding end point.
+        """
+        return max(0, min(1, self._surface.spline(logl, logchi)[0][0]))
 
     @property
     def dcoeffs(self):
@@ -159,8 +141,6 @@ class GalvanostaticRegressor(RegressorMixin):
         self : object
             Fitted model.
         """
-        self._surface()
-
         dks = np.array(list(it.product(self._dcoeffs, self._k0s)))
         mse = np.full(dks.shape[0], np.inf)
 
@@ -194,10 +174,10 @@ class GalvanostaticRegressor(RegressorMixin):
             logl = self._logl(x[0])
             logchi = self._logchi(x[0])
 
-            if (self._ls.min() <= logl <= self._ls.max()) and (
-                self._chis.min() <= logchi <= self._chis.max()
+            if (self._surface.ls.min() <= logl <= self._surface.ls.max()) and (
+                self._surface.chis.min() <= logchi <= self._surface.chis.max()
             ):
-                y[k] = self._soc_in_surface(logl, logchi)
+                y[k] = self._soc_approx(logl, logchi)
 
         return y
 

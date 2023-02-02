@@ -55,13 +55,17 @@ class GalvanostaticPlotter:
         ax = plt.gca() if ax is None else ax
 
         leval = np.linspace(
-            np.min(self.greg._ls), np.max(self.greg._ls), num=1000
+            np.min(self.greg._surface.ls),
+            np.max(self.greg._surface.ls),
+            num=1000,
         )
         chieval = np.linspace(
-            np.min(self.greg._chis), np.max(self.greg._chis), num=1000
+            np.min(self.greg._surface.chis),
+            np.max(self.greg._surface.chis),
+            num=1000,
         )
 
-        z = self.greg._surf_spl(leval, chieval)
+        z = self.greg._surface.spline(leval, chieval)
         z[z > 1] = 1.0
         z[z < 0] = 0.0
 
