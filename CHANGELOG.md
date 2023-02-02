@@ -18,7 +18,7 @@ diffusion length to charge the electrode material in t minutes.
     - runs on Ubuntu with Python 3.8+
     - documentation with installation guide, tutorial and API in readthedocs.
     - multiple unit tests.
-    - >90% coverage.
+    - coverage > 90%.
     - PEP8 style code assured with flake8 and extensions.
     - CI/CD on GitHub Actions.
     - MIT LICENSE.
