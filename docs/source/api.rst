@@ -51,3 +51,13 @@ Package contents
    :undoc-members:
    :show-inheritance:
    :member-order: bysource
+
+
+``galpynostatic.predict`` module
+--------------------------------
+
+.. automodule:: galpynostatic.predict
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :member-order: bysource
