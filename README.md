@@ -35,40 +35,11 @@ pip install git+https://github.com/fernandezfran/galpynostatic
 ```
 
 
-## Quickstart
+## Usage
 
-```python
-import galpynostatic
-
-# experimental data definition (with numpy and pandas)
-C_rates, dataframes, eq_pot, xmax, d = ...
-
-# obtain discharge capacities
-xmaxs = galpynostatic.preprocessing.get_discharge_capacities(dataframes, eq_pot)
-
-# xmaxs normalization by a maximum value
-xmaxs = xmaxs / xmax
-
-# fit the model
-dataset = galpynostatic.datasets.load_spherical()
-greg = galpynostatic.model.GalvanostaticRegressor(dataset, d, 3)
-greg.fit(C_rates, xmaxs)
-
-# get the diffusion coefficient and the kinetic rate constant
-dcoeff = greg.dcoeff_
-k0 = greg.k0_
-
-# and an estimation of the characteristic diffusion length to charge the 80%
-# of the electrode in 5 minutes
-new_d = greg.t_minutes_lenght()
-```
-
-The `greg` object also allows to obtain the values predicted by the model, plot 
-these predictions next to the experimental data and plot the points on the 
-surface on which they were fitted. For a broader view, please refer to the 
-[documentation tutorials](https://galpynostatic.readthedocs.io/en/latest/tutorial/index.html)
-or the [examples](https://github.com/fernandezfran/galpynostatic/tree/main/examples).
-
+To learn how to use galpynostatic you can start by following the 
+[tutorial examples](https://galpynostatic.readthedocs.io/en/latest/tutorial/index.html) 
+and then take a look at the [API](https://galpynostatic.readthedocs.io/en/latest/api.html).
 
 
 ## License

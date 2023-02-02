@@ -260,8 +260,10 @@ class GalvanostaticRegressor(RegressorMixin):
             A dataframe with the train or the evaluation set values.
         """
         dict_ = {"C_rates": X.ravel()}
+
         if y is not None:
             dict_["xmaxs_true"] = y
-        y_pred = self.predict(X)
-        dict_["xmaxs_pred"] = y_pred
+
+        dict_["xmaxs_pred"] = self.predict(X)
+
         return pd.DataFrame(dict_, dtype=np.float32)
