@@ -21,6 +21,8 @@ import itertools as it
 
 import numpy as np
 
+import pandas as pd
+
 import scipy.interpolate
 
 import sklearn.metrics
@@ -232,3 +234,34 @@ class GalvanostaticRegressor(RegressorMixin):
     def plot(self):
         """Plot accessor."""
         return GalvanostaticPlotter(self)
+
+    def to_dataframe(self, X, y=None):
+        """Convert the train or the evaluation set to a dataframe.
+
+        You can transform the training dataset, in case you pass in the y
+        values, you will have a dataframe with three columns: C_rates,
+        xmaxs_true & xmaxs_pred.
+
+        In the default case, in which `y` is `None`, you can pass any value of
+        `X` with physical meaning and predict on it, in that case the dataframe
+        will have only two columns: C_rates & xmaxs_pred.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_measurements, 1)
+            C rates.
+
+        y : array-like, default=None
+            Normalized discharge capacities.
+
+        Returns
+        -------
+        df : pd.DataFrame
+            A dataframe with the train or the evaluation set values.
+        """
+        dict_ = {"C_rates": X.ravel()}
+        if y is not None:
+            dict_["xmaxs_true"] = y
+        y_pred = self.predict(X)
+        dict_["xmaxs_pred"] = y_pred
+        return pd.DataFrame(dict_, dtype=np.float32)

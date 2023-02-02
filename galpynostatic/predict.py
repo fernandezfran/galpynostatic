@@ -24,9 +24,7 @@ import numpy as np
 # ============================================================================
 
 
-def t_minutes_lenght(
-    greg, minutes=5, load_percentage=0.8, dlogl=0.01, cm_to=10000
-):
+def t_minutes_lenght(greg, minutes=5, loaded=0.8, dlogl=0.01, cm_to=10000):
     """Obtain the characteristic diffusion length to charge in t minutes.
 
     Parameters
@@ -37,12 +35,12 @@ def t_minutes_lenght(
     minutes : int or float, default=5
         Desired minutes to reach the established load.
 
-    load_percentage : float, default=0.8
+    loaded : float, default=0.8
         Desired charge percentage between 0 and 1.
 
     dlogl : float, default=0.01
-        The delta for the decrease of the logarithm value in base 10 of the
-        l value.
+        The delta for the decrease of the logarithm value in base 10 of the l
+        value.
 
     cm_to : float, default=10000
         A factor to convert from cm to another unit, in this case to
@@ -57,16 +55,16 @@ def t_minutes_lenght(
     Raises
     ------
     ValueError
-        If the normalized discharge capacity was not found to be greater
-        than load_percentage and the value of the logarithm in base 10 of
-        l is less than the minimum at which the spline was fitted.
+        If the normalized discharge capacity was not found to be greater than
+        loaded and the value of the logarithm in base 10 of l is less than the
+        minimum at which the spline was fitted.
     """
     c_rate = 60.0 / minutes
 
     logchi = greg._logchi(c_rate)
 
     optlogl, xmax = greg._logl(c_rate), 0.0
-    while xmax < load_percentage:
+    while xmax < loaded:
         optlogl -= dlogl
         xmax = greg._xmax_in_surface(optlogl, logchi)
         if optlogl < np.min(greg._ls):
