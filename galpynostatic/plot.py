@@ -105,9 +105,10 @@ class GalvanostaticPlotter:
         already plotted and you just want to add the points on it, e.g., to
         compare different systems.
         """
-        if ax is None:
-            ax = plt.gca()
-            ax = self.surface(ax)
+        no_ax = True if ax is None else False
+
+        ax = plt.gca() if ax is None else ax
+        ax = self.surface(ax) if no_ax else ax
 
         keys = ["color", "marker", "linestyle", "label"]
         for key, value in zip(keys, ["k", "o", "--", "fitted data"]):
