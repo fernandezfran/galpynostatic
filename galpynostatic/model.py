@@ -39,7 +39,7 @@ class GalvanostaticRegressor(RegressorMixin):
 
     Parameters
     ----------
-    dataset : pd.DataFrame
+    dataset : pandas.DataFrame
         Dataset with a map of State of Charge (SOC) as function of l and chi
         parameters, this can be loaded using :ref:`galpynostatic.datasets`
         load functions.
@@ -68,9 +68,10 @@ class GalvanostaticRegressor(RegressorMixin):
     Notes
     -----
     By default the grid search is performed on the values of
-    ``np.logspace(-15, -6, num=100)`` and ``np.logspace(-14, -5, num=100)`` for
-    the coefficients D and k, respectively. Their range and precision can be
-    modified through the properties ``dcoeffs`` and ``k0s``, respectively.
+    ``numpy.logspace(-15, -6, num=100)`` and
+    ``numpy.logspace(-14, -5, num=100)`` for the coefficients D and k,
+    respectively. Their range and precision can be modified through the
+    properties ``dcoeffs`` and ``k0s``, respectively.
     """
 
     def __init__(self, dataset, d, z, t_h=3600):
@@ -133,7 +134,7 @@ class GalvanostaticRegressor(RegressorMixin):
         X : array-like of shape (n_measurements, 1)
             C rates measurements.
 
-        y : array-like
+        y : array-like of shape (n_measurements,)
             Target State of Charge (SOC).
 
         Returns
@@ -166,7 +167,7 @@ class GalvanostaticRegressor(RegressorMixin):
 
         Returns
         -------
-        y : ndarray
+        y : array-like of shape (n_measurements,)
             The predicted SOC for the C rates inputs.
         """
         y = np.full(X.size, None)
@@ -198,7 +199,7 @@ class GalvanostaticRegressor(RegressorMixin):
         X : array-like of shape (n_measurements, 1)
             C rates measurements.
 
-        y : array-like
+        y : array-like of shape (n_measurements,)
             True SOC.
 
         sample_weight : Ignored
@@ -232,12 +233,12 @@ class GalvanostaticRegressor(RegressorMixin):
         X : array-like of shape (n_measurements, 1)
             C rates.
 
-        y : array-like, default=None
+        y : array-like of shape (n_measurements,), default=None
             SOC.
 
         Returns
         -------
-        df : pd.DataFrame
+        df : pandas.DataFrame
             A dataframe with the train or the evaluation set values.
         """
         dict_ = {"C_rates": X.ravel()}

@@ -33,17 +33,17 @@ class SurfaceSpline:
 
     Parameters
     ----------
-    dataset : pd.DataFrame
+    dataset : pandas.DataFrame
         Dataset with a map of State of Charge (SOC) as function of l and chi
         parameters, this can be loaded using :ref:`galpynostatic.datasets`
         load functions.
 
     Attributes
     ----------
-    ls : ndarray
+    ls : numpy.ndarray
         Unique `l` possible values in the dataset.
 
-    chis : ndarray
+    chis : numpy.ndarray
         Unique `chi` possible values in the dataset.
 
     spline : scipy.interpolate.RectBivariateSpline

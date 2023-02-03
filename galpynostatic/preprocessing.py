@@ -75,13 +75,13 @@ class GetDischargeCapacities(TransformerMixin):
 
         Parameters
         ----------
-        X : `list of pd.DataFrame`
+        X : list of pandas.DataFrame
             Dataframes having only two columns, where the first one is the
             capacity and the second one is the voltage.
 
         Returns
         -------
-        X_new : ndarray
+        X_new : array-like of shape (n_measurement,)
             Discharge capacities in the same order as the pd.DataFrame in the
             list.
 
@@ -114,7 +114,7 @@ class GetDischargeCapacities(TransformerMixin):
 
         Parameters
         ----------
-        X : `list of pd.DataFrame`
+        X : list of pandas.DataFrame
             Dataframes having only two columns, where the first one is the
             capacity and the second one is the voltage.
 
@@ -127,7 +127,7 @@ class GetDischargeCapacities(TransformerMixin):
 
         Returns
         -------
-        X_new : ndarray
+        X_new : array-like of shape (n_measurement,)
             Discharge capacities in the same order as the pd.DataFrame in the
             list.
 

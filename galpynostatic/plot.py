@@ -96,7 +96,7 @@ class GalvanostaticPlotter:
 
         **kwargs
             Additional keyword arguments that are passed and are documented in
-            ``matplotlib.pyplot.plot``
+            ``matplotlib.axes.Axes.plot``
 
         Returns
         -------
@@ -127,7 +127,7 @@ class GalvanostaticPlotter:
         X : array-like of shape (n_measurements, 1)
             C rates measurements.
 
-        y : array-like
+        y : array-like of shape (n_measurements,)
             Target State of Charge (SOC).
 
         ax : matplotlib.axes.Axes, default=None
@@ -135,11 +135,11 @@ class GalvanostaticPlotter:
 
         data_kws : dict, default=None
             Additional keyword arguments that are passed and are documented in
-            ``matplotlib.pyplot.plot`` for the data points.
+            ``matplotlib.axes.Axes.plot`` for the data points.
 
         pred_kws : dict, default=None
             Additional keyword arguments that are passed and are documented in
-            ``matplotlib.pyplot.plot`` for the predictions values.
+            ``matplotlib.axes.Axes.plot`` for the predictions values.
 
         Returns
         -------
