@@ -53,109 +53,73 @@ def test_k0s(spherical):
         ("bak_experiment"),
     ],
 )
-def test_fit(experiment, request, spherical):
-    """Test the fitting of the model: dcoeff, k0 and mse."""
-    experiment = request.getfixturevalue(experiment)
+class TestModel:
+    """Test the galvanostatic regressor model with parametrization shared."""
 
-    greg = galpynostatic.model.GalvanostaticRegressor(
-        spherical, experiment["d"], 3
-    )
+    def test_fit(self, experiment, request, spherical):
+        """Test the fitting of the model: dcoeff, k0 and mse."""
+        experiment = request.getfixturevalue(experiment)
 
-    greg.dcoeffs = 10.0 ** np.arange(-14, -6, 1)
-    greg.k0s = 10.0 ** np.arange(-13, -5, 1)
+        greg = galpynostatic.model.GalvanostaticRegressor(
+            spherical, experiment["d"], 3
+        )
 
-    greg = greg.fit(experiment["C_rates"], experiment["soc"])
+        greg.dcoeffs = 10.0 ** np.arange(-14, -6, 1)
+        greg.k0s = 10.0 ** np.arange(-13, -5, 1)
 
-    np.testing.assert_almost_equal(
-        greg.dcoeff_, experiment["ref"]["dcoeff"], 12
-    )
-    np.testing.assert_almost_equal(greg.k0_, experiment["ref"]["k0"], 10)
-    np.testing.assert_almost_equal(greg.mse_, experiment["ref"]["mse"], 6)
+        greg = greg.fit(experiment["C_rates"], experiment["soc"])
 
+        np.testing.assert_almost_equal(
+            greg.dcoeff_, experiment["ref"]["dcoeff"], 12
+        )
+        np.testing.assert_almost_equal(greg.k0_, experiment["ref"]["k0"], 10)
+        np.testing.assert_almost_equal(greg.mse_, experiment["ref"]["mse"], 6)
 
-@pytest.mark.parametrize(
-    ("experiment"),
-    [
-        ("nishikawa_experiment"),
-        ("mancini_experiment"),
-        ("he_experiment"),
-        ("wang_experiment"),
-        ("lei_experiment"),
-        ("bak_experiment"),
-    ],
-)
-def test_predict(experiment, request, spherical):
-    """Test the predict of the soc values."""
-    experiment = request.getfixturevalue(experiment)
+    def test_predict(self, experiment, request, spherical):
+        """Test the predict of the soc values."""
+        experiment = request.getfixturevalue(experiment)
 
-    greg = galpynostatic.model.GalvanostaticRegressor(
-        spherical, experiment["d"], 3
-    )
+        greg = galpynostatic.model.GalvanostaticRegressor(
+            spherical, experiment["d"], 3
+        )
 
-    # fit results
-    greg.dcoeff_ = experiment["dcoeff"]
-    greg.k0_ = experiment["k0"]
+        greg.dcoeff_ = experiment["dcoeff"]
+        greg.k0_ = experiment["k0"]
 
-    soc = greg.predict(experiment["C_rates"])
+        soc = greg.predict(experiment["C_rates"])
 
-    np.testing.assert_array_almost_equal(soc, experiment["ref"]["soc"], 6)
+        np.testing.assert_array_almost_equal(soc, experiment["ref"]["soc"], 6)
 
+    def test_score(self, experiment, request, spherical):
+        """Test the r2 score of the model."""
+        experiment = request.getfixturevalue(experiment)
 
-@pytest.mark.parametrize(
-    ("experiment"),
-    [
-        ("nishikawa_experiment"),
-        ("mancini_experiment"),
-        ("he_experiment"),
-        ("wang_experiment"),
-        ("lei_experiment"),
-        ("bak_experiment"),
-    ],
-)
-def test_score(experiment, request, spherical):
-    """Test the r2 score of the model."""
-    experiment = request.getfixturevalue(experiment)
+        greg = galpynostatic.model.GalvanostaticRegressor(
+            spherical, experiment["d"], 3
+        )
 
-    greg = galpynostatic.model.GalvanostaticRegressor(
-        spherical, experiment["d"], 3
-    )
+        greg.dcoeff_ = experiment["dcoeff"]
+        greg.k0_ = experiment["k0"]
 
-    # fit results
-    greg.dcoeff_ = experiment["dcoeff"]
-    greg.k0_ = experiment["k0"]
+        r2 = greg.score(experiment["C_rates"], experiment["soc"])
 
-    r2 = greg.score(experiment["C_rates"], experiment["soc"])
+        np.testing.assert_almost_equal(r2, experiment["ref"]["r2"])
 
-    np.testing.assert_almost_equal(r2, experiment["ref"]["r2"])
+    def test_to_dataframe(self, experiment, request, spherical, data_path):
+        """Test the dataframe."""
+        experiment = request.getfixturevalue(experiment)
 
+        df_ref = pd.read_csv(
+            data_path / experiment["dir_name"] / "df.csv", dtype=np.float32
+        )
 
-@pytest.mark.parametrize(
-    ("experiment"),
-    [
-        ("nishikawa_experiment"),
-        ("mancini_experiment"),
-        ("he_experiment"),
-        ("wang_experiment"),
-        ("lei_experiment"),
-        ("bak_experiment"),
-    ],
-)
-def test_to_dataframe(experiment, request, spherical, data_path):
-    """Test the dataframe."""
-    experiment = request.getfixturevalue(experiment)
+        greg = galpynostatic.model.GalvanostaticRegressor(
+            spherical, experiment["d"], 3
+        )
 
-    df_ref = pd.read_csv(
-        data_path / experiment["dir_name"] / "df.csv", dtype=np.float32
-    )
+        greg.dcoeff_ = experiment["dcoeff"]
+        greg.k0_ = experiment["k0"]
 
-    greg = galpynostatic.model.GalvanostaticRegressor(
-        spherical, experiment["d"], 3
-    )
+        df = greg.to_dataframe(experiment["C_rates"], y=experiment["soc"])
 
-    # fit results
-    greg.dcoeff_ = experiment["dcoeff"]
-    greg.k0_ = experiment["k0"]
-
-    df = greg.to_dataframe(experiment["C_rates"], y=experiment["soc"])
-
-    pd.testing.assert_frame_equal(df, df_ref)
+        pd.testing.assert_frame_equal(df, df_ref)
