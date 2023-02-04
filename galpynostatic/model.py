@@ -89,13 +89,13 @@ class GalvanostaticRegressor(RegressorMixin):
         self._surface = SurfaceSpline(dataset)
 
     def _logl(self, cr):
-        """Logarithm value of l parameter in base 10."""
+        """Logarithm value in base 10 of l parameter."""
         return np.log10(
             (cr * self.d**2) / (self.z * self.t_h * self.dcoeff_)
         )
 
     def _logchi(self, cr):
-        """Logarithm value of chi parameter in base 10."""
+        """Logarithm value in base 10 of chi parameter."""
         return np.log10(self.k0_ * np.sqrt(self.t_h / (cr * self.dcoeff_)))
 
     def _soc_approx(self, logl, logchi):

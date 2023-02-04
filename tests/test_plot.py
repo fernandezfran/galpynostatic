@@ -47,7 +47,7 @@ class TestPlots:
     def test_plot_versus_data(
         self, fig_test, fig_ref, experiment, request, spherical
     ):
-        """Test the plot vs data points."""
+        """Test the plot of predictions versus data points."""
         experiment = request.getfixturevalue(experiment)
 
         greg = galpynostatic.model.GalvanostaticRegressor(
@@ -85,7 +85,7 @@ class TestPlots:
     def test_plot_in_surface(
         self, fig_test, fig_ref, experiment, request, spherical
     ):
-        """Test the plot vs data points."""
+        """Test the plot of data points in surface."""
         experiment = request.getfixturevalue(experiment)
 
         greg = galpynostatic.model.GalvanostaticRegressor(

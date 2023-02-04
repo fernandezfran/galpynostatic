@@ -58,9 +58,9 @@ you could cite the following article:
 Bibtex entry:
 
 ```bibtex
-    @article{
-        ...
-    }
+@article{
+    ...
+}
 ```
 
 
