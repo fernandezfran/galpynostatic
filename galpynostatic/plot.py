@@ -35,8 +35,8 @@ class GalvanostaticPlotter:
     - 'in_surface' : fitted data points in the surface.
     - 'versus_data' : predicted values versus true data.
 
-    Parametes
-    ---------
+    Parameters
+    ----------
     greg : galpynostatic.model.GalvanostaticRegressor
         An already fitted galvanostatic model.
     """
@@ -75,7 +75,7 @@ class GalvanostaticPlotter:
             origin="lower",
         )
         clb = plt.colorbar(im)
-        clb.ax.set_ylabel(r"x$_{max}$")
+        clb.ax.set_ylabel("SOC")
         clb.ax.set_ylim((0, 1))
 
         ax.set_xlabel(r"log($\ell$)")

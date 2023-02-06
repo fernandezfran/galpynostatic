@@ -142,7 +142,7 @@ class TestPlots:
         )
         clb = plt.colorbar(im)
         clb.ax.set_xlabel("")
-        clb.ax.set_ylabel(r"x$_{max}$")
+        clb.ax.set_ylabel("SOC")
         clb.ax.set_ylim((0, 1))
         ref_ax.scatter(spherical.l, spherical.chi, 400, facecolors="none")
 

@@ -1,7 +1,3 @@
-[tool.black]
-line-length = 79
-target-version = ["py39"]
-
 # =============================================================================
 # PACKAGING
 # =============================================================================
@@ -50,3 +46,7 @@ include-package-data = true
 [tool.setuptools.packages.find]
 include = ["galpynostatic", "galpynostatic.*"]
 namespaces = false
+
+[tool.black]
+line-length = 79
+target-version = ["py39"]
