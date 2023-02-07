@@ -33,6 +33,8 @@ Package contents
    :member-order: bysource
 
 
+.. _galpynostatic.model:
+
 ``galpynostatic.model`` module
 ------------------------------
 

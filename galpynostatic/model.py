@@ -35,14 +35,29 @@ from .plot import GalvanostaticPlotter
 
 
 class GalvanostaticRegressor(RegressorMixin):
-    """An heuristic regressor for galvanostatic data.
+    r"""An heuristic regressor for galvanostatic data.
+
+    The physics-based model uses the diagrams from the datasets
+    (:ref:`galpynostatic.datasets`) to perform a grid search of the :math:`\Xi`
+    and :math:`\ell` simulation parameters. The grid search consists of taking
+    experimental measurements of the State-of-Charge (SOC) of the electrode as
+    a function of the C-rates and trying different possible combinations of the
+    diffusion coefficient (:math:`D_0`) and the kinetic constant (:math:`k_0`).
+    This is done considering invariant the other parameters involved in
+    :math:`\Xi` and :math:`\ell`, such as the characteristic diffusion length
+    (:math:`d`) and the geometrical factor (:math:`z`). Each time a set of
+    parameters :math:`D_0` and :math:`k_0` is taken, the values that would be
+    obtained for the SOC in the diagram are predicted and the mean square error
+    (MSE) is calculated. After an exhaustive exploration, the set of parameters
+    that minimizes the MSE are obtained, thus yielding fundamental parameters
+    of the system that together with the diagram allows to make predictions.
 
     Parameters
     ----------
     dataset : pandas.DataFrame
-        Dataset with a map of State of Charge (SOC) as function of l and chi
-        parameters, this can be loaded using :ref:`galpynostatic.datasets`
-        load functions.
+        Dataset with a map of State of Charge (SOC) as function of :math:`\ell`
+        and :math:`\Xi` parameters, this can be loaded using the load functions
+        in :ref:`galpynostatic.datasets`
 
     d : float
         Characteristic diffusion length.
@@ -57,10 +72,10 @@ class GalvanostaticRegressor(RegressorMixin):
     Attributes
     ----------
     dcoeff_ : float
-        Estimated diffusion coefficient.
+        Estimated diffusion coefficient, :math:`D_0`.
 
     k0_ : float
-        Estimated kinetic rate constant.
+        Estimated kinetic rate constant, :math:`k_0`.
 
     mse_ : float
         Mean squared error of the fitted model.
@@ -69,9 +84,9 @@ class GalvanostaticRegressor(RegressorMixin):
     -----
     By default the grid search is performed on the values of
     ``numpy.logspace(-15, -6, num=100)`` and
-    ``numpy.logspace(-14, -5, num=100)`` for the coefficients D and k,
-    respectively. Their range and precision can be modified through the
-    properties ``dcoeffs`` and ``k0s``, respectively.
+    ``numpy.logspace(-14, -5, num=100)`` for the coefficients :math:`D_0` and
+    :math:`k_0`, respectively. Their range and precision can be modified
+    through the properties ``dcoeffs`` and ``k0s``, respectively.
     """
 
     def __init__(self, dataset, d, z, t_h=3600):
@@ -88,23 +103,23 @@ class GalvanostaticRegressor(RegressorMixin):
 
         self._surface = SurfaceSpline(dataset)
 
-    def _logl(self, cr):
-        """Logarithm value in base 10 of l parameter."""
+    def _logell(self, cr):
+        r"""Logarithm value in base 10 of :math:`\ell` parameter."""
         return np.log10(
             (cr * self.d**2) / (self.z * self.t_h * self.dcoeff_)
         )
 
-    def _logchi(self, cr):
-        """Logarithm value in base 10 of chi parameter."""
+    def _logxi(self, cr):
+        r"""Logarithm value in base 10 of :math:`\Xi` parameter."""
         return np.log10(self.k0_ * np.sqrt(self.t_h / (cr * self.dcoeff_)))
 
-    def _soc_approx(self, logl, logchi):
-        """Find the value of soc given the surface spline.
+    def _soc_approx(self, logell, logxi):
+        """Find the value of SOC given the surface spline.
 
         This is a linear function bounded in [0, 1], values exceeding this
         range are taken to the corresponding end point.
         """
-        return max(0, min(1, self._surface.spline(logl, logchi)[0][0]))
+        return max(0, min(1, self._surface.spline(logell, logxi)[0][0]))
 
     @property
     def dcoeffs(self):
@@ -132,7 +147,7 @@ class GalvanostaticRegressor(RegressorMixin):
         Parameters
         ----------
         X : array-like of shape (n_measurements, 1)
-            C rates measurements.
+            C-rates measurements.
 
         y : array-like of shape (n_measurements,)
             Target State of Charge (SOC).
@@ -163,22 +178,24 @@ class GalvanostaticRegressor(RegressorMixin):
         Parameters
         ----------
         X : array-like of shape (n_measurements, 1)
-            C rates measurements.
+            C-rates measurements.
 
         Returns
         -------
         y : array-like of shape (n_measurements,)
-            The predicted SOC for the C rates inputs.
+            The predicted SOC for the C-rates inputs.
         """
         y = np.full(X.size, None)
         for k, x in enumerate(X):
-            logl = self._logl(x[0])
-            logchi = self._logchi(x[0])
+            logell = self._logell(x[0])
+            logxi = self._logxi(x[0])
 
-            if (self._surface.ls.min() <= logl <= self._surface.ls.max()) and (
-                self._surface.chis.min() <= logchi <= self._surface.chis.max()
+            if (
+                self._surface.ells.min() <= logell <= self._surface.ells.max()
+            ) and (
+                self._surface.xis.min() <= logxi <= self._surface.xis.max()
             ):
-                y[k] = self._soc_approx(logl, logchi)
+                y[k] = self._soc_approx(logell, logxi)
 
         return y
 
@@ -197,7 +214,7 @@ class GalvanostaticRegressor(RegressorMixin):
         Parameters
         ----------
         X : array-like of shape (n_measurements, 1)
-            C rates measurements.
+            C-rates measurements.
 
         y : array-like of shape (n_measurements,)
             True SOC.
@@ -231,7 +248,7 @@ class GalvanostaticRegressor(RegressorMixin):
         Parameters
         ----------
         X : array-like of shape (n_measurements, 1)
-            C rates.
+            C-rates.
 
         y : array-like of shape (n_measurements,), default=None
             SOC.

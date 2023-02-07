@@ -54,24 +54,24 @@ class GalvanostaticPlotter:
         """
         ax = plt.gca() if ax is None else ax
 
-        leval = np.linspace(
-            np.min(self.greg._surface.ls),
-            np.max(self.greg._surface.ls),
+        elleval = np.linspace(
+            np.min(self.greg._surface.ells),
+            np.max(self.greg._surface.ells),
             num=1000,
         )
-        chieval = np.linspace(
-            np.min(self.greg._surface.chis),
-            np.max(self.greg._surface.chis),
+        xieval = np.linspace(
+            np.min(self.greg._surface.xis),
+            np.max(self.greg._surface.xis),
             num=1000,
         )
 
-        z = self.greg._surface.spline(leval, chieval)
+        z = self.greg._surface.spline(elleval, xieval)
         z[z > 1] = 1.0
         z[z < 0] = 0.0
 
         im = ax.imshow(
             z.T,
-            extent=[leval.min(), leval.max(), chieval.min(), chieval.max()],
+            extent=[elleval.min(), elleval.max(), xieval.min(), xieval.max()],
             origin="lower",
         )
         clb = plt.colorbar(im)
@@ -89,7 +89,7 @@ class GalvanostaticPlotter:
         Parameters
         ----------
         X : array-like of shape (n_measurements, 1)
-            C rates measurements.
+            C-rates measurements.
 
         ax : matplotlib.axes.Axes, default=None
             The current matplotlib axes.
@@ -115,20 +115,27 @@ class GalvanostaticPlotter:
         for key, value in zip(keys, ["k", "o", "--", "fitted data"]):
             kwargs.setdefault(key, value)
 
-        ax.plot(self.greg._logl(X), self.greg._logchi(X), **kwargs)
+        ax.plot(self.greg._logell(X), self.greg._logxi(X), **kwargs)
 
         return ax
 
-    def versus_data(self, X, y, ax=None, data_kws=None, pred_kws=None):
+    def versus_data(
+        self, X, y, xeval=None, ax=None, data_kws=None, pred_kws=None
+    ):
         """Plot predictions against data.
 
         Parameters
         ----------
         X : array-like of shape (n_measurements, 1)
-            C rates measurements.
+            C-rates measurements.
 
         y : array-like of shape (n_measurements,)
             Target State of Charge (SOC).
+
+        xeval : array-like of shape (n_measurements, 1), default=None.
+            C-rates values to evalute the model to compare against data. When
+            is defined as `None`, it evaluetes 250 points between the maximum
+            and the minimum of X.
 
         ax : matplotlib.axes.Axes, default=None
             The current axes.
@@ -161,7 +168,11 @@ class GalvanostaticPlotter:
 
         ax.plot(X, y, **data_kws)
 
-        xeval = np.linspace(X.min(), X.max(), 250).reshape(-1, 1)
+        xeval = (
+            np.linspace(X.min(), X.max(), 250).reshape(-1, 1)
+            if xeval is None
+            else xeval
+        )
         ax.plot(xeval, self.greg.predict(xeval), **pred_kws)
 
         ax.set_xlabel("C-rates")

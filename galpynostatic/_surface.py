@@ -29,36 +29,36 @@ import scipy.interpolate
 
 
 class SurfaceSpline:
-    """Spline of the `dataset` discrete surface.
+    r"""Spline of the `dataset` discrete surface.
 
     Parameters
     ----------
     dataset : pandas.DataFrame
-        Dataset with a map of State of Charge (SOC) as function of l and chi
-        parameters, this can be loaded using :ref:`galpynostatic.datasets`
-        load functions.
+        Dataset with a map of State of Charge (SOC) as function of :math:`\ell`
+        and :math:`\Xi` parameters, this can be loaded using load functions in
+        :ref:`galpynostatic.datasets`.
 
     Attributes
     ----------
-    ls : numpy.ndarray
-        Unique `l` possible values in the dataset.
+    ells : numpy.ndarray
+        Unique :math:`\ell` possible values in the dataset.
 
-    chis : numpy.ndarray
-        Unique `chi` possible values in the dataset.
+    xis : numpy.ndarray
+        Unique :math:`\Xi` possible values in the dataset.
 
     spline : scipy.interpolate.RectBivariateSpline
         Bivariate spline approximation over the discrete dataset.
     """
 
     def __init__(self, dataset):
-        self.ls = np.unique(dataset.l)
-        self.chis = np.unique(dataset.chi)
+        self.ells = np.unique(dataset.l)
+        self.xis = np.unique(dataset.chi)
 
         k, socs = 0, []
-        for logl, logchi in it.product(self.ls, self.chis[::-1]):
+        for logell, logxi in it.product(self.ells, self.xis[::-1]):
             soc = 0
             try:
-                if logl == dataset.l[k] and logchi == dataset.chi[k]:
+                if logell == dataset.l[k] and logxi == dataset.chi[k]:
                     soc = dataset.xmax[k]
                     k += 1
             except KeyError:
@@ -67,7 +67,7 @@ class SurfaceSpline:
                 socs.append(soc)
 
         self.spline = scipy.interpolate.RectBivariateSpline(
-            self.ls,
-            self.chis,
-            np.asarray(socs).reshape(self.ls.size, self.chis.size)[:, ::-1],
+            self.ells,
+            self.xis,
+            np.asarray(socs).reshape(self.ells.size, self.xis.size)[:, ::-1],
         )

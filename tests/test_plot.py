@@ -109,10 +109,10 @@ class TestPlots:
         chis = np.unique(spherical.chi)
 
         k, soc = 0, []
-        for logl, logchi in it.product(ls, chis[::-1]):
+        for logell, logxi in it.product(ls, chis[::-1]):
             xmax = 0
             try:
-                if logl == spherical.l[k] and logchi == spherical.chi[k]:
+                if logell == spherical.l[k] and logxi == spherical.chi[k]:
                     xmax = spherical.xmax[k]
                     k += 1
             except KeyError:
@@ -148,8 +148,8 @@ class TestPlots:
 
         # ref data
         ref_ax.plot(
-            greg._logl(experiment["C_rates"]),
-            greg._logchi(experiment["C_rates"]),
+            greg._logell(experiment["C_rates"]),
+            greg._logxi(experiment["C_rates"]),
             color="k",
             marker="o",
             linestyle="--",

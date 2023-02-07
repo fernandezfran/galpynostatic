@@ -31,12 +31,25 @@ from sklearn.base import TransformerMixin
 class GetDischargeCapacities(TransformerMixin):
     """Obtain the discharge capacities at a given cut-off potential.
 
-    Discharge capacities are useful to define the State of Charge (SOC) of the
-    electrode material by dividing the former by the maximum possible discharge
-    capacity for that particular system.
-
     This Transformer will subtract from all curves the equilibrium potential
-    to find the capacity at which the potential is cut off below `vcut`.
+    `eq_pot` to find the capacity at which the potential is cut off below
+    `vcut`.
+
+    Electrochemical experiments usually have the galvanostatic profiles
+    measured for different C-rates, these curves have the voltage in the axis
+    of the dependent variables and the discharge capacitites in the axis of the
+    independent variables. From the values at which the curves intersect the
+    horizontal line `vcut` below the equilibrium potential `eq_pot`, discharge
+    capacities can be obtained.
+
+    Discharge capacities are useful to define the State of Charge (SOC) of the
+    electrode material and have it as a function of C-rates, which is the
+    suitable way to have the data for the :ref:`galpynostatic.model`. Our
+    suggestion to determine the SOC is to take the maximum value for the
+    discharge capacities that which corresponds whit the value of the C-rate at
+    which the curve is already converged with respect to the previous one. In
+    this case, all the values obtained for the discharge capacities are divided
+    by this one and the SOC is obtained.
 
     Parameters
     ----------
@@ -77,7 +90,7 @@ class GetDischargeCapacities(TransformerMixin):
         ----------
         X : list of pandas.DataFrame
             Dataframes having only two columns, where the first one is the
-            capacity and the second one is the voltage.
+            capacity and the second the voltage.
 
         Returns
         -------
