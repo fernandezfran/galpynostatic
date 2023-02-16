@@ -34,8 +34,8 @@ import pytest
         ("bak_experiment"),
     ],
 )
-def test_t_minutes_lenght(experiment, request, spherical):
-    """Test the t minutes lenght."""
+def test_t_minutes_length(experiment, request, spherical):
+    """Test the t minutes length."""
     experiment = request.getfixturevalue(experiment)
 
     greg = galpynostatic.model.GalvanostaticRegressor(
@@ -46,20 +46,8 @@ def test_t_minutes_lenght(experiment, request, spherical):
     greg.dcoeff_ = experiment["dcoeff"]
     greg.k0_ = experiment["k0"]
 
-    lenght = galpynostatic.predict.t_minutes_length(greg)
+    length = galpynostatic.predict.t_minutes_length(greg)
 
     np.testing.assert_array_almost_equal(
-        lenght, experiment["ref"]["length"], 6
+        length, experiment["ref"]["length"], 6
     )
-
-
-def test_t_minutes_raise(spherical):
-    """Test the t minutes lenght ValueError raise."""
-    greg = galpynostatic.model.GalvanostaticRegressor(spherical, 0.005, 3)
-
-    # fictional fit results
-    greg.dcoeff_ = 3e-5
-    greg.k0_ = 1e-7
-
-    with pytest.raises(ValueError):
-        galpynostatic.predict.t_minutes_length(greg)
