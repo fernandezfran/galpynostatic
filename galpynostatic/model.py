@@ -42,11 +42,11 @@ class GalvanostaticRegressor(RegressorMixin):
     and :math:`\ell` simulation parameters. The grid search consists of taking
     experimental measurements of the State-of-Charge (SOC) of the electrode as
     a function of the C-rates and trying different possible combinations of the
-    diffusion coefficient (:math:`D_0`) and the kinetic constant (:math:`k_0`).
+    diffusion coefficient (:math:`D`) and the kinetic constant (:math:`k^0`).
     This is done considering invariant the other parameters involved in
     :math:`\Xi` and :math:`\ell`, such as the characteristic diffusion length
     (:math:`d`) and the geometrical factor (:math:`z`). Each time a set of
-    parameters :math:`D_0` and :math:`k_0` is taken, the values that would be
+    parameters :math:`D` and :math:`k^0` is taken, the values that would be
     obtained for the SOC in the diagram are predicted and the mean square error
     (MSE) is calculated. After an exhaustive exploration, the set of parameters
     that minimizes the MSE are obtained, thus yielding fundamental parameters
@@ -72,10 +72,10 @@ class GalvanostaticRegressor(RegressorMixin):
     Attributes
     ----------
     dcoeff_ : float
-        Estimated diffusion coefficient, :math:`D_0`.
+        Estimated diffusion coefficient, :math:`D`, in :math:`cm^2/s`.
 
     k0_ : float
-        Estimated kinetic rate constant, :math:`k_0`.
+        Estimated kinetic rate constant, :math:`k^0`, in :math:`cm/s`.
 
     mse_ : float
         Mean squared error of the fitted model.
@@ -84,8 +84,8 @@ class GalvanostaticRegressor(RegressorMixin):
     -----
     By default the grid search is performed on the values of
     ``numpy.logspace(-15, -6, num=100)`` and
-    ``numpy.logspace(-14, -5, num=100)`` for the coefficients :math:`D_0` and
-    :math:`k_0`, respectively. Their range and precision can be modified
+    ``numpy.logspace(-14, -5, num=100)`` for the coefficients :math:`D` and
+    :math:`k^0`, respectively. Their range and precision can be modified
     through the properties ``dcoeffs`` and ``k0s``, respectively.
     """
 
