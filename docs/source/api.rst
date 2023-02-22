@@ -56,10 +56,10 @@ Package contents
    :member-order: bysource
 
 
-``galpynostatic.predict`` module
---------------------------------
+``galpynostatic.size`` module
+-----------------------------
 
-.. automodule:: galpynostatic.predict
+.. automodule:: galpynostatic.size
    :members:
    :undoc-members:
    :show-inheritance:

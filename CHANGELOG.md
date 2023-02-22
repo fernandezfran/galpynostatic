@@ -11,8 +11,8 @@ capacities from galvanostatic profiles in a `sklearn.base.TransformerMixin` way.
 - `galpynostatic.model.GalvanostaticRegressor` to fit experimental data to the 
 model, predict and plot through an accessor to 
 `galpynostatic.plot.GalvanostaticPlotter`.
-- `galpynostatic.predict.t_minutes_length` to estimate the characteristic 
-diffusion length to charge the electrode material in t minutes.
+- `galpynostatic.size.predict_length` to estimate the characteristic diffusion 
+- length to charge the electrode material in t minutes.
 - examples of use with common and state-of-the-art research lithium battery systems.
 - software quality:
     - runs on Ubuntu with Python 3.8+

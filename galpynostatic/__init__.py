@@ -22,8 +22,8 @@ import importlib_metadata
 
 from . import datasets
 from .model import GalvanostaticRegressor
-from .predict import t_minutes_length
 from .preprocessing import GetDischargeCapacities
+from .size import predict_length
 
 
 # =============================================================================
@@ -34,7 +34,7 @@ __all__ = [
     "datasets",
     "GalvanostaticRegressor",
     "GetDischargeCapacities",
-    "t_minutes_length",
+    "predict_length",
 ]
 
 

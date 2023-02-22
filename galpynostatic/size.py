@@ -11,7 +11,7 @@
 # DOCS
 # ============================================================================
 
-"""A module with the function to identify the t minutes charging length."""
+"""A module to predict required size parameters of the electrode material."""
 
 # ============================================================================
 # IMPORTS
@@ -26,10 +26,10 @@ import scipy.interpolate
 # ============================================================================
 
 
-def t_minutes_length(greg, minutes=15, loaded=0.8, dlogell=0.01, cm_to=10000):
-    r"""Obtain the characteristic diffusion length to charge in t minutes.
+def predict_length(greg, minutes=15, loaded=0.8, dlogell=0.01, cm_to=10000):
+    r"""Predict the characteristic diffusion length to charge in t minutes.
 
-    Once a galvanostatic model was fitted, the :math:`D_0` and :math:`k_0`
+    Once a galvanostatic model was fitted, the :math:`D_0` and :math:`k^0`
     parameters can be fixed and leave the characteristic diffusion length free,
     d, which only apears in the :math:`\ell` parameters, so by setting the
     value of :math:`\Xi` one can decrease the value of :math:`\ell` until it
@@ -37,7 +37,7 @@ def t_minutes_length(greg, minutes=15, loaded=0.8, dlogell=0.01, cm_to=10000):
     C-rate.
 
     The default values of this function defines the criteria of wanting the
-    80% of the electrode to be charged in 5 minutes, this is translated as a
+    80% of the electrode to be charged in 15 minutes, this is translated as a
     SOC of 0.8 and a C-rate of 4C.
 
     Parameters
@@ -56,7 +56,7 @@ def t_minutes_length(greg, minutes=15, loaded=0.8, dlogell=0.01, cm_to=10000):
         evaluation.
 
     cm_to : float, default=10000
-        A factor to convert from cm to another unit, in this case to
+        A factor to convert from cm to another unit, in the defualt case to
         micrometers.
 
     Returns
@@ -68,7 +68,9 @@ def t_minutes_length(greg, minutes=15, loaded=0.8, dlogell=0.01, cm_to=10000):
     c_rate = 60.0 / minutes
 
     logxi = greg._logxi(c_rate)
-    logell_rng = np.arange(-4, 2, dlogell)
+    logell_rng = np.arange(
+        greg._surface.ells.min(), greg._surface.ells.max(), dlogell
+    )
 
     socs = np.array([greg._soc_approx(logell, logxi) for logell in logell_rng])
 
@@ -76,8 +78,6 @@ def t_minutes_length(greg, minutes=15, loaded=0.8, dlogell=0.01, cm_to=10000):
         logell_rng, socs - 0.8
     ).roots()[0]
 
-    length = cm_to * np.sqrt(
+    return cm_to * np.sqrt(
         (greg.z * greg.t_h * greg.dcoeff_ * 10.0**optlogell) / c_rate
     )
-
-    return length

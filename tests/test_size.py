@@ -12,7 +12,7 @@
 # =============================================================================
 
 import galpynostatic.model
-import galpynostatic.predict
+import galpynostatic.size
 
 import numpy as np
 
@@ -34,7 +34,7 @@ import pytest
         ("bak_experiment"),
     ],
 )
-def test_t_minutes_length(experiment, request, spherical):
+def test_predict_length(experiment, request, spherical):
     """Test the t minutes length."""
     experiment = request.getfixturevalue(experiment)
 
@@ -46,7 +46,7 @@ def test_t_minutes_length(experiment, request, spherical):
     greg.dcoeff_ = experiment["dcoeff"]
     greg.k0_ = experiment["k0"]
 
-    length = galpynostatic.predict.t_minutes_length(greg)
+    length = galpynostatic.size.predict_length(greg)
 
     np.testing.assert_array_almost_equal(
         length, experiment["ref"]["length"], 6
