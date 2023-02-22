@@ -91,4 +91,4 @@ class SurfaceSpline:
         soc : float
             The corresponding soc value in the surface spline.
         """
-        return max(0, min(1, self.spline(logell, logxi)[0][0]))
+        return np.clip(self.spline(logell, logxi)[0][0], 0, 1)

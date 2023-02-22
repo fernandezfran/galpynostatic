@@ -54,24 +54,27 @@ class GalvanostaticPlotter:
         """
         ax = plt.gca() if ax is None else ax
 
-        elleval = np.linspace(
+        logelleval = np.linspace(
             np.min(self.greg._surface.ells),
             np.max(self.greg._surface.ells),
             num=1000,
         )
-        xieval = np.linspace(
+        logxieval = np.linspace(
             np.min(self.greg._surface.xis),
             np.max(self.greg._surface.xis),
             num=1000,
         )
 
-        z = self.greg._surface.spline(elleval, xieval)
-        z[z > 1] = 1.0
-        z[z < 0] = 0.0
+        z = np.clip(self.greg._surface.spline(logelleval, logxieval), 0, 1)
 
         im = ax.imshow(
             z.T,
-            extent=[elleval.min(), elleval.max(), xieval.min(), xieval.max()],
+            extent=[
+                logelleval.min(),
+                logelleval.max(),
+                logxieval.min(),
+                logxieval.max(),
+            ],
             origin="lower",
         )
         clb = plt.colorbar(im)
