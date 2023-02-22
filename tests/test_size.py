@@ -43,8 +43,7 @@ def test_predict_length(experiment, request, spherical):
     )
 
     # fit results
-    greg.dcoeff_ = experiment["dcoeff"]
-    greg.k0_ = experiment["k0"]
+    greg.dcoeff_, greg.k0_ = experiment["dcoeff"], experiment["k0"]
 
     length = galpynostatic.size.predict_length(greg)
 

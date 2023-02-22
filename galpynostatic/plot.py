@@ -120,7 +120,7 @@ class GalvanostaticPlotter:
         return ax
 
     def versus_data(
-        self, X, y, xeval=None, ax=None, data_kws=None, pred_kws=None
+        self, X, y, X_eval=None, ax=None, data_kws=None, pred_kws=None
     ):
         """Plot predictions against data.
 
@@ -132,7 +132,7 @@ class GalvanostaticPlotter:
         y : array-like of shape (n_measurements,)
             Target State of Charge (SOC).
 
-        xeval : array-like of shape (n_measurements, 1), default=None.
+        X_eval : array-like of shape (n_measurements, 1), default=None.
             C-rates values to evalute the model to compare against data. When
             is defined as `None`, it evaluetes 250 points between the maximum
             and the minimum of X.
@@ -168,12 +168,12 @@ class GalvanostaticPlotter:
 
         ax.plot(X, y, **data_kws)
 
-        xeval = (
+        X_eval = (
             np.linspace(X.min(), X.max(), 250).reshape(-1, 1)
-            if xeval is None
-            else xeval
+            if X_eval is None
+            else X_eval
         )
-        ax.plot(xeval, self.greg.predict(xeval), **pred_kws)
+        ax.plot(X_eval, self.greg.predict(X_eval), **pred_kws)
 
         ax.set_xlabel("C-rates")
         ax.set_ylabel("SOC")

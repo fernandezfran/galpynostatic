@@ -26,8 +26,9 @@ import pandas as pd
 import sklearn.metrics
 from sklearn.base import RegressorMixin
 
-from ._surface import SurfaceSpline
 from .plot import GalvanostaticPlotter
+from .surface import SurfaceSpline
+from .utils import flogell, flogxi
 
 # ============================================================================
 # CLASSES
@@ -103,23 +104,17 @@ class GalvanostaticRegressor(RegressorMixin):
 
         self._surface = SurfaceSpline(dataset)
 
-    def _logell(self, cr):
+    def _logell(self, c_rate):
         r"""Logarithm value in base 10 of :math:`\ell` parameter."""
-        return np.log10(
-            (cr * self.d**2) / (self.z * self.t_h * self.dcoeff_)
-        )
+        return flogell(c_rate, self.d, self.z, self.dcoeff_, t_h=self.t_h)
 
-    def _logxi(self, cr):
+    def _logxi(self, c_rate):
         r"""Logarithm value in base 10 of :math:`\Xi` parameter."""
-        return np.log10(self.k0_ * np.sqrt(self.t_h / (cr * self.dcoeff_)))
+        return flogxi(c_rate, self.dcoeff_, self.k0_, t_h=self.t_h)
 
-    def _soc_approx(self, logell, logxi):
-        """Find the value of SOC given the surface spline.
-
-        This is a linear function bounded in [0, 1], values exceeding this
-        range are taken to the corresponding end point.
-        """
-        return max(0, min(1, self._surface.spline(logell, logxi)[0][0]))
+    def _soc(self, logell, logxi):
+        """Find the value of SOC given the surface spline."""
+        return self._surface.soc(logell, logxi)
 
     @property
     def dcoeffs(self):
@@ -195,7 +190,7 @@ class GalvanostaticRegressor(RegressorMixin):
             ) and (
                 self._surface.xis.min() <= logxi <= self._surface.xis.max()
             ):
-                y[k] = self._soc_approx(logell, logxi)
+                y[k] = self._soc(logell, logxi)
 
         return y
 

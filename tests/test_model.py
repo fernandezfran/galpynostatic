@@ -83,8 +83,7 @@ class TestModel:
             spherical, experiment["d"], 3
         )
 
-        greg.dcoeff_ = experiment["dcoeff"]
-        greg.k0_ = experiment["k0"]
+        greg.dcoeff_, greg.k0_ = experiment["dcoeff"], experiment["k0"]
 
         soc = greg.predict(experiment["C_rates"])
 
@@ -98,8 +97,7 @@ class TestModel:
             spherical, experiment["d"], 3
         )
 
-        greg.dcoeff_ = experiment["dcoeff"]
-        greg.k0_ = experiment["k0"]
+        greg.dcoeff_, greg.k0_ = experiment["dcoeff"], experiment["k0"]
 
         r2 = greg.score(experiment["C_rates"], experiment["soc"])
 
@@ -117,8 +115,7 @@ class TestModel:
             spherical, experiment["d"], 3
         )
 
-        greg.dcoeff_ = experiment["dcoeff"]
-        greg.k0_ = experiment["k0"]
+        greg.dcoeff_, greg.k0_ = experiment["dcoeff"], experiment["k0"]
 
         df = greg.to_dataframe(experiment["C_rates"], y=experiment["soc"])
 

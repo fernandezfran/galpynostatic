@@ -72,7 +72,7 @@ def predict_length(greg, minutes=15, loaded=0.8, dlogell=0.01, cm_to=10000):
         greg._surface.ells.min(), greg._surface.ells.max(), dlogell
     )
 
-    socs = np.array([greg._soc_approx(logell, logxi) for logell in logell_rng])
+    socs = np.array([greg._soc(logell, logxi) for logell in logell_rng])
 
     optlogell = scipy.interpolate.InterpolatedUnivariateSpline(
         logell_rng, socs - 0.8

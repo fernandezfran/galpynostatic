@@ -54,8 +54,7 @@ class TestPlots:
             spherical, experiment["d"], 3
         )
 
-        greg.dcoeff_ = experiment["dcoeff"]
-        greg.k0_ = experiment["k0"]
+        greg.dcoeff_, greg.k0_ = experiment["dcoeff"], experiment["k0"]
 
         # g reg plot
         test_ax = fig_test.subplots()
@@ -92,8 +91,7 @@ class TestPlots:
             spherical, experiment["d"], 3
         )
 
-        greg.dcoeff_ = experiment["dcoeff"]
-        greg.k0_ = experiment["k0"]
+        greg.dcoeff_, greg.k0_ = experiment["dcoeff"], experiment["k0"]
 
         # g reg plot
         test_ax = fig_test.subplots()

@@ -23,16 +23,6 @@ Package contents
    :member-order: bysource
 
 
-``galpynostatic.preprocessing`` module
---------------------------------------
-
-.. automodule:: galpynostatic.preprocessing
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :member-order: bysource
-
-
 .. _galpynostatic.model:
 
 ``galpynostatic.model`` module
@@ -56,10 +46,40 @@ Package contents
    :member-order: bysource
 
 
+``galpynostatic.preprocessing`` module
+--------------------------------------
+
+.. automodule:: galpynostatic.preprocessing
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :member-order: bysource
+
+
 ``galpynostatic.size`` module
 -----------------------------
 
 .. automodule:: galpynostatic.size
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :member-order: bysource
+
+
+``galpynostatic.utils`` module
+------------------------------
+
+.. automodule:: galpynostatic.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :member-order: bysource
+
+
+``galpynostatic.surface`` module
+--------------------------------
+
+.. automodule:: galpynostatic.surface
    :members:
    :undoc-members:
    :show-inheritance:

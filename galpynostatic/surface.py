@@ -29,7 +29,7 @@ import scipy.interpolate
 
 
 class SurfaceSpline:
-    r"""Spline of the `dataset` discrete surface.
+    r"""Spline of the `dataset` disete surface.
 
     Parameters
     ----------
@@ -47,7 +47,7 @@ class SurfaceSpline:
         Unique :math:`\Xi` possible values in the dataset.
 
     spline : scipy.interpolate.RectBivariateSpline
-        Bivariate spline approximation over the discrete dataset.
+        Bivariate spline approximation over the disete dataset.
     """
 
     def __init__(self, dataset):
@@ -71,3 +71,24 @@ class SurfaceSpline:
             self.xis,
             np.asarray(socs).reshape(self.ells.size, self.xis.size)[:, ::-1],
         )
+
+    def soc(self, logell, logxi):
+        r"""Find the value of SOC given the surface spline.
+
+        This is a linear function bounded in [0, 1], values exceeding this
+        range are taken to the corresponding end point.
+
+        Parameters
+        ----------
+        logell : float
+            Log 10 value of :math:`\ell` parameter.
+
+        logxi : float
+            Log 10 value of :math:`\Xi` parameter.
+
+        Returns
+        -------
+        soc : float
+            The corresponding soc value in the surface spline.
+        """
+        return max(0, min(1, self.spline(logell, logxi)[0][0]))
