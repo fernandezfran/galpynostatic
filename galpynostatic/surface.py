@@ -29,7 +29,7 @@ import scipy.interpolate
 
 
 class SurfaceSpline:
-    r"""Spline of the `dataset` disete surface.
+    r"""Spline of the `dataset` discrete surface.
 
     Parameters
     ----------
@@ -47,7 +47,7 @@ class SurfaceSpline:
         Unique :math:`\Xi` possible values in the dataset.
 
     spline : scipy.interpolate.RectBivariateSpline
-        Bivariate spline approximation over the disete dataset.
+        Bivariate spline approximation over the discrete dataset.
     """
 
     def __init__(self, dataset):
