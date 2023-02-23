@@ -55,13 +55,13 @@ class GalvanostaticPlotter:
         ax = plt.gca() if ax is None else ax
 
         logelleval = np.linspace(
-            np.min(self.greg._surface.ells),
-            np.max(self.greg._surface.ells),
+            np.min(self.greg._surface.logells),
+            np.max(self.greg._surface.logells),
             num=1000,
         )
         logxieval = np.linspace(
-            np.min(self.greg._surface.xis),
-            np.max(self.greg._surface.xis),
+            np.min(self.greg._surface.logxis),
+            np.max(self.greg._surface.logxis),
             num=1000,
         )
 

@@ -40,10 +40,10 @@ class SurfaceSpline:
 
     Attributes
     ----------
-    ells : numpy.ndarray
+    logells : numpy.ndarray
         Unique :math:`\ell` possible values in the dataset.
 
-    xis : numpy.ndarray
+    logxis : numpy.ndarray
         Unique :math:`\Xi` possible values in the dataset.
 
     spline : scipy.interpolate.RectBivariateSpline
@@ -51,11 +51,11 @@ class SurfaceSpline:
     """
 
     def __init__(self, dataset):
-        self.ells = np.unique(dataset.l)
-        self.xis = np.unique(dataset.chi)
+        self.logells = np.unique(dataset.l)
+        self.logxis = np.unique(dataset.chi)
 
         k, socs = 0, []
-        for logell, logxi in it.product(self.ells, self.xis[::-1]):
+        for logell, logxi in it.product(self.logells, self.logxis[::-1]):
             soc = 0
             try:
                 if logell == dataset.l[k] and logxi == dataset.chi[k]:
@@ -65,11 +65,12 @@ class SurfaceSpline:
                 ...
             finally:
                 socs.append(soc)
+        socs = np.array(socs)
 
         self.spline = scipy.interpolate.RectBivariateSpline(
-            self.ells,
-            self.xis,
-            np.asarray(socs).reshape(self.ells.size, self.xis.size)[:, ::-1],
+            self.logells,
+            self.logxis,
+            socs.reshape(self.logells.size, self.logxis.size)[:, ::-1],
         )
 
     def soc(self, logell, logxi):

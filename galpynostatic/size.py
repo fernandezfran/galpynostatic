@@ -70,7 +70,7 @@ def predict_length(greg, minutes=15, loaded=0.8, dlogell=0.01, cm_to=10000):
 
     logxi = flogxi(c_rate, greg.dcoeff_, greg.k0_)
     logell_range = np.arange(
-        greg._surface.ells.min(), greg._surface.ells.max(), dlogell
+        greg._surface.logells.min(), greg._surface.logells.max(), dlogell
     )
 
     socs = np.array([greg._soc(logell, logxi) for logell in logell_range])
