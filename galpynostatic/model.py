@@ -67,10 +67,6 @@ class GalvanostaticRegressor(RegressorMixin):
     z : int
         Geometric factor (1 for planar, 2 for cylinder and 3 for sphere).
 
-    t_h : int or float, default=3600
-        Time equivalent to one hour in suitable time units, by default in
-        seconds.
-
     Attributes
     ----------
     dcoeff_ : float
@@ -95,12 +91,10 @@ class GalvanostaticRegressor(RegressorMixin):
     .. [2] TODO
     """
 
-    def __init__(self, dataset, d, z, t_h=3600):
+    def __init__(self, dataset, d, z):
         self.dataset = dataset
         self.d = d
         self.z = z
-
-        self.t_h = t_h
 
         self.dcoeff_, self.k0_, self.mse_ = None, None, None
 
@@ -111,11 +105,11 @@ class GalvanostaticRegressor(RegressorMixin):
 
     def _logell(self, c_rate):
         r"""Logarithm value in base 10 of :math:`\ell` parameter."""
-        return flogell(c_rate, self.d, self.z, self.dcoeff_, t_h=self.t_h)
+        return flogell(c_rate, self.d, self.z, self.dcoeff_)
 
     def _logxi(self, c_rate):
         r"""Logarithm value in base 10 of :math:`\Xi` parameter."""
-        return flogxi(c_rate, self.dcoeff_, self.k0_, t_h=self.t_h)
+        return flogxi(c_rate, self.dcoeff_, self.k0_)
 
     def _soc(self, logell, logxi):
         """Find the value of SOC given the surface spline."""
@@ -207,7 +201,7 @@ class GalvanostaticRegressor(RegressorMixin):
         sum of squares ``((y_true - y_pred)** 2).sum()`` and :math:`v`
         is the total sum of squares ``((y_true - y_true.mean()) ** 2).sum()``.
         The best possible score is 1.0 and it can be negative (because the
-        model can be arbitrarily worse).  A constant model that always predicts
+        model can be arbitrarily worse). A constant model that always predicts
         the expected value of `y`, disregarding the input C-rates, would get
         a :math:`R^2` score of 0.0.
 

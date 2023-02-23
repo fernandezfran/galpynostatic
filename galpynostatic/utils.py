@@ -24,10 +24,12 @@ import numpy as np
 # ============================================================================
 
 
-def flogell(c_rate, d, z, dcoeff, t_h=3600):
+def flogell(c_rate, d, z, dcoeff):
     r"""Obtain log value in base 10 of :math:`\ell` parameter.
 
-    Where :math:`\ell = d z \left( \frac{C_{rate}}{D t_h} \right)`.
+    Where :math:`\ell = d z \left( \frac{C_{rate}}{D t_h} \right)` with
+    :math:`t_h` the equivalent to one hour in suitable time units, here 3600
+    seconds.
 
     Parameters
     ----------
@@ -46,22 +48,19 @@ def flogell(c_rate, d, z, dcoeff, t_h=3600):
     k0 : float
         Kinetic rate constant, :math:`k^0`, in :math:`cm/s`.
 
-    t_h : int or float, default=3600
-        Time equivalent to one hour in suitable time units, by default in
-        seconds.
-
     Returns
     -------
     logell : float
         The log 10 value of :math:`\ell` parameter.
     """
-    return np.log10((c_rate * d**2) / (z * t_h * dcoeff))
+    return np.log10((c_rate * d**2) / (3600 * z * dcoeff))
 
 
-def flogxi(c_rate, dcoeff, k0, t_h=3600):
+def flogxi(c_rate, dcoeff, k0):
     r"""Obtain log value in base 10 of :math:`\Xi` parameter.
 
-    Where :math:`\Xi = k^0 \sqrt{\frac{t_h}{C_{rate} D}}`.
+    Where :math:`\Xi = k^0 \sqrt{\frac{t_h}{C_{rate} D}}` with :math:`t_h` the
+    equivalent to one hour in suitable time units, here 3600 seconds.
 
     Parameters
     ----------
@@ -74,13 +73,9 @@ def flogxi(c_rate, dcoeff, k0, t_h=3600):
     k0 : float
         Kinetic rate constant, :math:`k^0`, in :math:`cm/s`.
 
-    t_h : int or float, default=3600
-        Time equivalent to one hour in suitable time units, by default in
-        seconds.
-
     Returns
     -------
     logxi : float
         The log 10 value of :math:`\Xi` parameter.
     """
-    return np.log10(k0 * np.sqrt(t_h / (c_rate * dcoeff)))
+    return np.log10(k0 * np.sqrt(3600 / (c_rate * dcoeff)))

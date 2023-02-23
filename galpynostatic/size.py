@@ -80,5 +80,5 @@ def predict_length(greg, minutes=15, loaded=0.8, dlogell=0.01, cm_to=10000):
     ).roots()[0]
 
     return cm_to * np.sqrt(
-        (greg.z * greg.t_h * greg.dcoeff_ * 10.0**optimal_logell) / c_rate
+        (3600 * greg.z * greg.dcoeff_ * 10.0**optimal_logell) / c_rate
     )
