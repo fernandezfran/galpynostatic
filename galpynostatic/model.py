@@ -184,18 +184,9 @@ class GalvanostaticRegressor(RegressorMixin):
             logell = self._logell(x[0])
             logxi = self._logxi(x[0])
 
-            logell_mask = (
-                self._surface.logells.min()
-                <= logell
-                <= self._surface.logells.max()
-            )
-            logxi_mask = (
-                self._surface.logxis.min()
-                <= logxi
-                <= self._surface.logxis.max()
-            )
-
-            if logell_mask and logxi_mask:
+            mask_logell = self._surface._mask_logell(logell)
+            mask_logxi = self._surface._mask_logxi(logxi)
+            if mask_logell and mask_logxi:
                 y[k] = self._soc(logell, logxi)
 
         return y

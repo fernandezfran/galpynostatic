@@ -73,6 +73,14 @@ class SurfaceSpline:
             socs.reshape(self.logells.size, self.logxis.size)[:, ::-1],
         )
 
+    def _mask_logell(self, logell):
+        """Mask the value between the extrems of the interval."""
+        return self.logells.min() <= logell <= self.logells.max()
+
+    def _mask_logxi(self, logxi):
+        """Mask the value between the extrems of the interval."""
+        return self.logxis.min() <= logxi <= self.logxis.max()
+
     def soc(self, logell, logxi):
         r"""Get the SOC value given the surface spline.
 
