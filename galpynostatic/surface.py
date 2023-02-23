@@ -11,7 +11,7 @@
 # DOCS
 # ============================================================================
 
-"""Private module with the dataset surface spline."""
+"""Module with the spline to the diagram surface in the dataset."""
 
 # ============================================================================
 # IMPORTS
@@ -34,8 +34,8 @@ class SurfaceSpline:
     Parameters
     ----------
     dataset : pandas.DataFrame
-        Dataset with a map of State of Charge (SOC) as function of :math:`\ell`
-        and :math:`\Xi` parameters, this can be loaded using load functions in
+        Dataset with a diagram of SOC as function of :math:`\ell` and
+        :math:`\Xi` parameters, this can be loaded using the functions in
         :ref:`galpynostatic.datasets`.
 
     Attributes
@@ -73,7 +73,7 @@ class SurfaceSpline:
         )
 
     def soc(self, logell, logxi):
-        r"""Find the value of SOC given the surface spline.
+        r"""Get the SOC value given the surface spline.
 
         This is a linear function bounded in [0, 1], values exceeding this
         range are taken to the corresponding end point.

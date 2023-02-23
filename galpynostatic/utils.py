@@ -27,6 +27,8 @@ import numpy as np
 def flogell(c_rate, d, z, dcoeff, t_h=3600):
     r"""Obtain log value in base 10 of :math:`\ell` parameter.
 
+    Where :math:`\ell = d z \left( \frac{C_{rate}}{D t_h} \right)`.
+
     Parameters
     ----------
     c_rate : float or int
@@ -58,6 +60,8 @@ def flogell(c_rate, d, z, dcoeff, t_h=3600):
 
 def flogxi(c_rate, dcoeff, k0, t_h=3600):
     r"""Obtain log value in base 10 of :math:`\Xi` parameter.
+
+    Where :math:`\Xi = k^0 \sqrt{\frac{t_h}{C_{rate} D}}`.
 
     Parameters
     ----------

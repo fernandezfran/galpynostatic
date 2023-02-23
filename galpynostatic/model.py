@@ -11,7 +11,7 @@
 # DOCS
 # ============================================================================
 
-"""Module with the galvanostatic model."""
+"""Module with the galvanostatic regression model."""
 
 # ============================================================================
 # IMPORTS
@@ -38,33 +38,34 @@ from .utils import flogell, flogxi
 class GalvanostaticRegressor(RegressorMixin):
     r"""An heuristic regressor for galvanostatic data.
 
-    The physics-based model uses the diagrams from the datasets
-    (:ref:`galpynostatic.datasets`) to perform a grid search of the :math:`\Xi`
-    and :math:`\ell` simulation parameters. The grid search consists of taking
-    experimental measurements of the State-of-Charge (SOC) of the electrode as
-    a function of the C-rates and trying different possible combinations of the
-    diffusion coefficient (:math:`D`) and the kinetic constant (:math:`k^0`).
-    This is done considering invariant the other parameters involved in
-    :math:`\Xi` and :math:`\ell`, such as the characteristic diffusion length
-    (:math:`d`) and the geometrical factor (:math:`z`). Each time a set of
-    parameters :math:`D` and :math:`k^0` is taken, the values that would be
-    obtained for the SOC in the diagram are predicted and the mean square error
-    (MSE) is calculated. After an exhaustive exploration, the set of parameters
-    that minimizes the MSE are obtained, thus yielding fundamental parameters
-    of the system that together with the diagram allows to make predictions.
+    This physics-based model [2]_ uses the diagram in the `dataset`
+    (:ref:`galpynostatic.datasets`) to perform a grid search by taking
+    different combinations of the diffusion coefficient, :math:`D`, and the
+    kinetic rate constant, :math:`k^0`, to fit experimental measurments of the
+    State-of-Charge (SOC) of the electrode material as a function of the
+    C-rates. This is done considering invariant all the other experimental
+    values involved in the continuum galvanostatic model :math:`\Xi` and
+    :math:`\ell` parameters, such as the characteristic diffusion length,
+    :math:`d`, and the geometrical factor, :math:`z`.
+
+    Each time a set of parameters :math:`D` and :math:`k^0` is taken, the
+    SOC values are predicted and the mean square error (MSE) is calculated.
+    Then, the set of parameters that minimizes the MSE are obtained, thus
+    yielding fundamental parameters of the system that together with the
+    diagram allows to make predictions.
 
     Parameters
     ----------
     dataset : pandas.DataFrame
-        Dataset with a map of State of Charge (SOC) as function of :math:`\ell`
-        and :math:`\Xi` parameters, this can be loaded using the load functions
-        in :ref:`galpynostatic.datasets`
+        Dataset with the State of Charge (SOC) diagram as function of
+        :math:`\ell` and :math:`\Xi` parameters, this can be loaded using the
+        functions in :ref:`galpynostatic.datasets`.
 
     d : float
         Characteristic diffusion length.
 
     z : int
-        Geometric factor: 1 for planar, 2 for cylinder and 3 for sphere.
+        Geometric factor (1 for planar, 2 for cylinder and 3 for sphere).
 
     t_h : int or float, default=3600
         Time equivalent to one hour in suitable time units, by default in
@@ -73,10 +74,10 @@ class GalvanostaticRegressor(RegressorMixin):
     Attributes
     ----------
     dcoeff_ : float
-        Estimated diffusion coefficient, :math:`D`, in :math:`cm^2/s`.
+        Estimated diffusion coefficient in :math:`cm^2/s`.
 
     k0_ : float
-        Estimated kinetic rate constant, :math:`k^0`, in :math:`cm/s`.
+        Estimated kinetic rate constant in :math:`cm/s`.
 
     mse_ : float
         Mean squared error of the fitted model.
@@ -85,9 +86,13 @@ class GalvanostaticRegressor(RegressorMixin):
     -----
     By default the grid search is performed on the values of
     ``numpy.logspace(-15, -6, num=100)`` and
-    ``numpy.logspace(-14, -5, num=100)`` for the coefficients :math:`D` and
-    :math:`k^0`, respectively. Their range and precision can be modified
-    through the properties ``dcoeffs`` and ``k0s``, respectively.
+    ``numpy.logspace(-14, -5, num=100)`` for :math:`D` and :math:`k^0`,
+    respectively. Their range and precision can be modified through the
+    properties ``dcoeffs`` and ``k0s``.
+
+    References
+    ----------
+    .. [2] TODO
     """
 
     def __init__(self, dataset, d, z, t_h=3600):
@@ -137,7 +142,7 @@ class GalvanostaticRegressor(RegressorMixin):
         self._k0s = k0s
 
     def fit(self, X, y):
-        """Fit the galvanostatic model.
+        """Fit the galvanostatic regressor model.
 
         Parameters
         ----------
@@ -145,7 +150,7 @@ class GalvanostaticRegressor(RegressorMixin):
             C-rates measurements.
 
         y : array-like of shape (n_measurements,)
-            Target State of Charge (SOC).
+            Target SOC.
 
         Returns
         -------
@@ -202,8 +207,8 @@ class GalvanostaticRegressor(RegressorMixin):
         sum of squares ``((y_true - y_pred)** 2).sum()`` and :math:`v`
         is the total sum of squares ``((y_true - y_true.mean()) ** 2).sum()``.
         The best possible score is 1.0 and it can be negative (because the
-        model can be arbitrarily worse). A constant model that always predicts
-        the expected value of `y`, disregarding the input features, would get
+        model can be arbitrarily worse).  A constant model that always predicts
+        the expected value of `y`, disregarding the input C-rates, would get
         a :math:`R^2` score of 0.0.
 
         Parameters
@@ -232,13 +237,8 @@ class GalvanostaticRegressor(RegressorMixin):
     def to_dataframe(self, X, y=None):
         """Convert the train or the evaluation set to a dataframe.
 
-        You can transform the training dataset, in case you pass in the y
-        values, you will have a dataframe with three columns: `C_rates`,
-        `SOC_true` & `SOC_pred`.
-
-        In the default case, in which `y` is `None`, you can pass any value of
-        `X` with physical meaning and predict on it, in that case the dataframe
-        will have only two columns: `C_rates` & `SOC_pred`.
+        Obtain a dataframe with two or three columns (`C_rates`, `SOC_true` &
+        `SOC_pred`), depending if you passed the `y` values or not.
 
         Parameters
         ----------
@@ -251,7 +251,7 @@ class GalvanostaticRegressor(RegressorMixin):
         Returns
         -------
         df : pandas.DataFrame
-            A dataframe with the train or the evaluation set values.
+            A dataframe with the train or the evaluation set.
         """
         dict_ = {"C_rates": X.ravel()}
 

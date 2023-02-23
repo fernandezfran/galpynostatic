@@ -27,13 +27,13 @@ import numpy as np
 
 
 class GalvanostaticPlotter:
-    """GalvanostaticRegressor plot utilities.
+    r"""GalvanostaticRegressor plot utilities.
 
     Kind of plots to produce:
 
-    - 'surface' : the surface on which it was fitted.
-    - 'in_surface' : fitted data points in the surface.
-    - 'versus_data' : predicted values versus true data.
+    - 'surface' : the surface on which the data was fitted.
+    - 'in_surface' : :math:`\Xi` and :math:`\ell` data points in the surface.
+    - 'versus_data' : predicted & true SOC versus C-rates data.
 
     Parameters
     ----------
@@ -125,7 +125,7 @@ class GalvanostaticPlotter:
     def versus_data(
         self, X, y, X_eval=None, ax=None, data_kws=None, pred_kws=None
     ):
-        """Plot predictions against data.
+        """Plot SOC predictions against true data as a function of C-rates.
 
         Parameters
         ----------
@@ -133,7 +133,7 @@ class GalvanostaticPlotter:
             C-rates measurements.
 
         y : array-like of shape (n_measurements,)
-            Target State of Charge (SOC).
+            Target SOC.
 
         X_eval : array-like of shape (n_measurements, 1), default=None.
             C-rates values to evalute the model to compare against data. When

@@ -29,7 +29,8 @@ galpynostatic
 
 
 **galpynostatic** is a Python package with a physics-based heuristic model for 
-identifying the five minutes charging electrode material.
+identifying optimal characteristics of the fifteen-minute charging electrode 
+material.
 
 
 Requirements

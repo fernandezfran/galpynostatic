@@ -11,13 +11,14 @@
 # DOCS
 # ============================================================================
 
-"""The ``galpynostatic.dataset`` module loads the data needed for the fits.
+r"""The ``galpynostatic.dataset`` module loads the data needed for the fits.
 
 These datasets were obtained using a computational physics continuum model [1]_
-for the different geometries that allows to simulate. They come from a cutoff
-of a surface at a given cell potential, with respect to equilibrium, and from
-a grid search covering a wide range of possible experimental values for the
-diffusion coefficient and the kinetic rate constant.
+for different geometries. They come from a cutoff of a surface at a given cell
+potential, with respect to equilibrium, and from different combinations of
+internal parameters :math:`\Xi` and :math:`\ell` (see
+:ref:`galpynostatic.utils`) that covers a wide range of possible values of the
+experimental variables involved.
 
 References
 ----------
@@ -47,15 +48,15 @@ PATH = pathlib.Path(os.path.abspath(os.path.dirname(__file__)))
 
 
 def load_planar():
-    """Galvanostatic planar map for a cut-off potential of 150 mV."""
+    """Galvanostatic planar diagram for a cut-off potential of 150 mV."""
     return pd.read_csv(PATH / "planar.tsv", delimiter="\t")
 
 
 def load_cylindrical():
-    """Galvanostatic cylindrical map for a cut-off potential of 150 mV."""
+    """Galvanostatic cylindrical diagram for a cut-off potential of 150 mV."""
     return pd.read_csv(PATH / "cylindrical.tsv", delimiter="\t")
 
 
 def load_spherical():
-    """Galvanostatic spherical map for a cut-off potential of 150 mV."""
+    """Galvanostatic spherical diagram for a cut-off potential of 150 mV."""
     return pd.read_csv(PATH / "spherical.tsv", delimiter="\t")

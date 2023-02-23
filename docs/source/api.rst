@@ -65,6 +65,7 @@ Package contents
    :show-inheritance:
    :member-order: bysource
 
+.. _galpynostatic.utils:
 
 ``galpynostatic.utils`` module
 ------------------------------

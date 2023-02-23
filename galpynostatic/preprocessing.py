@@ -11,7 +11,7 @@
 # DOCS
 # ============================================================================
 
-"""Module for preprocessing of experimental data."""
+"""Module to handle experimental data preprocessing."""
 
 # ============================================================================
 # IMPORTS
@@ -31,25 +31,9 @@ from sklearn.base import TransformerMixin
 class GetDischargeCapacities(TransformerMixin):
     """Obtain the discharge capacities at a given cut-off potential.
 
-    This Transformer will subtract from all curves the equilibrium potential
-    `eq_pot` to find the capacity at which the potential is cut off below
-    `vcut`.
-
-    Electrochemical experiments usually have the galvanostatic profiles
-    measured for different C-rates, these curves have the voltage in the axis
-    of the dependent variables and the discharge capacitites in the axis of the
-    independent variables. From the values at which the curves intersect the
-    horizontal line `vcut` below the equilibrium potential `eq_pot`, discharge
-    capacities can be obtained.
-
-    Discharge capacities are useful to define the State of Charge (SOC) of the
-    electrode material and have it as a function of C-rates, which is the
-    suitable way to have the data for the :ref:`galpynostatic.model`. Our
-    suggestion to determine the SOC is to take the maximum value for the
-    discharge capacities that which corresponds whit the value of the C-rate at
-    which the curve is already converged with respect to the previous one. In
-    this case, all the values obtained for the discharge capacities are divided
-    by this one and the SOC is obtained.
+    This Transformer will subtract from all galvanostatic profiles the
+    equilibrium potential, `eq_pot`, to find the discharge capacity for each
+    curve at which the potential is cut off below `vcut`.
 
     Parameters
     ----------
@@ -58,7 +42,17 @@ class GetDischargeCapacities(TransformerMixin):
 
     vcut : float, default=0.15
         The cut-off potential in V, the default value corresponds to 150 mV,
-        which is the one defined by the data of the distributed maps.
+        which is the one defined by the data of the distributed diagrams.
+
+    Notes
+    -----
+    Discharge capacities are useful to define the SOC for a given C-rate, which
+    is the suitable way to have the data for the :ref:`galpynostatic.model`.
+    Our suggestion to determine the SOC is to take the maximum value for the
+    discharge capacities that which corresponds whit the value of the C-rate at
+    which the curve is already converged with respect to the previous one. In
+    this case, all the values obtained for the discharge capacities are divided
+    by this one and the SOC is obtained.
     """
 
     def __init__(self, eq_pot, vcut=0.15):
