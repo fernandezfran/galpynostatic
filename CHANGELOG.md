@@ -1,25 +1,24 @@
 # Changelog of galpynostatic
 
-## Version 0.1
+# v0.1.0 (2023-??-??)
 
-This first object-oriented version contains the 
-`galpynostatic.model.GalvanostaticRegressor` to fit SOC versus C-rates 
-experimental data to the physics-based heuristic model, with the surface data 
-available in `galpynostatic.datasets`. Allows visualization through an accessor 
-to `galpynostatic.plot.GalvanostaticPlotter` and make predictions on the optimal 
-size characteristic of the fifteen-minute charging electrode material with
-`galpynostatic.size.predict_length`. It also offers the 
-`galpynostatic.preprocessing.GetDischargeCapacities` class to obtain discharge 
-capacities from galvanostatic profiles.
+This is the first Python object-oriented version of galpynostatic.
 
-The software quality is the following:
-    - runs on Ubuntu with Python 3.8+.
-    - documentation with installation guide, tutorials with examples of use with 
-    common and state-of-the-art research lithium battery systems, and API in 
-    readthedocs.
-    - multiple unit tests.
-    - 100% coverage.
-    - PEP8 style code assured with flake8 and extensions.
-    - CI/CD on GitHub Actions.
-    - MIT LICENSE.
-    - available as a package in PyPI.
+## Features
+
+- A galvanostatic regressor to fit State-of-Charge (SOC) versus C-rates experimental data with the physics-based heuristic model. 
+- Surface datasets for different geometries of the continuous computational physics previous model. 
+- Visualization in different formats through a plotter.
+- Make predictions on the optimal size characteristic of the fifteen-minute charging electrode material. 
+- A preprocessing tool to obtain discharge capacities from galvanostatic profile, useful to define the SOC values.
+
+## Software quality assurance
+
+- Runs on Ubuntu with Python 3.8+.
+- Documentation available in readthedocs with installation guide, API reference and tutorials with examples of use with common and state-of-the-art research lithium battery systems.
+- Multiple unit tests.
+- 100% coverage.
+- PEP8 style code assured with flake8 and extensions.
+- CI/CD on GitHub Actions.
+- MIT LICENSE, encouraging its use in both academic and commercial settings.
+- PyPI package distribution.
