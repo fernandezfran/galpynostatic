@@ -82,22 +82,22 @@ class SurfaceSpline:
         return self.logxis.min() <= logxi <= self.logxis.max()
 
     def soc(self, logell, logxi):
-        r"""Get the SOC value given the surface spline.
+        r"""Get the SOC values given the surface spline.
 
         This is a linear function bounded in [0, 1], values exceeding this
         range are taken to the corresponding end point.
 
         Parameters
         ----------
-        logell : float
+        logell : numpy.ndarray
             Log 10 value of :math:`\ell` parameter.
 
-        logxi : float
+        logxi : numpy.ndarray
             Log 10 value of :math:`\Xi` parameter.
 
         Returns
         -------
-        soc : float
-            The corresponding soc value in the surface spline.
+        soc : numpy.ndarray
+            The corresponding soc values in the surface spline.
         """
-        return np.clip(self.spline(logell, logxi)[0][0], 0, 1)
+        return np.clip(self.spline(logell, logxi), 0, 1)

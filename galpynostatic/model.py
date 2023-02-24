@@ -112,8 +112,8 @@ class GalvanostaticRegressor(RegressorMixin):
         return flogxi(c_rate, self.dcoeff_, self.k0_)
 
     def _soc(self, logell, logxi):
-        """Find the value of SOC given the surface spline."""
-        return self._surface.soc(logell, logxi)
+        """Find a single value of the SOC given the surface spline."""
+        return self._surface.soc(logell, logxi)[0][0]
 
     @property
     def dcoeffs(self):

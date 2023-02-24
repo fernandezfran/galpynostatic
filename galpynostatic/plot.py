@@ -65,7 +65,7 @@ class GalvanostaticPlotter:
             num=1000,
         )
 
-        z = np.clip(self.greg._surface.spline(logelleval, logxieval), 0, 1)
+        z = self.greg._surface.soc(logelleval, logxieval)
 
         im = ax.imshow(
             z.T,
