@@ -16,9 +16,9 @@ description = "A physics-based heuristic model for identifying the five minutes 
 keywords = [
     "battery",
     "physics-based-model",
+    "data-driven-model",
     "heuristic-algorithm",
     "fast-charging",
-    "single-particle",
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
