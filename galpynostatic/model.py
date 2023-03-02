@@ -57,9 +57,9 @@ class GalvanostaticRegressor(RegressorMixin):
     Parameters
     ----------
     dataset : pandas.DataFrame
-        Dataset with the State of Charge (SOC) diagram as function of
-        :math:`\ell` and :math:`\Xi` parameters, this can be loaded using the
-        functions in :ref:`galpynostatic.datasets`.
+        Dataset with the SOC diagram as function of :math:`\log(\ell)` and
+        :math:`\log(\Xi)` parameters, this can be loaded using the functions in
+        :ref:`galpynostatic.datasets`.
 
     d : float
         Characteristic diffusion length.
