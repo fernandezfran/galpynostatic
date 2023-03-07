@@ -11,8 +11,8 @@
 # DOCS
 # =============================================================================
 
-"""A physics-based heuristic model for identifying optimal characteristics of \
-the fifteen-minute charging electrode material."""
+"""A physics-based heuristic model to identify optimal fifteen-minute charging\
+electrode material characteristics."""
 
 # =============================================================================
 # IMPORTS
