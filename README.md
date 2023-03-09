@@ -55,7 +55,7 @@ you could cite the following article:
 
 > Autores. (Año). Título. _Revista_. DOI
 
-Bibtex entry:
+BibTeX entry:
 
 ```bibtex
 @article{
