@@ -7,7 +7,7 @@
 [![doi](https://img.shields.io/badge/doi-TODO-b19cd9)](https://www.doi.org/)
 
 **galpynostatic** is a Python package with a physics-based heuristic model to 
-identify optimal fifteen-minute charging electrode material characteristics.
+identify optimal fast-charging LIBs electrode material characteristics.
 
 
 ## Requirements

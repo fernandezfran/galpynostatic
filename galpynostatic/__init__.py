@@ -11,7 +11,7 @@
 # DOCS
 # =============================================================================
 
-"""A physics-based heuristic model to identify optimal fifteen-minute charging\
+"""A physics-based heuristic model to identify optimal fast-charging LIBs \
 electrode material characteristics."""
 
 # =============================================================================
