@@ -11,8 +11,8 @@
 # DOCS
 # =============================================================================
 
-"""A physics-based heuristic model to identify optimal fast-charging lithium \
-battery electrode material characteristics."""
+"""A physics-based heuristic model towards the fast-charging of lithium-ion \
+batteries electrode material."""
 
 # =============================================================================
 # IMPORTS

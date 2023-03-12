@@ -12,7 +12,7 @@ version = "0.0.1"
 authors = [{name = "Francisco Fernandez", email = "fernandezfrancisco2195@gmail.com"}]
 readme = "README.md"
 license = {file = "LICENSE"}
-description = "A physics-based heuristic model to identify optimal fast-charging lithium battery electrode material characteristics."
+description = "A physics-based heuristic model towards the fast-charging of lithium-ion batteries electrode material."
 keywords = [
     "battery",
     "physics-based-model",
