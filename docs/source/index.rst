@@ -53,7 +53,7 @@ https://github.com/fernandezfran/galpynostatic/
    :caption: Contents:
 
    install
-   tutorial/index
+   tutorial.ipynb
    api
 
 

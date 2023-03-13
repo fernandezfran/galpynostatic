@@ -15,7 +15,7 @@ This is the first Python object-oriented version of galpynostatic.
 ## Software quality assurance
 
 - Runs on Ubuntu with Python 3.8+.
-- Documentation available in readthedocs with installation guide, API reference and tutorials with examples of use in common and state-of-the-art research lithium battery systems.
+- Documentation available in readthedocs with installation guide, tutorial and API reference.
 - Multiple unit tests.
 - 100% coverage.
 - PEP8 style code assured with flake8 and extensions.
