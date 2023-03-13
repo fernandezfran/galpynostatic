@@ -10,5 +10,4 @@ exclude requirements_dev.txt
 exclude tox.ini
 
 recursive-exclude docs *
-recursive-exclude examples *
 recursive-exclude tests *
