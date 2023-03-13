@@ -26,13 +26,7 @@ import pytest
 
 @pytest.mark.parametrize(
     ("experiment"),
-    [
-        ("nishikawa_experiment"),
-        ("he_experiment"),
-        ("wang_experiment"),
-        ("lei_experiment"),
-        ("bak_experiment"),
-    ],
+    [("nishikawa"), ("he"), ("wang"), ("lei"), ("bak")],
 )
 def test_get_discharge_capacities(experiment, request, data_path):
     """Test the get of discharge capacities."""

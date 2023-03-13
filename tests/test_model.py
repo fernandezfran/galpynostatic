@@ -45,12 +45,13 @@ def test_k0s(spherical):
 @pytest.mark.parametrize(
     ("experiment"),
     [
-        ("nishikawa_experiment"),
-        ("mancini_experiment"),
-        ("he_experiment"),
-        ("wang_experiment"),
-        ("lei_experiment"),
-        ("bak_experiment"),
+        ("nishikawa"),
+        ("mancini"),
+        ("he"),
+        ("wang"),
+        ("lei"),
+        ("bak"),
+        ("dokko"),
     ],
 )
 class TestModel:

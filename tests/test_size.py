@@ -26,12 +26,13 @@ import pytest
 @pytest.mark.parametrize(
     ("experiment"),
     [
-        ("nishikawa_experiment"),
-        ("mancini_experiment"),
-        ("he_experiment"),
-        ("wang_experiment"),
-        ("lei_experiment"),
-        ("bak_experiment"),
+        ("nishikawa"),
+        ("mancini"),
+        ("he"),
+        ("wang"),
+        ("lei"),
+        ("bak"),
+        ("dokko"),
     ],
 )
 def test_predict_length(experiment, request, spherical):

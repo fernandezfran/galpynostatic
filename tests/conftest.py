@@ -48,7 +48,7 @@ def spherical():
 
 
 @pytest.fixture()
-def nishikawa_experiment():
+def nishikawa():
     return {
         "dir_name": "LMNO",
         "file_names": ("1nA.csv", "2nA.csv", "3nA.csv", "5nA.csv", "10nA.csv"),
@@ -73,7 +73,7 @@ def nishikawa_experiment():
 
 
 @pytest.fixture()
-def mancini_experiment():
+def mancini():
     return {
         "dir_name": "NATURAL_GRAPHITE",
         "file_names": None,
@@ -122,7 +122,7 @@ def mancini_experiment():
 
 
 @pytest.fixture()
-def he_experiment():
+def he():
     return {
         "dir_name": "LTO",
         "file_names": ("0.1C.csv", "0.5C.csv", "1C.csv", "2C.csv", "5C.csv"),
@@ -149,7 +149,7 @@ def he_experiment():
 
 
 @pytest.fixture()
-def wang_experiment():
+def wang():
     return {
         "dir_name": "LCO",
         "file_names": (
@@ -185,7 +185,7 @@ def wang_experiment():
 
 
 @pytest.fixture()
-def lei_experiment():
+def lei():
     return {
         "dir_name": "LFP",
         "file_names": (
@@ -228,7 +228,7 @@ def lei_experiment():
 
 
 @pytest.fixture()
-def bak_experiment():
+def bak():
     return {
         "dir_name": "LMO",
         "file_names": (
@@ -266,5 +266,38 @@ def bak_experiment():
             ),
             "r2": 0.5436138,
             "length": 0.118554,
+        },
+    }
+
+
+@pytest.fixture()
+def dokko():
+    return {
+        "dir_name": "GRAPHITE",
+        "file_names": None,
+        "eq_pot": None,
+        "d": 0.0009,
+        "C_rates": np.array([1.5, 4.5, 12.5, 25, 50, 100, 250]).reshape(-1, 1),
+        "soc": np.array([0.952, 0.947, 0.928, 0.586, 0.214, 0.157, 0.013]),
+        "dcoeff": 1.0e-9,
+        "k0": 1.0e-6,
+        "ref": {
+            "dc": None,
+            "dcoeff": 1.0e-9,
+            "k0": 1.0e-6,
+            "mse": 0.02627097,
+            "soc": np.array(
+                [
+                    0.952891,
+                    0.864461,
+                    0.630083,
+                    0.333588,
+                    0.120853,
+                    0.031413,
+                    0.0,
+                ]
+            ),
+            "r2": 0.8194799,
+            "length": 11.855359,
         },
     }
