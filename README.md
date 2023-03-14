@@ -37,7 +37,7 @@ pip install git+https://github.com/fernandezfran/galpynostatic
 ## Usage
 
 To learn how to use galpynostatic you can start by following the 
-[tutorial examples](https://galpynostatic.readthedocs.io/en/latest/tutorial/index.html) 
+[tutorial](https://galpynostatic.readthedocs.io/en/latest/tutorial/index.html)
 and then take a look at the [API](https://galpynostatic.readthedocs.io/en/latest/api.html).
 
 
@@ -67,8 +67,3 @@ BibTeX entry:
 ```
 
 We will publish this arXiv work in a refereed journal that will supersede this citation.
-
-
-## Contact
-
-For bugs or questions, please send an email to <fernandezfrancisco2195@gmail.com>
