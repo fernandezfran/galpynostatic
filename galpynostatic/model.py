@@ -88,7 +88,10 @@ class GalvanostaticRegressor(RegressorMixin):
 
     References
     ----------
-    .. [2] TODO
+    .. [2] Fernandez, F., Gavilán-Arriazu, E.M., Visintín, A., Barraco, D.,
+       Ein-Eli, Y. and Leiva, E., 2023. Towards the fast-charging of LIBs
+       electrode materials: a heuristic model based on galvanostatic
+       simulations.
     """
 
     def __init__(self, dataset, d, z):
