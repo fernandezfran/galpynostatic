@@ -15,10 +15,9 @@ license = {file = "LICENSE"}
 description = "A physics-based heuristic model towards the fast-charging of lithium-ion batteries electrode material."
 keywords = [
     "battery",
-    "physics-based-model",
-    "data-driven-model",
+    "physics-based",
+    "data-driven",
     "heuristic-algorithm",
-    "fast-charging",
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
