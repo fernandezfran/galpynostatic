@@ -29,7 +29,7 @@ galpynostatic
 
 
 **galpynostatic** is a Python package with a physics-based heuristic model
-towards the fast-charging of lithium-ion batteries electrode material.
+towards the fast-charging of lithium-ion batteries electrode materials.
 
 
 Requirements

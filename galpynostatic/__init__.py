@@ -12,7 +12,7 @@
 # =============================================================================
 
 """A physics-based heuristic model towards the fast-charging of lithium-ion \
-batteries electrode material."""
+batteries electrode materials."""
 
 # =============================================================================
 # IMPORTS
