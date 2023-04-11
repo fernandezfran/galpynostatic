@@ -95,7 +95,6 @@ class GalvanostaticRegressor(RegressorMixin):
     """
 
     def __init__(self, dataset, d, z):
-        self.dataset = dataset
         self.d = d
         self.z = z
 
