@@ -18,6 +18,7 @@ keywords = [
     "physics-based",
     "data-driven",
     "heuristic-algorithm",
+    "regression-models",
 ]
 classifiers = [
     "Development Status :: 4 - Beta",

@@ -54,18 +54,16 @@ galpynostatic is under
 If you use galpynostatic in a scientific publication, we would appreciate it if 
 you could cite the following article:
 
-> Fernandez, Francisco, et al. "Towards the fast-charging of LIBs electrode 
+> Fernandez, Francisco, et al. "Towards a fast-charging of LIBs electrode 
 > materials: a heuristic model based on galvanostatic simulations" (2023). 
-> _arXiv_. DOI
+> _TODO_. DOI
 
 BibTeX entry:
 
 ```bibtex
 @article{fernandez2023towards,
-  title={Towards the fast-charging of LIBs electrode materials: a heuristic model based on galvanostatic simulations},
-  author={Fernandez, Francisco and Gavilán, Maximiliano and Visintín, Aldo and Barraco, Daniel and Ein-Eli, Yair and Leiva, Ezequiel},
+  title={Towards a fast-charging of LIBs electrode materials: a heuristic model based on galvanostatic simulations},
+  author={Fernandez, Francisco and Gavilán, Maximiliano and Barraco, Daniel and Visintín, Aldo and Ein-Eli, Yair and Leiva, Ezequiel},
   year={2023}
 }
 ```
-
-We will publish this arXiv work in a refereed journal that will supersede this citation.
