@@ -88,7 +88,7 @@ class GalvanostaticRegressor(RegressorMixin):
 
     References
     ----------
-    .. [2] Fernandez, F., Gavilán-Arriazu, E.M., Visintín, A., Barraco, D.,
+    .. [2] Fernandez, F., Gavilán-Arriazu, E.M., Barraco, D., Visintín, A.,
        Ein-Eli, Y. and Leiva, E., 2023. Towards a fast-charging of LIBs
        electrode materials: a heuristic model based on galvanostatic
        simulations.
