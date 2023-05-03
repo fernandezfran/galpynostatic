@@ -11,7 +11,7 @@
 # DOCS
 # ============================================================================
 
-"""Predict optimal size characteristics of the charging electrode material."""
+"""Predict the optimal particle size of the charging electrode material."""
 
 # ============================================================================
 # IMPORTS
@@ -31,15 +31,16 @@ from .utils import flogxi
 def predict_length(greg, minutes=15, loaded=0.8, dlogell=0.01, cm_to=10000):
     r"""Predict the characteristic diffusion length to charge in certain time.
 
-    Once a galvanostatic model was fitted, the kinetic information in :math:`D`
-    and :math:`k^0` can be fixed and leave the characteristic diffusion length,
+    Once a galvanostatic model was fitted, the :math:`D` and :math:`k^0`
+    parameters can be fixed and leave the characteristic diffusion length,
     `d`, free. This new free parameter only apears in :math:`\ell`, so by
-    setting the value of :math:`\Xi` one can predict the SOC for a range of
-    :math:`\ell` values and obtain the optimal one to get certain SOC.
+    setting the value of :math:`\Xi` one can predict the maximum SOC value for
+    a range of :math:`\ell` values and obtain the optimal one to get certain
+    maximum SOC value.
 
-    The default values of this function defines the criteria of wanting the
-    80% of the electrode to be charged in 15 minutes, this is translated as a
-    SOC of 0.8 and a C-rate of 4C.
+    The default values of this function defines the criteria of achieving the
+    80% of the load of the electrode in 15 minutes, this is translated as a
+    maximum SOC value of 0.8 and a C-rate of 4C.
 
     Parameters
     ----------
@@ -50,7 +51,7 @@ def predict_length(greg, minutes=15, loaded=0.8, dlogell=0.01, cm_to=10000):
         Desired minutes to reach the established load.
 
     loaded : float, default=0.8
-        Desired SOC, between 0 and 1.
+        Desired maximum SOC value, between 0 and 1.
 
     dlogell : float, default=0.01
         The delta for the logarithm value in base 10 of the :math:`\ell`
@@ -64,7 +65,7 @@ def predict_length(greg, minutes=15, loaded=0.8, dlogell=0.01, cm_to=10000):
     -------
     length : float
         The characteristic length necessary to charge the electrode to the
-        desired SOC and in the desired time.
+        desired maximum SOC value and in the desired time.
     """
     c_rate = 60.0 / minutes
 

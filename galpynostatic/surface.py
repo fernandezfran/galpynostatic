@@ -34,9 +34,9 @@ class SurfaceSpline:
     Parameters
     ----------
     dataset : pandas.DataFrame
-        Dataset with a diagram of SOC as function of :math:`\ell` and
-        :math:`\Xi` parameters, this can be loaded using the functions in
-        :ref:`galpynostatic.datasets`.
+        Dataset with a diagram of maximum SOC values as function of
+        :math:`\ell` and :math:`\Xi` internal parameters, this can be loaded
+        using the functions in :ref:`galpynostatic.datasets`.
 
     Attributes
     ----------
@@ -82,7 +82,7 @@ class SurfaceSpline:
         return self.logxis.min() <= logxi <= self.logxis.max()
 
     def soc(self, logell, logxi):
-        r"""Get the SOC values given the surface spline.
+        r"""Predict the maximum SOC values given the surface spline.
 
         This is a linear function bounded in [0, 1], values exceeding this
         range are taken to the corresponding end point.
@@ -98,6 +98,6 @@ class SurfaceSpline:
         Returns
         -------
         soc : numpy.ndarray
-            The corresponding soc values in the surface spline.
+            The corresponding maximum SOC values in the surface spline.
         """
         return np.clip(self.spline(logell, logxi), 0, 1)

@@ -33,7 +33,7 @@ class GalvanostaticPlotter:
 
     - 'surface' : the surface on which the data was fitted.
     - 'in_surface' : :math:`\Xi` and :math:`\ell` data points in the surface.
-    - 'versus_data' : predicted & true SOC versus C-rates data.
+    - 'versus_data' : predicted & true maximum SOC values versus C-rate data.
 
     Parameters
     ----------
@@ -92,7 +92,7 @@ class GalvanostaticPlotter:
         Parameters
         ----------
         X : array-like of shape (n_measurements, 1)
-            C-rates measurements.
+            C-rates used in experiments.
 
         ax : matplotlib.axes.Axes, default=None
             The current matplotlib axes.
@@ -130,10 +130,10 @@ class GalvanostaticPlotter:
         Parameters
         ----------
         X : array-like of shape (n_measurements, 1)
-            C-rates measurements.
+            C-rates used in experiments.
 
         y : array-like of shape (n_measurements,)
-            Target SOC.
+            Target maximum SOC values.
 
         X_eval : array-like of shape (n_measurements, 1), default=None.
             C-rates values to evalute the model to compare against data. When

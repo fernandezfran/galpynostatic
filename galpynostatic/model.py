@@ -38,10 +38,10 @@ from .utils import flogell, flogxi
 class GalvanostaticRegressor(RegressorMixin):
     r"""An heuristic regressor for galvanostatic data.
 
-    This physics-based model [2]_ uses the diagram in the `dataset`
+    This physics-based heuristic model [2]_ uses the diagram in the `dataset`
     (:ref:`galpynostatic.datasets`) to perform a grid search by taking
     different combinations of the diffusion coefficient, :math:`D`, and the
-    kinetic rate constant, :math:`k^0`, to fit experimental measurments of the
+    kinetic rate constant, :math:`k^0`, to fit experimental data of the
     State-of-Charge (SOC) of the electrode material as a function of the
     C-rates. This is done considering invariant all the other experimental
     values involved in the continuum galvanostatic model :math:`\Xi` and
@@ -49,17 +49,17 @@ class GalvanostaticRegressor(RegressorMixin):
     :math:`d`, and the geometrical factor, :math:`z`.
 
     Each time a set of parameters :math:`D` and :math:`k^0` is taken, the
-    SOC values are predicted and the mean square error (MSE) is calculated.
-    Then, the set of parameters that minimizes the MSE are obtained, thus
+    SOC values are predicted and the mean square error (MSE) is computed. Then,
+    the set of parameters that minimizes the MSE are obtained, thus
     yielding fundamental parameters of the system that together with the
     diagram allows to make predictions.
 
     Parameters
     ----------
     dataset : pandas.DataFrame
-        Dataset with the SOC diagram as function of :math:`\log(\ell)` and
-        :math:`\log(\Xi)` parameters, this can be loaded using the functions in
-        :ref:`galpynostatic.datasets`.
+        Dataset with the maximum SOC values diagram as function of
+        :math:`\log(\ell)` and :math:`\log(\Xi)` internal parameters, this can
+        be loaded using the functions in :ref:`galpynostatic.datasets`.
 
     d : float
         Characteristic diffusion length.
@@ -70,13 +70,13 @@ class GalvanostaticRegressor(RegressorMixin):
     Attributes
     ----------
     dcoeff_ : float
-        Estimated diffusion coefficient in :math:`cm^2/s`.
+        Predicted diffusion coefficient in :math:`cm^2/s`.
 
     k0_ : float
-        Estimated kinetic rate constant in :math:`cm/s`.
+        Predicted kinetic rate constant in :math:`cm/s`.
 
     mse_ : float
-        Mean squared error of the fitted model.
+        Mean squared error of the best fitted model.
 
     Notes
     -----
@@ -91,7 +91,7 @@ class GalvanostaticRegressor(RegressorMixin):
     .. [2] Fernandez, F., Gavilán-Arriazu, E.M., Barraco, D., Visintín, A.,
        Ein-Eli, Y. and Leiva, E., 2023. Towards a fast-charging of LIBs
        electrode materials: a heuristic model based on galvanostatic
-       simulations.
+       simulations. TODO.
     """
 
     def __init__(self, dataset, d, z):
@@ -143,27 +143,27 @@ class GalvanostaticRegressor(RegressorMixin):
         Parameters
         ----------
         X : array-like of shape (n_measurements, 1)
-            C-rates measurements.
+            C-rates used in experiments.
 
         y : array-like of shape (n_measurements,)
-            Target SOC.
+            Target maximum SOC values.
 
         Returns
         -------
         self : object
             Fitted model.
         """
-        dks = np.array(list(it.product(self._dcoeffs, self._k0s)))
-        mse = np.full(dks.shape[0], np.inf)
+        params = np.array(list(it.product(self._dcoeffs, self._k0s)))
+        mse = np.full(params.shape[0], np.inf)
 
-        for k, (self.dcoeff_, self.k0_) in enumerate(dks):
+        for k, (self.dcoeff_, self.k0_) in enumerate(params):
             pred = self.predict(X)
             if None not in pred:
                 mse[k] = sklearn.metrics.mean_squared_error(y, pred)
 
         idx = np.argmin(mse)
 
-        self.dcoeff_, self.k0_ = dks[idx]
+        self.dcoeff_, self.k0_ = params[idx]
         self.mse_ = mse[idx]
 
         return self
@@ -174,12 +174,12 @@ class GalvanostaticRegressor(RegressorMixin):
         Parameters
         ----------
         X : array-like of shape (n_measurements, 1)
-            C-rates measurements.
+            C-rates used in experiments.
 
         Returns
         -------
         y : array-like of shape (n_measurements,)
-            The predicted SOC for the C-rates inputs.
+            The predicted maximum SOC values for the C-rates inputs.
         """
         y = np.full(X.size, None)
         for k, x in enumerate(X):
@@ -208,10 +208,10 @@ class GalvanostaticRegressor(RegressorMixin):
         Parameters
         ----------
         X : array-like of shape (n_measurements, 1)
-            C-rates measurements.
+            C-rates used in experiments.
 
         y : array-like of shape (n_measurements,)
-            True SOC.
+            Experimental maximum SOC values.
 
         sample_weight : Ignored
             Not used, presented for sklearn API consistency by convention.
@@ -229,7 +229,7 @@ class GalvanostaticRegressor(RegressorMixin):
         return GalvanostaticPlotter(self)
 
     def to_dataframe(self, X, y=None):
-        """Convert the train or the evaluation set to a dataframe.
+        """Convert the train, the evaluation or both sets to a dataframe.
 
         Obtain a dataframe with two or three columns (`C_rates`, `SOC_true` &
         `SOC_pred`), depending if you passed the `y` values or not.
@@ -240,7 +240,7 @@ class GalvanostaticRegressor(RegressorMixin):
             C-rates.
 
         y : array-like of shape (n_measurements,), default=None
-            SOC.
+            maximum SOC values.
 
         Returns
         -------

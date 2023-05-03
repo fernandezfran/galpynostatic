@@ -11,7 +11,7 @@
 # DOCS
 # ============================================================================
 
-"""Parameters functions."""
+"""Internal parameters functions."""
 
 # ============================================================================
 # IMPORTS
@@ -25,7 +25,7 @@ import numpy as np
 
 
 def flogell(c_rate, d, z, dcoeff):
-    r"""Obtain log value in base 10 of :math:`\ell` parameter.
+    r"""Obtain log value in base 10 of :math:`\ell` internal parameter.
 
     Where :math:`\ell = d z \left( \frac{C_{rate}}{D t_h} \right)` with
     :math:`t_h` the equivalent to one hour in suitable time units, here 3600
@@ -34,7 +34,7 @@ def flogell(c_rate, d, z, dcoeff):
     Parameters
     ----------
     c_rate : float or int
-        C-rate single value
+        C-rate single value.
 
     d : float
         Characteristic diffusion length.
@@ -51,13 +51,13 @@ def flogell(c_rate, d, z, dcoeff):
     Returns
     -------
     logell : float
-        The log 10 value of :math:`\ell` parameter.
+        The log 10 value of :math:`\ell` internal parameter.
     """
     return np.log10((c_rate * d**2) / (3600 * z * dcoeff))
 
 
 def flogxi(c_rate, dcoeff, k0):
-    r"""Obtain log value in base 10 of :math:`\Xi` parameter.
+    r"""Obtain log value in base 10 of :math:`\Xi` internal parameter.
 
     Where :math:`\Xi = k^0 \sqrt{\frac{t_h}{C_{rate} D}}` with :math:`t_h` the
     equivalent to one hour in suitable time units, here 3600 seconds.
@@ -76,6 +76,6 @@ def flogxi(c_rate, dcoeff, k0):
     Returns
     -------
     logxi : float
-        The log 10 value of :math:`\Xi` parameter.
+        The log 10 value of :math:`\Xi` internal parameter.
     """
     return np.log10(k0 * np.sqrt(3600 / (c_rate * dcoeff)))

@@ -46,13 +46,14 @@ class GetDischargeCapacities(TransformerMixin):
 
     Notes
     -----
-    Discharge capacities are useful to define the SOC for a given C-rate, which
-    is the suitable way to have the data for the :ref:`galpynostatic.model`.
-    Our suggestion to determine the SOC is to take the maximum value for the
-    discharge capacities that which corresponds whit the value of the C-rate at
-    which the curve is already converged with respect to the previous one. In
-    this case, all the values obtained for the discharge capacities are divided
-    by this one and the SOC is obtained.
+    Discharge capacities are useful to define the maximum SOC value for a given
+    C-rate, which is the suitable way to have the data for the
+    :ref:`galpynostatic.model`. Our suggestion to determine the maximum SOC
+    value is to take the maximum value for the discharge capacities that
+    corresponds with the value of the C-rate at which the curve is already
+    converged with respect to the previous one. In this case, all the values
+    obtained for the discharge capacities are divided by this one and the
+    maximum SOC values are obtained.
     """
 
     def __init__(self, eq_pot, vcut=0.15):
@@ -89,8 +90,8 @@ class GetDischargeCapacities(TransformerMixin):
         Returns
         -------
         X_new : array-like of shape (n_measurement,)
-            Discharge capacities in the same order as the pd.DataFrame in the
-            list.
+            Discharge capacities in the same order as the pandas.DataFrame in
+            the list.
 
         Raises
         ------
@@ -135,8 +136,8 @@ class GetDischargeCapacities(TransformerMixin):
         Returns
         -------
         X_new : array-like of shape (n_measurement,)
-            Discharge capacities in the same order as the pd.DataFrame in the
-            list.
+            Discharge capacities in the same order as the pandas.DataFrame in
+            the list.
 
         Raises
         ------
