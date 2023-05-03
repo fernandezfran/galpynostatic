@@ -27,9 +27,8 @@ import numpy as np
 def flogell(c_rate, d, z, dcoeff):
     r"""Obtain log value in base 10 of :math:`\ell` internal parameter.
 
-    Where :math:`\ell = d z \left( \frac{C_{rate}}{D t_h} \right)` with
-    :math:`t_h` the equivalent to one hour in suitable time units, here 3600
-    seconds.
+    Where :math:`\ell = \frac{d^2 C_{rate}}{z t_h D}` with :math:`t_h` the
+    equivalent to one hour in suitable time units, here 3600 seconds.
 
     Parameters
     ----------

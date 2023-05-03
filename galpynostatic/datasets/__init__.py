@@ -13,7 +13,7 @@
 
 r"""The ``galpynostatic.dataset`` module loads the data needed for the fits.
 
-These datasets were obtained using a computational physics continuum model [1]_
+These datasets were obtained using a computational physics continuum model [2]_
 for different geometries. They come from a cutoff of a surface at a given cell
 potential, with respect to equilibrium, and from different combinations of
 internal parameters :math:`\Xi` and :math:`\ell` (see
@@ -22,7 +22,7 @@ experimental variables involved.
 
 References
 ----------
-.. [1] Gavilán-Arriazu, E.M., Barraco, D., Ein-Eli, Y. and Leiva, E.P.M., 2022.
+.. [2] Gavilán-Arriazu, E.M., Barraco, D., Ein-Eli, Y. and Leiva, E.P.M., 2022.
    Galvanostatic Fast Charging of Alkali‐Ion Battery Materials at the
    Single‐Particle Level: A Map‐Driven Diagnosis. `ChemPhysChem`.
 """

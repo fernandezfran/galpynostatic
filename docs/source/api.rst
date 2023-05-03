@@ -11,18 +11,6 @@ galpynostatic API
 Package contents
 ----------------
 
-.. _galpynostatic.datasets:
-
-``galpynostatic.datasets`` module
----------------------------------
-
-.. automodule:: galpynostatic.datasets
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :member-order: bysource
-
-
 .. _galpynostatic.model:
 
 ``galpynostatic.model`` module
@@ -36,10 +24,22 @@ Package contents
    :member-order: bysource
 
 
+.. _galpynostatic.plot:
+
 ``galpynostatic.plot`` module
 -----------------------------
 
 .. automodule:: galpynostatic.plot
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :member-order: bysource
+
+
+``galpynostatic.size`` module
+-----------------------------
+
+.. automodule:: galpynostatic.size
    :members:
    :undoc-members:
    :show-inheritance:
@@ -56,14 +56,27 @@ Package contents
    :member-order: bysource
 
 
-``galpynostatic.size`` module
------------------------------
+``galpynostatic.surface`` module
+--------------------------------
 
-.. automodule:: galpynostatic.size
+.. automodule:: galpynostatic.surface
    :members:
    :undoc-members:
    :show-inheritance:
    :member-order: bysource
+
+
+.. _galpynostatic.datasets:
+
+``galpynostatic.datasets`` module
+---------------------------------
+
+.. automodule:: galpynostatic.datasets
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :member-order: bysource
+
 
 .. _galpynostatic.utils:
 
@@ -71,16 +84,6 @@ Package contents
 ------------------------------
 
 .. automodule:: galpynostatic.utils
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :member-order: bysource
-
-
-``galpynostatic.surface`` module
---------------------------------
-
-.. automodule:: galpynostatic.surface
    :members:
    :undoc-members:
    :show-inheritance:

@@ -38,7 +38,7 @@ from .utils import flogell, flogxi
 class GalvanostaticRegressor(RegressorMixin):
     r"""An heuristic regressor for galvanostatic data.
 
-    This physics-based heuristic model [2]_ uses the diagram in the `dataset`
+    This physics-based heuristic model [1]_ uses the diagram in the `dataset`
     (:ref:`galpynostatic.datasets`) to perform a grid search by taking
     different combinations of the diffusion coefficient, :math:`D`, and the
     kinetic rate constant, :math:`k^0`, to fit experimental data of the
@@ -88,7 +88,7 @@ class GalvanostaticRegressor(RegressorMixin):
 
     References
     ----------
-    .. [2] Fernandez, F., Gavilán-Arriazu, E.M., Barraco, D., Visintín, A.,
+    .. [1] Fernandez, F., Gavilán-Arriazu, E.M., Barraco, D., Visintín, A.,
        Ein-Eli, Y. and Leiva, E., 2023. Towards a fast-charging of LIBs
        electrode materials: a heuristic model based on galvanostatic
        simulations. TODO.
@@ -225,7 +225,7 @@ class GalvanostaticRegressor(RegressorMixin):
 
     @property
     def plot(self):
-        """Plot accessor."""
+        """Plot accessor to :ref:`galpynostatic.plot`."""
         return GalvanostaticPlotter(self)
 
     def to_dataframe(self, X, y=None):
