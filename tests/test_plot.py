@@ -78,7 +78,7 @@ class TestPlots:
         ref_ax.plot(xeval, greg.predict(xeval), marker="", linestyle="-")
 
         ref_ax.set_xlabel("C-rates")
-        ref_ax.set_ylabel("SOC")
+        ref_ax.set_ylabel("maximum SOC")
         ref_ax.set_xscale("log")
 
     @check_figures_equal(extensions=["png", "pdf"], tol=0.000001)
@@ -141,7 +141,7 @@ class TestPlots:
         )
         clb = plt.colorbar(im)
         clb.ax.set_xlabel("")
-        clb.ax.set_ylabel("SOC")
+        clb.ax.set_ylabel("maximum SOC")
         clb.ax.set_ylim((0, 1))
         ref_ax.scatter(spherical.l, spherical.chi, 400, facecolors="none")
 

@@ -78,7 +78,7 @@ class GalvanostaticPlotter:
             origin="lower",
         )
         clb = plt.colorbar(im)
-        clb.ax.set_ylabel("SOC")
+        clb.ax.set_ylabel("maximum SOC")
         clb.ax.set_ylim((0, 1))
 
         ax.set_xlabel(r"log($\ell$)")
@@ -179,7 +179,7 @@ class GalvanostaticPlotter:
         ax.plot(X_eval, self.greg.predict(X_eval), **pred_kws)
 
         ax.set_xlabel("C-rates")
-        ax.set_ylabel("SOC")
+        ax.set_ylabel("maximum SOC")
 
         ax.set_xscale("log")
 
