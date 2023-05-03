@@ -77,7 +77,7 @@ class TestModel:
         np.testing.assert_almost_equal(greg.mse_, experiment["ref"]["mse"], 6)
 
     def test_predict(self, experiment, request, spherical):
-        """Test the predict of the soc values."""
+        """Test the predict of the maximum SOC values."""
         experiment = request.getfixturevalue(experiment)
 
         greg = galpynostatic.model.GalvanostaticRegressor(

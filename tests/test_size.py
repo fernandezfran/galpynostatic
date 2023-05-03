@@ -36,7 +36,7 @@ import pytest
     ],
 )
 def test_predict_length(experiment, request, spherical):
-    """Test the t minutes length."""
+    """Test the prediction of the characteristic length."""
     experiment = request.getfixturevalue(experiment)
 
     greg = galpynostatic.model.GalvanostaticRegressor(
