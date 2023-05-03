@@ -11,8 +11,8 @@
 # DOCS
 # =============================================================================
 
-"""A physics-based heuristic model to predict the optimal conditions for the \
-fast-charging of lithium-ion batteries electrode materials."""
+"""A physics-based heuristic model to predict the optimal particle size for \
+a fast-charging of lithium-ion battery electrode materials."""
 
 # =============================================================================
 # IMPORTS
