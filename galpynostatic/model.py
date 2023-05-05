@@ -95,6 +95,7 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
     """
 
     def __init__(self, dataset, d, z):
+        self.dataset = dataset
         self.d = d
         self.z = z
 
@@ -150,14 +151,14 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
             Fitted model.
         """
         params = np.array(list(it.product(self._dcoeffs, self._k0s)))
-        mse = np.full(params.shape[0], np.inf)
 
+        mse = np.full(params.shape[0], np.inf)
         for k, (self.dcoeff_, self.k0_) in enumerate(params):
             pred = self.predict(X)
             try:
                 mse[k] = sklearn.metrics.mean_squared_error(y, pred)
             except ValueError:
-                mse[k] = np.inf
+                ...
 
         idx = np.argmin(mse)
 
@@ -179,7 +180,15 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         y : array-like of shape (n_measurements,)
             The predicted maximum SOC values for the C-rates inputs.
         """
-        return _make_soc_predictions(self, X)
+        logell = self._logell(X[:, 0])
+        logxi = self._logxi(X[:, 0])
+
+        mask_logell = self._surface._mask_logell(logell)
+        mask_logxi = self._surface._mask_logxi(logxi)
+
+        return np.where(
+            mask_logell & mask_logxi, self._surface.soc(logell, logxi), np.nan
+        )
 
     def score(self, X, y, sample_weight=None):
         r"""Return the coefficient of determination of the prediction.
@@ -243,16 +252,3 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         dict_["SOC_pred"] = self.predict(X)
 
         return pd.DataFrame(dict_, dtype=np.float32)
-
-
-def _make_soc_predictions(greg, X):
-    """Predict SOC values with the galvanostatic model."""
-    logell = greg._logell(X[:, 0])
-    logxi = greg._logxi(X[:, 0])
-
-    mask_logell = greg._surface._mask_logell(logell)
-    mask_logxi = greg._surface._mask_logxi(logxi)
-
-    return np.where(
-        mask_logell & mask_logxi, greg._surface.soc(logell, logxi), np.nan
-    )
