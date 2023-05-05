@@ -29,14 +29,14 @@ import scipy.interpolate
 
 
 class SurfaceSpline:
-    r"""Spline of the `dataset` discrete surface.
+    r"""Spline of the dataset discrete diagram.
 
     Parameters
     ----------
     dataset : pandas.DataFrame
-        Dataset with a diagram of maximum SOC values as function of
-        :math:`\ell` and :math:`\Xi` internal parameters, this can be loaded
-        using the functions in :ref:`galpynostatic.datasets`.
+        Dataset with the diagram of the maximum SOC values as function of the
+        internal parameters :math:`\log(\ell)` and :math:`\log(\Xi)`, this can
+        be loaded using the functions of the :ref:`galpynostatic.datasets`.
 
     Attributes
     ----------
@@ -88,10 +88,10 @@ class SurfaceSpline:
         )
 
     def soc(self, logell, logxi):
-        r"""Predict the maximum SOC values given the surface spline.
+        r"""Predicts the maximum values of the SOC with the spline.
 
-        This is a linear function bounded in [0, 1], values exceeding this
-        range are taken to the corresponding end point.
+        This is a linear function of the spline bounded in [0, 1], values
+        exceeding this range are taken to the corresponding endpoint.
 
         Parameters
         ----------

@@ -36,33 +36,33 @@ from .utils import logell, logxi
 
 
 class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
-    r"""An heuristic regressor for galvanostatic data.
+    r"""A heuristic regressor for SOC versus C-rates galvanostatic data.
 
-    This physics-based heuristic model [1]_ uses the diagram in the `dataset`
-    (:ref:`galpynostatic.datasets`) to perform a grid search by taking
-    different combinations of the diffusion coefficient, :math:`D`, and the
-    kinetic rate constant, :math:`k^0`, to fit experimental data of the
+    This physics-based heuristic model [1]_ uses the diagrams in
+    :ref:`galpynostatic.datasets` to perform a grid search by taking different
+    combinations of the diffusion coefficient, :math:`D`, and the
+    kinetic-rate constant, :math:`k^0`, to fit experimental data of the
     State-of-Charge (SOC) of the electrode material as a function of the
     C-rates. This is done considering invariant all the other experimental
-    values involved in the continuum galvanostatic model :math:`\Xi` and
-    :math:`\ell` parameters, such as the characteristic diffusion length,
-    :math:`d`, and the geometrical factor, :math:`z`.
+    values involved in the parameters :math:`\Xi` and :math:`\ell` of the
+    diagrams of the continuous galvanostatic model [2]_, such as the
+    characteristic diffusion length, :math:`d`, and the geometrical factor,
+    :math:`z` (see :ref:`galpynostatic.utils`).
 
     Each time a set of parameters :math:`D` and :math:`k^0` is taken, the
-    SOC values are predicted and the mean square error (MSE) is computed. Then,
-    the set of parameters that minimizes the MSE are obtained, thus
-    yielding fundamental parameters of the system that together with the
-    diagram allows to make predictions.
+    SOC values are predicted and the mean square error (MSE) is calculated.
+    Then, the set of parameters that minimizes the MSE is obtained, thus
+    providing fundamental parameters of the system.
 
     Parameters
     ----------
     dataset : pandas.DataFrame
-        Dataset with the maximum SOC values diagram as function of
-        :math:`\log(\ell)` and :math:`\log(\Xi)` internal parameters, this can
-        be loaded using the functions in :ref:`galpynostatic.datasets`.
+        Dataset with the diagram of the maximum SOC values as function of the
+        internal parameters :math:`\log(\ell)` and :math:`\log(\Xi)`, this can
+        be loaded using the functions of the :ref:`galpynostatic.datasets`.
 
     d : float
-        Characteristic diffusion length.
+        Characteristic diffusion length (particle size) in cm.
 
     z : int
         Geometric factor (1 for planar, 2 for cylinder and 3 for sphere).
@@ -83,8 +83,8 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
     By default the grid search is performed on the values of
     ``numpy.logspace(-15, -6, num=100)`` and
     ``numpy.logspace(-14, -5, num=100)`` for :math:`D` and :math:`k^0`,
-    respectively. Their range and precision can be modified through the
-    properties ``dcoeffs`` and ``k0s``.
+    respectively. Their range and number of samples to be evaluated can be
+    modified through the properties ``dcoeffs`` and ``k0s``.
 
     References
     ----------
@@ -104,7 +104,7 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         self._dcoeffs = np.logspace(-15, -6, num=100)
         self._k0s = np.logspace(-14, -5, num=100)
 
-        self._surface = SurfaceSpline(dataset)
+        self._surface = SurfaceSpline(self.dataset)
 
     @property
     def dcoeffs(self):
@@ -127,7 +127,7 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         self._k0s = k0s
 
     def fit(self, X, y):
-        """Fit the galvanostatic regressor model.
+        """Fit the heuristic galvanostatic regressor model.
 
         Parameters
         ----------
@@ -160,7 +160,7 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         return self
 
     def predict(self, X):
-        """Predict using the galvanostatic model in the range of the surface.
+        """Predict using the heuristic model within the range of the diagram.
 
         Parameters
         ----------
@@ -192,9 +192,7 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         sum of squares ``((y_true - y_pred)** 2).sum()`` and :math:`v`
         is the total sum of squares ``((y_true - y_true.mean()) ** 2).sum()``.
         The best possible score is 1.0 and it can be negative (because the
-        model can be arbitrarily worse). A constant model that always predicts
-        the expected value of `y`, disregarding the input C-rates, would get
-        a :math:`R^2` score of 0.0.
+        model can be arbitrarily worse).
 
         Parameters
         ----------
@@ -220,10 +218,11 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         return GalvanostaticPlotter(self)
 
     def to_dataframe(self, X, y=None):
-        """Convert the train, the evaluation or both sets to a dataframe.
+        """Convert the train, the evaluation or both sets into a dataframe.
 
-        Obtain a dataframe with two or three columns (`C_rates`, `SOC_true` &
-        `SOC_pred`), depending if you passed the `y` values or not.
+        Get a dataframe with two or three columns (`C_rates`, `SOC_true` and
+        `SOC_pred`), depending on whether you have passed the `y` values or
+        not.
 
         Parameters
         ----------
@@ -236,7 +235,7 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         Returns
         -------
         df : pandas.DataFrame
-            A dataframe with the train or the evaluation set.
+            A dataframe with the train, the evaluation or both sets.
         """
         dict_ = {"C_rates": X.ravel()}
 

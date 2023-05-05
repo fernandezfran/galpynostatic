@@ -13,12 +13,11 @@
 
 r"""The ``galpynostatic.dataset`` module loads the data needed for the fits.
 
-These datasets were obtained using a computational physics continuum model [2]_
-for different geometries. They come from a cutoff of a surface at a given cell
-potential, with respect to equilibrium, and from different combinations of
-internal parameters :math:`\Xi` and :math:`\ell` (see
-:ref:`galpynostatic.utils`) that covers a wide range of possible values of the
-experimental variables involved.
+These datasets were obtained using a continuous computational physics model for
+different geometries [2]_. They come from a cutoff of a surface at a given cell
+potential, with respect to equilibrium, and from different combinations of the
+internal parameters :math:`\Xi` and :math:`\ell` covering a wide range of
+possible values of the experimental variables involved.
 
 References
 ----------

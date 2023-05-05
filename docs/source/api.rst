@@ -11,6 +11,16 @@ galpynostatic API
 Package contents
 ----------------
 
+``galpynostatic.make_prediction`` module
+----------------------------------------
+
+.. automodule:: galpynostatic.make_prediction
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :member-order: bysource
+
+
 .. _galpynostatic.model:
 
 ``galpynostatic.model`` module
@@ -19,8 +29,6 @@ Package contents
 .. automodule:: galpynostatic.model
    :members:
    :undoc-members:
-   :show-inheritance:
-   :inherited-members:
    :member-order: bysource
 
 
@@ -30,16 +38,6 @@ Package contents
 -----------------------------
 
 .. automodule:: galpynostatic.plot
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :member-order: bysource
-
-
-``galpynostatic.make_prediction`` module
-----------------------------------------
-
-.. automodule:: galpynostatic.make_prediction
    :members:
    :undoc-members:
    :show-inheritance:
@@ -66,24 +64,24 @@ Package contents
    :member-order: bysource
 
 
-.. _galpynostatic.datasets:
-
-``galpynostatic.datasets`` module
----------------------------------
-
-.. automodule:: galpynostatic.datasets
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :member-order: bysource
-
-
 .. _galpynostatic.utils:
 
 ``galpynostatic.utils`` module
 ------------------------------
 
 .. automodule:: galpynostatic.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :member-order: bysource
+
+
+.. _galpynostatic.datasets:
+
+``galpynostatic.datasets`` module
+---------------------------------
+
+.. automodule:: galpynostatic.datasets
    :members:
    :undoc-members:
    :show-inheritance:

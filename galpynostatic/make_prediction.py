@@ -11,7 +11,7 @@
 # DOCS
 # ============================================================================
 
-"""Predict the optimal particle size of the charging electrode material."""
+"""Make predictions using the physics-based heurist model."""
 
 # ============================================================================
 # IMPORTS
@@ -29,25 +29,31 @@ from .utils import logxi
 
 
 def optimal_particle_size(
-    greg, minutes=15, loaded=0.8, dlogell=0.01, cm_to=10000
+    greg,
+    minutes=15,
+    loaded=0.8,
+    cm_to=10000,
+    dlogell=0.01,
 ):
     r"""Predict the optimal electrode particle size to charge in certain time.
 
-    Once a galvanostatic model was fitted, the :math:`D` and :math:`k^0`
-    parameters can be fixed and leave the characteristic diffusion length,
-    `d`, free. This new free parameter only apears in :math:`\ell`, so by
-    setting the value of :math:`\Xi` and varying the value of :math:`\ell` one
-    can predict the particle size to get a certain maximum SOC value.
+    Once the physics-based heuristic model is fitted, the diffusion
+    coefficient, :math:`D`, and the kinetic-rate constant, :math:`k^0`,
+    parameters of the active material in the electrode remain fixed. The other
+    two parameters of the model, the characteristic diffusion lenght,
+    :math:`d`, (i.e. particle size) and the C-rate can vary. With this in mind,
+    the model can be used to predict the particle size at a given C-rate to
+    obtain a desired maximum State-of-Charge (SOC) value.
 
-    The default values of this function defines the criteria of achieving the
-    80% of the load of the electrode in 15 minutes, this is translated as a
-    maximum SOC value of 0.8 and a C-rate of 4C, which is the standard that
-    USABC (*United States Advanced Battery Consortium*) aims for fast-charging.
+    The default parameters of this function define the criteria of reaching 80%
+    of the electrode charge in 15 minutes, which translates into a maximum SOC
+    value of 0.8 and a C-rate of 4C, which is the USABC (`United States
+    Advanced Battery Consortium`) standard for fast charging.
 
     Parameters
     ----------
     greg : galpynostatic.model.GalvanostaticRegressor
-        An already fitted galvanostatic model.
+        A heuristic model already fitted.
 
     minutes : int or float, default=15
         Desired minutes to reach the established load.
@@ -55,13 +61,13 @@ def optimal_particle_size(
     loaded : float, default=0.8
         Desired maximum SOC value, between 0 and 1.
 
+    cm_to : float, default=10000
+        A factor to convert from cm to another unit, in the default case to
+        micrometers.
+
     dlogell : float, default=0.01
         The delta for the logarithm value in base 10 of the :math:`\ell`
         evaluation between the minimum and the maximum in the diagram.
-
-    cm_to : float, default=10000
-        A factor to convert from cm to another unit, in the defualt case to
-        micrometers.
 
     Returns
     -------

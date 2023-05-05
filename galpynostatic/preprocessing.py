@@ -33,7 +33,7 @@ class GetDischargeCapacities(TransformerMixin):
 
     This Transformer will subtract from all galvanostatic profiles the
     equilibrium potential, `eq_pot`, to find the discharge capacity for each
-    curve at which the potential is cut off below `vcut`.
+    curve where the potential is cut off by `vcut`.
 
     Parameters
     ----------
@@ -46,12 +46,12 @@ class GetDischargeCapacities(TransformerMixin):
 
     Notes
     -----
-    Discharge capacities are useful to define the maximum SOC value for a given
-    C-rate, which is the suitable way to have the data for the
-    :ref:`galpynostatic.model`. Our suggestion to determine the maximum SOC
-    value is to take the maximum value for the discharge capacities that
-    corresponds with the value of the C-rate at which the curve is already
-    converged with respect to the previous one. In this case, all the values
+    Discharge capacities are useful to define the maximum value of SOC for a
+    given C-rate, which is the appropiate way to have the data for the
+    :ref:`galpynostatic.model`. Our suggestion for determining the maximum
+    value of SOC is to take the maximum value for the discharge capacities
+    that corresponds with the value of the C-rate to which the curve already
+    converges with respect to the previous one. In this case, all the values
     obtained for the discharge capacities are divided by this one and the
     maximum SOC values are obtained.
     """
@@ -79,52 +79,41 @@ class GetDischargeCapacities(TransformerMixin):
         return self
 
     def transform(self, X):
-        """Perform the substraction of the X curves.
+        """Transform the curves to single values of discharge capacities.
 
         Parameters
         ----------
         X : list of pandas.DataFrame
-            Dataframes having only two columns, where the first one is the
-            capacity and the second the voltage.
+            Dataframes that have only two columns, where the first is the
+            capacity and the second is the voltage.
 
         Returns
         -------
         X_new : array-like of shape (n_measurement,)
-            Discharge capacities in the same order as the pandas.DataFrame in
-            the list.
-
-        Raises
-        ------
-        ValueError
-            When one of the galvanostatic profiles passed in `X` does not
-            intersect the cut-off potential below the equilibrium potential.
+            Discharge capacities in the same order as pandas.DataFrame in the
+            input list.
         """
-        try:
-            X_new = [
-                scipy.interpolate.InterpolatedUnivariateSpline(
+        X_new = np.zeros(len(X))
+        for k, df in enumerate(X):
+            try:
+                X_new[k] = scipy.interpolate.InterpolatedUnivariateSpline(
                     df.iloc[:, 0],
                     df.iloc[:, 1] - self.eq_pot + self.vcut,
                     **self.fit_params,
                 ).roots()[0]
-                for df in X
-            ]
+            except IndexError:
+                ...
 
-        except IndexError:
-            raise ValueError(
-                "A galvanostatic profile does not intersect the cut-off "
-                "potential from the equlibrium potential."
-            )
-
-        return np.array(X_new, dtype=np.float32)
+        return X_new
 
     def fit_transform(self, X, y=None, **fit_params):
-        """Transform the X curves with optional parameters `fit_params`.
+        """Transform the curves to discharge capacities with optional params.
 
         Parameters
         ----------
         X : list of pandas.DataFrame
-            Dataframes having only two columns, where the first one is the
-            capacity and the second one is the voltage.
+            Dataframes that have only two columns, where the first is the
+            capacity and the second is the voltage.
 
         y : Ignored
             Not used, presented for sklearn API consistency by convention.
@@ -136,14 +125,8 @@ class GetDischargeCapacities(TransformerMixin):
         Returns
         -------
         X_new : array-like of shape (n_measurement,)
-            Discharge capacities in the same order as the pandas.DataFrame in
-            the list.
-
-        Raises
-        ------
-        ValueError
-            When one of the galvanostatic profiles passed in `X` does not
-            intersect the cut-off potential below the equilibrium potential.
+            Discharge capacities in the same order as pandas.DataFrame in the
+            input list.
         """
         return super(GetDischargeCapacities, self).fit_transform(
             X, y, **fit_params

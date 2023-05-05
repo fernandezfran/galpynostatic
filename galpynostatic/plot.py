@@ -33,21 +33,21 @@ class GalvanostaticPlotter:
 
     Kind of plots to produce:
 
-    - 'surface' : the surface on which the data was fitted.
-    - 'in_surface' : :math:`\Xi` and :math:`\ell` data points in the surface.
-    - 'versus_data' : predicted & true maximum SOC values versus C-rate data.
+    - 'surface' : the diagram on which the data were fitted.
+    - 'in_surface' : :math:`\Xi` and :math:`\ell` data points in the diagram.
+    - 'versus_data' : predicted and actual maximum SOC values versus C-rate.
 
     Parameters
     ----------
     greg : galpynostatic.model.GalvanostaticRegressor
-        An already fitted galvanostatic model.
+        An already fitted GalvanostaticRegressor model.
     """
 
     def __init__(self, greg):
         self.greg = greg
 
     def surface(self, ax=None):
-        """Plot 2D surface on which data was fitted.
+        """Plot the diagram on which data was fitted.
 
         Parameters
         ----------
@@ -89,7 +89,7 @@ class GalvanostaticPlotter:
         return ax
 
     def in_surface(self, X, ax=None, **kwargs):
-        """Plot showing in which region of the map the fit is found.
+        """Plot showing in which region of the diagram the fit is found.
 
         Parameters
         ----------
@@ -110,9 +110,9 @@ class GalvanostaticPlotter:
 
         Notes
         -----
-        Only plot the background surface if ax is None, otherwise assume it is
-        already plotted and you just want to add the points on it, e.g., to
-        compare different systems.
+        Only plot the diagram if ax is None, otherwise assume it is already
+        plotted and you just want to add the points on it, e.g. to compare
+        different systems.
         """
         ax = self.surface() if ax is None else ax
 
@@ -131,7 +131,7 @@ class GalvanostaticPlotter:
     def versus_data(
         self, X, y, X_eval=None, ax=None, data_kws=None, pred_kws=None
     ):
-        """Plot SOC predictions against true data as a function of C-rates.
+        """Plot SOC predictions against actual data as a function of C-rates.
 
         Parameters
         ----------
@@ -142,9 +142,9 @@ class GalvanostaticPlotter:
             Target maximum SOC values.
 
         X_eval : array-like of shape (n_measurements, 1), default=None.
-            C-rates values to evalute the model to compare against data. When
-            is defined as `None`, it evaluetes 250 points between the maximum
-            and the minimum of X.
+            C-rates values to evalute the model and compare it with the data.
+            When set to `None`, it evaluates 250 points between the maximum
+            and minimum of X.
 
         ax : matplotlib.axes.Axes, default=None
             The current axes.
