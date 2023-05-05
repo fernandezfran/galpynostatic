@@ -28,7 +28,7 @@ from sklearn.base import BaseEstimator, RegressorMixin
 
 from .plot import GalvanostaticPlotter
 from .surface import SurfaceSpline
-from .utils import flogell, flogxi
+from .utils import logell, logxi
 
 # ============================================================================
 # CLASSES
@@ -106,14 +106,6 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
 
         self._surface = SurfaceSpline(dataset)
 
-    def _logell(self, c_rate):
-        r"""Logarithm value in base 10 of :math:`\ell` parameter."""
-        return flogell(c_rate, self.d, self.z, self.dcoeff_)
-
-    def _logxi(self, c_rate):
-        r"""Logarithm value in base 10 of :math:`\Xi` parameter."""
-        return flogxi(c_rate, self.dcoeff_, self.k0_)
-
     @property
     def dcoeffs(self):
         """Diffusion coefficients to evaluate in model training."""
@@ -150,7 +142,7 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         self : object
             Fitted model.
         """
-        params = np.array(list(it.product(self._dcoeffs, self._k0s)))
+        params = np.array(tuple(it.product(self._dcoeffs, self._k0s)))
 
         mse = np.full(params.shape[0], np.inf)
         for k, (self.dcoeff_, self.k0_) in enumerate(params):
@@ -180,14 +172,16 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         y : array-like of shape (n_measurements,)
             The predicted maximum SOC values for the C-rates inputs.
         """
-        logell = self._logell(X[:, 0])
-        logxi = self._logxi(X[:, 0])
+        logells = logell(X.ravel(), self.d, self.z, self.dcoeff_)
+        logxis = logxi(X.ravel(), self.dcoeff_, self.k0_)
 
-        mask_logell = self._surface._mask_logell(logell)
-        mask_logxi = self._surface._mask_logxi(logxi)
+        mask_logell = self._surface._mask_logell(logells)
+        mask_logxi = self._surface._mask_logxi(logxis)
 
         return np.where(
-            mask_logell & mask_logxi, self._surface.soc(logell, logxi), np.nan
+            mask_logell & mask_logxi,
+            self._surface.soc(logells, logxis),
+            np.nan,
         )
 
     def score(self, X, y, sample_weight=None):

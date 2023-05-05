@@ -21,6 +21,8 @@ import matplotlib.pyplot as plt
 
 import numpy as np
 
+from .utils import logell, logxi
+
 # ============================================================================
 # CLASSES
 # ============================================================================
@@ -118,7 +120,11 @@ class GalvanostaticPlotter:
         for key, value in zip(keys, ["k", "o", "--", "fitted data"]):
             kwargs.setdefault(key, value)
 
-        ax.plot(self.greg._logell(X), self.greg._logxi(X), **kwargs)
+        ax.plot(
+            logell(X.ravel(), self.greg.d, self.greg.z, self.greg.dcoeff_),
+            logxi(X.ravel(), self.greg.dcoeff_, self.greg.k0_),
+            **kwargs,
+        )
 
         return ax
 

@@ -14,6 +14,7 @@
 import itertools as it
 
 import galpynostatic.model
+from galpynostatic.utils import logell, logxi
 
 import matplotlib.pyplot as plt
 from matplotlib.testing.decorators import check_figures_equal
@@ -108,10 +109,13 @@ class TestPlots:
         chis = np.unique(spherical.chi)
 
         k, soc = 0, []
-        for logell, logxi in it.product(ls, chis[::-1]):
+        for logell_value, logxi_value in it.product(ls, chis[::-1]):
             xmax = 0
             try:
-                if logell == spherical.l[k] and logxi == spherical.chi[k]:
+                if (
+                    logell_value == spherical.l[k]
+                    and logxi_value == spherical.chi[k]
+                ):
                     xmax = spherical.xmax[k]
                     k += 1
             except KeyError:
@@ -147,8 +151,8 @@ class TestPlots:
 
         # ref data
         ref_ax.plot(
-            greg._logell(experiment["C_rates"]),
-            greg._logxi(experiment["C_rates"]),
+            logell(experiment["C_rates"], greg.d, greg.z, greg.dcoeff_),
+            logxi(experiment["C_rates"], greg.dcoeff_, greg.k0_),
             color="k",
             marker="o",
             linestyle="--",

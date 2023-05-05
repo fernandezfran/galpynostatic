@@ -24,7 +24,7 @@ import numpy as np
 # ============================================================================
 
 
-def flogell(c_rate, d, z, dcoeff):
+def logell(c_rate, d, z, dcoeff):
     r"""Obtain log value in base 10 of :math:`\ell` internal parameter.
 
     Where :math:`\ell = \frac{d^2 C_{rate}}{z t_h D}` with :math:`t_h` the
@@ -55,7 +55,7 @@ def flogell(c_rate, d, z, dcoeff):
     return np.log10((c_rate * d**2) / (3600 * z * dcoeff))
 
 
-def flogxi(c_rate, dcoeff, k0):
+def logxi(c_rate, dcoeff, k0):
     r"""Obtain log value in base 10 of :math:`\Xi` internal parameter.
 
     Where :math:`\Xi = k^0 \sqrt{\frac{t_h}{C_{rate} D}}` with :math:`t_h` the
