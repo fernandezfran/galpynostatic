@@ -11,8 +11,8 @@
 # IMPORTS
 # =============================================================================
 
+import galpynostatic.make_prediction
 import galpynostatic.model
-import galpynostatic.size
 
 import numpy as np
 
@@ -35,8 +35,8 @@ import pytest
         ("dokko"),
     ],
 )
-def test_predict_length(experiment, request, spherical):
-    """Test the prediction of the characteristic length."""
+def test_optimal_particle_size(experiment, request, spherical):
+    """Test the prediction of the optimal particle size."""
     experiment = request.getfixturevalue(experiment)
 
     greg = galpynostatic.model.GalvanostaticRegressor(
@@ -46,8 +46,8 @@ def test_predict_length(experiment, request, spherical):
     # fit results
     greg.dcoeff_, greg.k0_ = experiment["dcoeff"], experiment["k0"]
 
-    length = galpynostatic.size.predict_length(greg)
+    length = galpynostatic.make_prediction.optimal_particle_size(greg)
 
     np.testing.assert_array_almost_equal(
-        length, experiment["ref"]["length"], 6
+        length, experiment["ref"]["particle_size"], 6
     )

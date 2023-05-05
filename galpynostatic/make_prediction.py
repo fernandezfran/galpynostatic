@@ -28,19 +28,21 @@ from .utils import logxi
 # ============================================================================
 
 
-def predict_length(greg, minutes=15, loaded=0.8, dlogell=0.01, cm_to=10000):
-    r"""Predict the characteristic diffusion length to charge in certain time.
+def optimal_particle_size(
+    greg, minutes=15, loaded=0.8, dlogell=0.01, cm_to=10000
+):
+    r"""Predict the optimal electrode particle size to charge in certain time.
 
     Once a galvanostatic model was fitted, the :math:`D` and :math:`k^0`
     parameters can be fixed and leave the characteristic diffusion length,
     `d`, free. This new free parameter only apears in :math:`\ell`, so by
-    setting the value of :math:`\Xi` one can predict the maximum SOC value for
-    a range of :math:`\ell` values and obtain the optimal one to get certain
-    maximum SOC value.
+    setting the value of :math:`\Xi` and varying the value of :math:`\ell` one
+    can predict the particle size to get a certain maximum SOC value.
 
     The default values of this function defines the criteria of achieving the
     80% of the load of the electrode in 15 minutes, this is translated as a
-    maximum SOC value of 0.8 and a C-rate of 4C.
+    maximum SOC value of 0.8 and a C-rate of 4C, which is the standard that
+    USABC (*United States Advanced Battery Consortium*) aims for fast-charging.
 
     Parameters
     ----------
@@ -63,9 +65,9 @@ def predict_length(greg, minutes=15, loaded=0.8, dlogell=0.01, cm_to=10000):
 
     Returns
     -------
-    length : float
-        The characteristic length necessary to charge the electrode to the
-        desired maximum SOC value and in the desired time.
+    particle_size : float
+        The optimal particle size to charge the electrode to the desired
+        maximum SOC value in the desired time.
     """
     c_rate = 60.0 / minutes
 

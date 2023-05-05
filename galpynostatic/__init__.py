@@ -21,9 +21,9 @@ size for a fast-charging of lithium-ion batteries."""
 import importlib_metadata
 
 from . import datasets
+from .make_prediction import optimal_particle_size
 from .model import GalvanostaticRegressor
 from .preprocessing import GetDischargeCapacities
-from .size import predict_length
 
 
 # =============================================================================
@@ -34,7 +34,7 @@ __all__ = [
     "datasets",
     "GalvanostaticRegressor",
     "GetDischargeCapacities",
-    "predict_length",
+    "optimal_particle_size",
 ]
 
 
