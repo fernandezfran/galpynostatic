@@ -24,7 +24,7 @@ import numpy as np
 import pandas as pd
 
 import sklearn.metrics
-from sklearn.base import RegressorMixin
+from sklearn.base import BaseEstimator, RegressorMixin
 
 from .plot import GalvanostaticPlotter
 from .surface import SurfaceSpline
@@ -35,7 +35,7 @@ from .utils import flogell, flogxi
 # ============================================================================
 
 
-class GalvanostaticRegressor(RegressorMixin):
+class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
     r"""An heuristic regressor for galvanostatic data.
 
     This physics-based heuristic model [1]_ uses the diagram in the `dataset`
@@ -158,8 +158,10 @@ class GalvanostaticRegressor(RegressorMixin):
 
         for k, (self.dcoeff_, self.k0_) in enumerate(params):
             pred = self.predict(X)
-            if None not in pred:
+            try:
                 mse[k] = sklearn.metrics.mean_squared_error(y, pred)
+            except ValueError:
+                mse[k] = np.inf
 
         idx = np.argmin(mse)
 
@@ -181,7 +183,7 @@ class GalvanostaticRegressor(RegressorMixin):
         y : array-like of shape (n_measurements,)
             The predicted maximum SOC values for the C-rates inputs.
         """
-        y = np.full(X.size, None)
+        y = np.full(X.size, np.nan)
         for k, x in enumerate(X):
             logell = self._logell(x[0])
             logxi = self._logxi(x[0])
