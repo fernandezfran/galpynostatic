@@ -113,10 +113,6 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         r"""Logarithm value in base 10 of :math:`\Xi` parameter."""
         return flogxi(c_rate, self.dcoeff_, self.k0_)
 
-    def _soc(self, logell, logxi):
-        """Find a single value of the SOC given the surface spline."""
-        return self._surface.soc(logell, logxi)[0][0]
-
     @property
     def dcoeffs(self):
         """Diffusion coefficients to evaluate in model training."""
@@ -183,17 +179,7 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         y : array-like of shape (n_measurements,)
             The predicted maximum SOC values for the C-rates inputs.
         """
-        y = np.full(X.size, np.nan)
-        for k, x in enumerate(X):
-            logell = self._logell(x[0])
-            logxi = self._logxi(x[0])
-
-            mask_logell = self._surface._mask_logell(logell)
-            mask_logxi = self._surface._mask_logxi(logxi)
-            if mask_logell and mask_logxi:
-                y[k] = self._soc(logell, logxi)
-
-        return y
+        return _make_soc_predictions(self, X)
 
     def score(self, X, y, sample_weight=None):
         r"""Return the coefficient of determination of the prediction.
@@ -257,3 +243,16 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         dict_["SOC_pred"] = self.predict(X)
 
         return pd.DataFrame(dict_, dtype=np.float32)
+
+
+def _make_soc_predictions(greg, X):
+    """Predict SOC values with the galvanostatic model."""
+    logell = greg._logell(X[:, 0])
+    logxi = greg._logxi(X[:, 0])
+
+    mask_logell = greg._surface._mask_logell(logell)
+    mask_logxi = greg._surface._mask_logxi(logxi)
+
+    return np.where(
+        mask_logell & mask_logxi, greg._surface.soc(logell, logxi), np.nan
+    )

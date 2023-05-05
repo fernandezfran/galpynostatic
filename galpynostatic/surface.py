@@ -75,11 +75,17 @@ class SurfaceSpline:
 
     def _mask_logell(self, logell):
         """Mask the value between the extrems of the interval."""
-        return self.logells.min() <= logell <= self.logells.max()
+        return np.logical_and(
+            np.greater_equal(logell, self.logells.min()),
+            np.less_equal(logell, self.logells.max()),
+        )
 
     def _mask_logxi(self, logxi):
         """Mask the value between the extrems of the interval."""
-        return self.logxis.min() <= logxi <= self.logxis.max()
+        return np.logical_and(
+            np.greater_equal(logxi, self.logxis.min()),
+            np.less_equal(logxi, self.logxis.max()),
+        )
 
     def soc(self, logell, logxi):
         r"""Predict the maximum SOC values given the surface spline.
@@ -100,4 +106,4 @@ class SurfaceSpline:
         soc : numpy.ndarray
             The corresponding maximum SOC values in the surface spline.
         """
-        return np.clip(self.spline(logell, logxi), 0, 1)
+        return np.clip(self.spline(logell, logxi, grid=False), 0, 1)
