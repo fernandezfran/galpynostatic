@@ -11,7 +11,7 @@
 # DOCS
 # ============================================================================
 
-"""Make predictions using the physics-based heurist model."""
+"""Make predictions using the physics-based heuristic model."""
 
 # ============================================================================
 # IMPORTS
@@ -53,7 +53,7 @@ def optimal_particle_size(
     Parameters
     ----------
     greg : galpynostatic.model.GalvanostaticRegressor
-        A heuristic model already fitted.
+        A GalvanostaticRegressor already fitted.
 
     minutes : int or float, default=15
         Desired minutes to reach the established load.

@@ -36,7 +36,7 @@ def logell(c_rate, d, z, dcoeff):
         C-rate single value.
 
     d : float
-        Characteristic diffusion length (particle size).
+        Characteristic diffusion length (particle size) in cm.
 
     z : int
         Geometric factor: 1 for planar, 2 for cylinder and 3 for sphere.
