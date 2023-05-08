@@ -76,6 +76,25 @@ class TestModel:
         np.testing.assert_almost_equal(greg.k0_, experiment["ref"]["k0"], 10)
         np.testing.assert_almost_equal(greg.mse_, experiment["ref"]["mse"], 6)
 
+    def test_fit_with_str_dataset(self, experiment, request):
+        """Test the fitting of the model: dcoeff, k0 and mse."""
+        experiment = request.getfixturevalue(experiment)
+
+        greg = galpynostatic.model.GalvanostaticRegressor(
+            "spherical", experiment["d"], 3
+        )
+
+        greg.dcoeffs = 10.0 ** np.arange(-14, -6, 1)
+        greg.k0s = 10.0 ** np.arange(-13, -5, 1)
+
+        greg = greg.fit(experiment["C_rates"], experiment["soc"])
+
+        np.testing.assert_almost_equal(
+            greg.dcoeff_, experiment["ref"]["dcoeff"], 12
+        )
+        np.testing.assert_almost_equal(greg.k0_, experiment["ref"]["k0"], 10)
+        np.testing.assert_almost_equal(greg.mse_, experiment["ref"]["mse"], 6)
+
     def test_predict(self, experiment, request, spherical):
         """Test the predict of the maximum SOC values."""
         experiment = request.getfixturevalue(experiment)

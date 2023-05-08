@@ -41,6 +41,12 @@ class GalvanostaticPlotter:
     ----------
     greg : galpynostatic.model.GalvanostaticRegressor
         An already fitted GalvanostaticRegressor model.
+
+    Notes
+    -----
+    The diagram will only be plotted in ``self.in_surface(X)`` if ax is None,
+    otherwise assumes it is already plotted and you just want to add
+    the points on it, e.g. to compare different systems.
     """
 
     def __init__(self, greg):
@@ -107,12 +113,6 @@ class GalvanostaticPlotter:
         -------
         ax : matplotlib.axes.Axes
             The current axes.
-
-        Notes
-        -----
-        Only plot the diagram if ax is None, otherwise assume it is already
-        plotted and you just want to add the points on it, e.g. to compare
-        different systems.
         """
         ax = self.surface() if ax is None else ax
 

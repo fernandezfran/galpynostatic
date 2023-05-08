@@ -26,6 +26,7 @@ import pandas as pd
 import sklearn.metrics
 from sklearn.base import BaseEstimator, RegressorMixin
 
+from .datasets import load_cylindrical, load_planar, load_spherical
 from .plot import GalvanostaticPlotter
 from .surface import SurfaceSpline
 from .utils import logell, logxi
@@ -56,16 +57,43 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
 
     Parameters
     ----------
-    dataset : pandas.DataFrame
-        Dataset with the diagram of the maximum SOC values as function of the
-        internal parameters :math:`\log(\ell)` and :math:`\log(\Xi)`, this can
-        be loaded using the functions of the :ref:`galpynostatic.datasets`.
+    dataset : str or pandas.DataFrame
+        A str indicating the particle geometry (planar, cylindrical or
+        spherical) to use the datasets distributed in this package which can
+        also be loaded using the functions of the
+        :ref:`galpynostatic.datasets` to give it as a pandas.DataFrame with
+        the diagram of the maximum SOC values as function of the internal
+        parameters :math:`\log(\ell)` and :math:`\log(\Xi)`.
 
     d : float
         Characteristic diffusion length (particle size) in cm.
 
     z : int
         Geometric factor (1 for planar, 2 for cylinder and 3 for sphere).
+
+    Raises
+    ------
+    ValueError
+        When the dataset passed is a str but is not a valid geometry (planar,
+        cylindrical or spherical).
+
+    Notes
+    -----
+    By default the grid search is performed on the values of
+    ``numpy.logspace(-15, -6, num=100)`` and
+    ``numpy.logspace(-14, -5, num=100)`` for :math:`D` and :math:`k^0`,
+    respectively. Their range and number of samples to be evaluated can be
+    modified through the properties ``dcoeffs`` and ``k0s``.
+
+    You can also give your own dataset to another potential cut-off in the
+    same format as the distributed ones and as pandas.DataFrame.
+
+    References
+    ----------
+    .. [1] Fernandez, F., Gavilán-Arriazu, E.M., Barraco, D., Visintín, A.,
+       Ein-Eli, Y. and Leiva, E., 2023. Towards a fast-charging of LIBs
+       electrode materials: a heuristic model based on galvanostatic
+       simulations. TODO.
 
     Attributes
     ----------
@@ -77,21 +105,6 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
 
     mse_ : float
         Mean squared error of the best fitted model.
-
-    Notes
-    -----
-    By default the grid search is performed on the values of
-    ``numpy.logspace(-15, -6, num=100)`` and
-    ``numpy.logspace(-14, -5, num=100)`` for :math:`D` and :math:`k^0`,
-    respectively. Their range and number of samples to be evaluated can be
-    modified through the properties ``dcoeffs`` and ``k0s``.
-
-    References
-    ----------
-    .. [1] Fernandez, F., Gavilán-Arriazu, E.M., Barraco, D., Visintín, A.,
-       Ein-Eli, Y. and Leiva, E., 2023. Towards a fast-charging of LIBs
-       electrode materials: a heuristic model based on galvanostatic
-       simulations. TODO.
     """
 
     def __init__(self, dataset, d, z):
@@ -104,6 +117,16 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         self._dcoeffs = np.logspace(-15, -6, num=100)
         self._k0s = np.logspace(-14, -5, num=100)
 
+        load_geometry = {
+            "planar": load_planar,
+            "cylindrical": load_cylindrical,
+            "spherical": load_spherical,
+        }
+        if isinstance(self.dataset, str):
+            if self.dataset in load_geometry:
+                self.dataset = load_geometry[self.dataset]()
+            else:
+                raise ValueError(f"{self.dataset} is not a valid geometry.")
         self._surface = SurfaceSpline(self.dataset)
 
     @property
@@ -212,11 +235,6 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         """
         return super(GalvanostaticRegressor, self).score(X, y, sample_weight)
 
-    @property
-    def plot(self):
-        """Plot accessor to :ref:`galpynostatic.plot`."""
-        return GalvanostaticPlotter(self)
-
     def to_dataframe(self, X, y=None):
         """Convert the train, the evaluation or both sets into a dataframe.
 
@@ -245,3 +263,8 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         dict_["SOC_pred"] = self.predict(X)
 
         return pd.DataFrame(dict_, dtype=np.float32)
+
+    @property
+    def plot(self):
+        """Plot accessor to :ref:`galpynostatic.plot`."""
+        return GalvanostaticPlotter(self)
