@@ -30,12 +30,6 @@ python -m pip install -U pip
 python -m pip install -U galpynostatic
 ```
 
-or you can install the development version directly from this
-[repo](https://github.com/fernandezfran/galpynostatic)
-```
-pip install git+https://github.com/fernandezfran/galpynostatic
-```
-
 
 ## Usage
 
