@@ -66,6 +66,30 @@ https://github.com/fernandezfran/galpynostatic/
    api
 
 
+Citation
+--------
+
+If you use galpynostatic in a scientific publication, we would appreciate it if 
+you could cite the following article:
+
+.. rst-class:: blockquote
+
+   Fernandez, Francisco, et al. "Towards a fast-charging of LIBs electrode 
+   materials: a heuristic model based on galvanostatic simulations" (2023). 
+   _TODO_. DOI
+
+BibTeX entry:
+
+.. code-block:: bibtex
+
+   @article{fernandez2023towards,
+       title={Towards a fast-charging of LIBs electrode materials: a heuristic model based on galvanostatic simulations},
+       author={Fernandez, Francisco and Gavilán, Maximiliano and Barraco, Daniel and Visintín, Aldo and Ein-Eli, Yair and Leiva, Ezequiel},
+       year={2023}
+   }
+
+
+
 Contact
 -------
 
