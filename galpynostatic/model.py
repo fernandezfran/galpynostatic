@@ -61,7 +61,7 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         A str indicating the particle geometry (planar, cylindrical or
         spherical) to use the datasets distributed in this package which can
         also be loaded using the functions of the
-        :ref:`galpynostatic.datasets` to give it as a pandas.DataFrame with
+        :ref:`galpynostatic.datasets` to give it as a ``pandas.DataFrame`` with
         the diagram of the maximum SOC values as function of the internal
         parameters :math:`\log(\ell)` and :math:`\log(\Xi)`.
 
@@ -86,7 +86,7 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
     modified through the properties ``dcoeffs`` and ``k0s``.
 
     You can also give your own dataset to another potential cut-off in the
-    same format as the distributed ones and as pandas.DataFrame.
+    same format as the distributed ones and as ``pandas.DataFrame``.
 
     References
     ----------
@@ -253,7 +253,7 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         Returns
         -------
         df : pandas.DataFrame
-            A dataframe with the train, the evaluation or both sets.
+            A ``pandas.DataFrame`` with the train, the evaluation or both sets.
         """
         dict_ = {"C_rates": X.ravel()}
 

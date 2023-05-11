@@ -42,6 +42,12 @@ def test_k0s(spherical):
     )
 
 
+def test_raise():
+    """Test the raise of the ValueError."""
+    with pytest.raises(ValueError):
+        galpynostatic.model.GalvanostaticRegressor("spherica", 1.0, 3)
+
+
 @pytest.mark.parametrize(
     ("experiment"),
     [

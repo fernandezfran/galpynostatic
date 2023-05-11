@@ -90,8 +90,8 @@ class GetDischargeCapacities(TransformerMixin):
         Returns
         -------
         X_new : array-like of shape (n_measurement,)
-            Discharge capacities in the same order as pandas.DataFrame in the
-            input list.
+            Discharge capacities in the same order as ``pandas.DataFrame`` in
+            the input list.
         """
         X_new = np.zeros(len(X))
         for k, df in enumerate(X):
@@ -125,8 +125,8 @@ class GetDischargeCapacities(TransformerMixin):
         Returns
         -------
         X_new : array-like of shape (n_measurement,)
-            Discharge capacities in the same order as pandas.DataFrame in the
-            input list.
+            Discharge capacities in the same order as ``pandas.DataFrame`` in
+            the input list.
         """
         return super(GetDischargeCapacities, self).fit_transform(
             X, y, **fit_params
