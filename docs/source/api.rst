@@ -1,4 +1,3 @@
-=================
 galpynostatic API
 =================
 
@@ -7,9 +6,6 @@ galpynostatic API
 
 .. automodule:: galpynostatic
 
-
-Package contents
-----------------
 
 ``galpynostatic.make_prediction`` module
 ----------------------------------------
