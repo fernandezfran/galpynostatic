@@ -36,7 +36,7 @@ python -m pip install -U galpynostatic
 ## Usage
 
 To learn how to use galpynostatic you can start by following the 
-[tutorial](https://galpynostatic.readthedocs.io/en/latest/tutorial/index.html)
+[tutorials](https://galpynostatic.readthedocs.io/en/latest/tutorials/index.html)
 and then take a look at the [API](https://galpynostatic.readthedocs.io/en/latest/api.html).
 
 

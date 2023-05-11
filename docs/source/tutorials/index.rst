@@ -1,7 +1,7 @@
 Tutorials
 =========
 
-In this section we have differnet tutorials to learn how to use **galpynostatic**
+In this section we have different tutorials to learn how to use **galpynostatic**
 package.
 
 .. toctree::
