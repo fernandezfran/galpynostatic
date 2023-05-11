@@ -72,7 +72,7 @@ Citation
 If you use galpynostatic in a scientific publication, we would appreciate it if 
 you could cite the following article:
 
-.. rst-class:: blockquote
+.. pull-quote::
 
    Fernandez, Francisco, et al. "Towards a fast-charging of LIBs electrode 
    materials: a heuristic model based on galvanostatic simulations" (2023). 
