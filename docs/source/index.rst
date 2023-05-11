@@ -96,7 +96,7 @@ Contact
 | **Author**
 | Francisco Fernandez
 
-For bugs or questions, please send an email to fernandezfrancisco2195@gmail.com
+For bugs or questions, please send an email to ffernandev@gmail.com
 
 
 Indices and tables
