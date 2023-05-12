@@ -255,14 +255,14 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         df : pandas.DataFrame
             A ``pandas.DataFrame`` with the train, the evaluation or both sets.
         """
-        dict_ = {"C_rates": X.ravel()}
+        df = pd.DataFrame({"C_rates": X.ravel()})
 
         if y is not None:
-            dict_["SOC_true"] = y
+            df["SOC_true"] = y
 
-        dict_["SOC_pred"] = self.predict(X)
+        df["SOC_pred"] = self.predict(X)
 
-        return pd.DataFrame(dict_, dtype=np.float32)
+        return df
 
     @property
     def plot(self):
