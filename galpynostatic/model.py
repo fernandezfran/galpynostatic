@@ -86,7 +86,14 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
     modified through the properties ``dcoeffs`` and ``k0s``.
 
     You can also give your own dataset to another potential cut-off in the
-    same format as the distributed ones and as ``pandas.DataFrame``.
+    same format as the distributed ones and as ``pandas.DataFrame``, i.e. in
+    the column of :math:`\ell` the different values have to be grouped in
+    ascending order and for each of these groups the :math:`\Xi` have to be in
+    decreasing order and respecting that for each group of :math:`\ell` the
+    same values are simulated (this is a restriction to perform the
+    ``scipy.interpolate.RectBivariateSpline``, since `x` and `y` have to be
+    strictly in a special order, which is handled internally by the
+    :ref:`galpynostatic.surface`).
 
     References
     ----------

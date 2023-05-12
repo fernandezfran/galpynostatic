@@ -50,6 +50,8 @@ galpynostatic API
    :member-order: bysource
 
 
+.. _galpynostatic.surface:
+
 ``galpynostatic.surface`` module
 --------------------------------
 

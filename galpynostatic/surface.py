@@ -37,6 +37,8 @@ class SurfaceSpline:
         Dataset with the diagram of the maximum SOC values as function of the
         internal parameters :math:`\log(\ell)` and :math:`\log(\Xi)`, this can
         be loaded using the functions of the :ref:`galpynostatic.datasets`.
+        See the Notes in :ref:`galpynostatic.model` to know the restrictions
+        of this dataframe.
 
     Attributes
     ----------
@@ -52,13 +54,13 @@ class SurfaceSpline:
 
     def __init__(self, dataset):
         self.logells = np.unique(dataset.l)
-        self.logxis = np.unique(dataset.chi)
+        self.logxis = np.unique(dataset.xi)
 
         k, socs = 0, []
         for logell, logxi in it.product(self.logells, self.logxis[::-1]):
             soc = 0
             try:
-                if logell == dataset.l[k] and logxi == dataset.chi[k]:
+                if logell == dataset.l[k] and logxi == dataset.xi[k]:
                     soc = dataset.xmax[k]
                     k += 1
             except KeyError:

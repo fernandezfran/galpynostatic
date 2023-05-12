@@ -106,15 +106,15 @@ class TestPlots:
 
         # ref map
         ls = np.unique(spherical.l)
-        chis = np.unique(spherical.chi)
+        xis = np.unique(spherical.xi)
 
         k, soc = 0, []
-        for logell_value, logxi_value in it.product(ls, chis[::-1]):
+        for logell_value, logxi_value in it.product(ls, xis[::-1]):
             xmax = 0
             try:
                 if (
                     logell_value == spherical.l[k]
-                    and logxi_value == spherical.chi[k]
+                    and logxi_value == spherical.xi[k]
                 ):
                     xmax = spherical.xmax[k]
                     k += 1
@@ -123,13 +123,13 @@ class TestPlots:
             finally:
                 soc.append(xmax)
 
-        soc = np.asarray(soc).reshape(ls.size, chis.size)[:, ::-1]
+        soc = np.asarray(soc).reshape(ls.size, xis.size)[:, ::-1]
 
-        spl = scipy.interpolate.RectBivariateSpline(ls, chis, soc)
+        spl = scipy.interpolate.RectBivariateSpline(ls, xis, soc)
 
         leval = np.linspace(np.min(ls), np.max(ls), num=1000)
-        chieval = np.linspace(np.min(chis), np.max(chis), num=1000)
-        z = spl(leval, chieval)
+        xieval = np.linspace(np.min(xis), np.max(xis), num=1000)
+        z = spl(leval, xieval)
         z[z > 1] = 1.0
         z[z < 0] = 0.0
 
@@ -138,8 +138,8 @@ class TestPlots:
             extent=[
                 spherical.l.min(),
                 spherical.l.max(),
-                spherical.chi.min(),
-                spherical.chi.max(),
+                spherical.xi.min(),
+                spherical.xi.max(),
             ],
             origin="lower",
         )
@@ -147,7 +147,7 @@ class TestPlots:
         clb.ax.set_xlabel("")
         clb.ax.set_ylabel("maximum SOC")
         clb.ax.set_ylim((0, 1))
-        ref_ax.scatter(spherical.l, spherical.chi, 400, facecolors="none")
+        ref_ax.scatter(spherical.l, spherical.xi, 400, facecolors="none")
 
         # ref data
         ref_ax.plot(
