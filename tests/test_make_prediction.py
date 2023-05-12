@@ -51,3 +51,15 @@ def test_optimal_particle_size(experiment, request, spherical):
     np.testing.assert_array_almost_equal(
         length, experiment["ref"]["particle_size"], 6
     )
+
+
+def test_raise():
+    """Test the raise of the ValueError."""
+    greg = galpynostatic.model.GalvanostaticRegressor("spherical", 0.0015, 3)
+
+    greg.dcoeff_, greg.k0_ = 1.93e-10, 3.14e-7
+
+    with pytest.raises(ValueError):
+        galpynostatic.make_prediction.optimal_particle_size(
+            greg, minutes=1, loaded=1
+        )

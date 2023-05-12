@@ -24,30 +24,6 @@ import pytest
 # =============================================================================
 
 
-def test_dcoeffs(spherical):
-    """A property test."""
-    greg = galpynostatic.model.GalvanostaticRegressor(spherical, 1.0, 3)
-
-    np.testing.assert_array_almost_equal(
-        greg.dcoeffs, np.logspace(-15, -6, num=100)
-    )
-
-
-def test_k0s(spherical):
-    """A property test."""
-    greg = galpynostatic.model.GalvanostaticRegressor(spherical, 1.0, 3)
-
-    np.testing.assert_array_almost_equal(
-        greg.k0s, np.logspace(-14, -5, num=100)
-    )
-
-
-def test_raise():
-    """Test the raise of the ValueError."""
-    with pytest.raises(ValueError):
-        galpynostatic.model.GalvanostaticRegressor("spherica", 1.0, 3)
-
-
 @pytest.mark.parametrize(
     ("experiment"),
     [
@@ -144,3 +120,27 @@ class TestModel:
         df = greg.to_dataframe(experiment["C_rates"], y=experiment["soc"])
 
         pd.testing.assert_frame_equal(df, df_ref)
+
+
+def test_dcoeffs(spherical):
+    """A property test."""
+    greg = galpynostatic.model.GalvanostaticRegressor(spherical, 1.0, 3)
+
+    np.testing.assert_array_almost_equal(
+        greg.dcoeffs, np.logspace(-15, -6, num=100)
+    )
+
+
+def test_k0s(spherical):
+    """A property test."""
+    greg = galpynostatic.model.GalvanostaticRegressor(spherical, 1.0, 3)
+
+    np.testing.assert_array_almost_equal(
+        greg.k0s, np.logspace(-14, -5, num=100)
+    )
+
+
+def test_raise():
+    """Test the raise of the ValueError."""
+    with pytest.raises(ValueError):
+        galpynostatic.model.GalvanostaticRegressor("spherica", 1.0, 3)

@@ -65,9 +65,9 @@ you could cite the following article:
 
 .. pull-quote::
 
-   Fernandez, Francisco, et al. "Towards a fast-charging of LIBs electrode 
-   materials: a heuristic model based on galvanostatic simulations" (2023). 
-   _TODO_. DOI
+   F. Fernandez, E. M. Gavilán-Arriazu, D. E. Barraco, A. Visintin, Y. Ein-Eli, 
+   E. P. M. Leiva. "Towards a fast-charging of LIBs electrode materials: a 
+   heuristic model based on galvanostatic simulations" (2023). _TODO_
 
 BibTeX entry:
 

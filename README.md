@@ -51,9 +51,9 @@ galpynostatic is under
 If you use galpynostatic in a scientific publication, we would appreciate it if 
 you could cite the following [article](https://www.doi.org/):
 
-> Fernandez, Francisco, et al. "Towards a fast-charging of LIBs electrode 
-> materials: a heuristic model based on galvanostatic simulations" (2023). 
-> _TODO_. DOI
+> F. Fernandez, E. M. Gavilán-Arriazu, D. E. Barraco, A. Visintin, Y. Ein-Eli, 
+> E. P. M. Leiva. "Towards a fast-charging of LIBs electrode materials: a 
+> heuristic model based on galvanostatic simulations" (2023). _TODO_
 
 BibTeX entry:
 

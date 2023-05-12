@@ -32,7 +32,7 @@ def optimal_particle_size(
     greg,
     minutes=15,
     loaded=0.8,
-    cm_to=10000,
+    cm_to=10_000,
     dlogell=0.01,
 ):
     r"""Predict the optimal electrode particle size to charge in certain time.
@@ -74,6 +74,12 @@ def optimal_particle_size(
     particle_size : float
         The optimal particle size to charge the electrode to the desired
         maximum SOC value in the desired time.
+
+    Raises
+    ------
+    ValueError
+        When the material does not meet the defined criterion given the map
+        constraints.
     """
     c_rate = 60.0 / minutes
 
@@ -82,11 +88,16 @@ def optimal_particle_size(
         greg._surface.logells.min(), greg._surface.logells.max(), dlogell
     )
 
-    socs = greg._surface.soc(logell_range, logxi_value)
+    socs = greg._surface.soc(logell_range, logxi_value) - loaded
 
-    optimal_logell = scipy.interpolate.InterpolatedUnivariateSpline(
-        logell_range, socs - 0.8
-    ).roots()[0]
+    spline = scipy.interpolate.InterpolatedUnivariateSpline(logell_range, socs)
+    try:
+        optimal_logell = spline.roots()[0]
+    except IndexError:
+        raise ValueError(
+            "This material does not meet the defined criterion given the "
+            "map constaints."
+        )
 
     return cm_to * np.sqrt(
         (3600 * greg.z * greg.dcoeff_ * 10.0**optimal_logell) / c_rate
