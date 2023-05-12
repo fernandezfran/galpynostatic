@@ -37,7 +37,7 @@ python -m pip install -U galpynostatic
 
 To learn how to use galpynostatic you can start by following the 
 [tutorials](https://galpynostatic.readthedocs.io/en/latest/tutorials/index.html)
-and then take a look at the [API](https://galpynostatic.readthedocs.io/en/latest/api.html).
+and then read the [API](https://galpynostatic.readthedocs.io/en/latest/api.html).
 
 
 ## License
@@ -49,7 +49,7 @@ galpynostatic is under
 ## Citation
 
 If you use galpynostatic in a scientific publication, we would appreciate it if 
-you could cite the following article:
+you could cite the following [article](https://www.doi.org/):
 
 > Fernandez, Francisco, et al. "Towards a fast-charging of LIBs electrode 
 > materials: a heuristic model based on galvanostatic simulations" (2023). 
