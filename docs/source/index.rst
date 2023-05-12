@@ -51,19 +51,10 @@ usual ones of the scientific computing stack
 and `SciPy <https://scipy.org/>`__), are installed automatically.
 
 
-Repository
-----------
+Code Repository
+---------------
 
 https://github.com/fernandezfran/galpynostatic/
-
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-
-   install
-   tutorials/index
-   api
 
 
 Citation
@@ -89,14 +80,19 @@ BibTeX entry:
    }
 
 
-
 Contact
 -------
 
-| **Author**
-| Francisco Fernandez
+You can contact me if you have any questions at ffernandev@gmail.com
 
-For bugs or questions, please send an email to ffernandev@gmail.com
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents
+
+   install
+   tutorials/index
+   api
 
 
 Indices and tables

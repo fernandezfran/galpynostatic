@@ -6,6 +6,7 @@ package.
 
 .. toctree::
    :maxdepth: 1
+   :caption: Contents
 
    model_fitting.ipynb
-   model_evaluation.ipynb
+   map-driven_analysis.ipynb

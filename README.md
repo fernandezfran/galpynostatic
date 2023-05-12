@@ -64,3 +64,8 @@ BibTeX entry:
   year={2023}
 }
 ```
+
+
+## Contact
+
+You can contact me if you have any questions at <ffernandev@gmail.com>
