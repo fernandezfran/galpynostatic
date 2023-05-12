@@ -94,13 +94,17 @@ class GetDischargeCapacities(TransformerMixin):
             the input list.
         """
         X_new = np.zeros(len(X))
+
         for k, df in enumerate(X):
+            capacity = df.iloc[:, 0]
+            voltage = df.iloc[:, 1] - self.eq_pot + self.vcut
+
+            spline = scipy.interpolate.InterpolatedUnivariateSpline(
+                capacity, voltage, **self.fit_params
+            )
+
             try:
-                X_new[k] = scipy.interpolate.InterpolatedUnivariateSpline(
-                    df.iloc[:, 0],
-                    df.iloc[:, 1] - self.eq_pot + self.vcut,
-                    **self.fit_params,
-                ).roots()[0]
+                X_new[k] = spline.roots()[0]
             except IndexError:
                 ...
 

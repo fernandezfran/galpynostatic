@@ -133,9 +133,7 @@ class TestModel:
         """Test the dataframe."""
         experiment = request.getfixturevalue(experiment)
 
-        df_ref = pd.read_csv(
-            data_path / experiment["dir_name"] / "df.csv"#, dtype=np.float64
-        )
+        df_ref = pd.read_csv(data_path / experiment["dir_name"] / "df.csv")
 
         greg = galpynostatic.model.GalvanostaticRegressor(
             spherical, experiment["d"], 3
