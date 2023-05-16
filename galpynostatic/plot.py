@@ -52,13 +52,16 @@ class GalvanostaticPlotter:
     def __init__(self, greg):
         self.greg = greg
 
-    def surface(self, ax=None):
+    def surface(self, ax=None, clb_label="maximum SOC"):
         """Plot the diagram on which data was fitted.
 
         Parameters
         ----------
         ax : matplotlib.axes.Axes, default=None
             The current axes.
+
+        clb_label : str, default="maximum SOC"
+            The label for the color bar.
         """
         ax = plt.gca() if ax is None else ax
 
@@ -86,7 +89,7 @@ class GalvanostaticPlotter:
             origin="lower",
         )
         clb = plt.colorbar(im)
-        clb.ax.set_ylabel("maximum SOC")
+        clb.ax.set_ylabel(clb_label)
         clb.ax.set_ylim((0, 1))
 
         ax.set_xlabel(r"log($\ell$)")
