@@ -4,7 +4,7 @@ include README.md
 include pyproject.toml
 
 recursive-include galpynostatic *.py
-recursive-include galpynostatic *.tsv
+recursive-include galpynostatic *.csv
 
 exclude requirements_dev.txt
 exclude tox.ini

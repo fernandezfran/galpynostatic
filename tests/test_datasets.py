@@ -31,15 +31,15 @@ def test_load_planar():
 
     assert pla.l.min() == -4
     np.testing.assert_almost_equal(pla.l.max(), 1.75, 6)
-    np.testing.assert_almost_equal(pla.l.mean(), -1.504081, 6)
+    np.testing.assert_almost_equal(pla.l.mean(), -1.125, 6)
 
-    np.testing.assert_almost_equal(pla.xi.min(), -3.25, 6)
+    np.testing.assert_almost_equal(pla.xi.min(), -3.2, 6)
     np.testing.assert_almost_equal(pla.xi.max(), 2, 6)
-    np.testing.assert_almost_equal(pla.xi.mean(), 0.017519, 6)
+    np.testing.assert_almost_equal(pla.xi.mean(), -0.6, 6)
 
-    np.testing.assert_almost_equal(pla.xmax.min(), 6e-5, 6)
+    np.testing.assert_almost_equal(pla.xmax.min(), 0.0, 6)
     np.testing.assert_almost_equal(pla.xmax.max(), 0.997055, 6)
-    np.testing.assert_almost_equal(pla.xmax.mean(), 0.702871, 6)
+    np.testing.assert_almost_equal(pla.xmax.mean(), 0.515846, 6)
 
 
 def test_load_cylindrical():
@@ -50,15 +50,15 @@ def test_load_cylindrical():
 
     assert cyl.l.min() == -4
     np.testing.assert_almost_equal(cyl.l.max(), 1.75, 6)
-    np.testing.assert_almost_equal(cyl.l.mean(), -1.4597826, 6)
+    np.testing.assert_almost_equal(cyl.l.mean(), -1.125, 6)
 
     np.testing.assert_almost_equal(cyl.xi.min(), -3.4, 6)
     np.testing.assert_almost_equal(cyl.xi.max(), 2, 6)
-    np.testing.assert_almost_equal(cyl.xi.mean(), -0.04983696, 6)
+    np.testing.assert_almost_equal(cyl.xi.mean(), -0.7, 6)
 
-    np.testing.assert_almost_equal(cyl.xmax.min(), 0.000239, 6)
+    np.testing.assert_almost_equal(cyl.xmax.min(), 0.0, 6)
     np.testing.assert_almost_equal(cyl.xmax.max(), 0.997055, 6)
-    np.testing.assert_almost_equal(cyl.xmax.mean(), 0.695191, 6)
+    np.testing.assert_almost_equal(cyl.xmax.mean(), 0.516647, 6)
 
 
 def test_load_spherical():
@@ -69,12 +69,12 @@ def test_load_spherical():
 
     assert sph.l.min() == -4
     np.testing.assert_almost_equal(sph.l.max(), 1.75, 6)
-    np.testing.assert_almost_equal(sph.l.mean(), -1.488384, 6)
+    np.testing.assert_almost_equal(sph.l.mean(), -1.125, 6)
 
     np.testing.assert_almost_equal(sph.xi.min(), -3.5, 6)
     np.testing.assert_almost_equal(sph.xi.max(), 2, 6)
-    np.testing.assert_almost_equal(sph.xi.mean(), -0.103535, 6)
+    np.testing.assert_almost_equal(sph.xi.mean(), -0.75, 6)
 
-    np.testing.assert_almost_equal(sph.xmax.min(), 0.000119, 6)
+    np.testing.assert_almost_equal(sph.xmax.min(), 0.0, 6)
     np.testing.assert_almost_equal(sph.xmax.max(), 0.99706, 6)
-    np.testing.assert_almost_equal(sph.xmax.mean(), 0.704005, 6)
+    np.testing.assert_almost_equal(sph.xmax.mean(), 0.518575, 6)

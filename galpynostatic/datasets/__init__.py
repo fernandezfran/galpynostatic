@@ -48,14 +48,14 @@ PATH = pathlib.Path(os.path.abspath(os.path.dirname(__file__)))
 
 def load_planar():
     """Galvanostatic planar diagram for a cut-off potential of 150 mV."""
-    return pd.read_csv(PATH / "planar.tsv", delimiter="\t")
+    return pd.read_csv(PATH / "planar.csv")
 
 
 def load_cylindrical():
     """Galvanostatic cylindrical diagram for a cut-off potential of 150 mV."""
-    return pd.read_csv(PATH / "cylindrical.tsv", delimiter="\t")
+    return pd.read_csv(PATH / "cylindrical.csv")
 
 
 def load_spherical():
     """Galvanostatic spherical diagram for a cut-off potential of 150 mV."""
-    return pd.read_csv(PATH / "spherical.tsv", delimiter="\t")
+    return pd.read_csv(PATH / "spherical.csv")

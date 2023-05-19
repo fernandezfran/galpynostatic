@@ -17,8 +17,6 @@
 # IMPORTS
 # ============================================================================
 
-import itertools as it
-
 import numpy as np
 
 import scipy.interpolate
@@ -56,23 +54,12 @@ class SurfaceSpline:
         self.logells = np.unique(dataset.l)
         self.logxis = np.unique(dataset.xi)
 
-        k, socs = 0, []
-        for logell, logxi in it.product(self.logells, self.logxis[::-1]):
-            soc = 0
-            try:
-                if logell == dataset.l[k] and logxi == dataset.xi[k]:
-                    soc = dataset.xmax[k]
-                    k += 1
-            except KeyError:
-                ...
-            finally:
-                socs.append(soc)
-        socs = np.array(socs)
+        socs = dataset.xmax.to_numpy().reshape(
+            self.logells.size, self.logxis.size
+        )[:, ::-1]
 
         self.spline = scipy.interpolate.RectBivariateSpline(
-            self.logells,
-            self.logxis,
-            socs.reshape(self.logells.size, self.logxis.size)[:, ::-1],
+            self.logells, self.logxis, socs
         )
 
     def _mask_logell(self, logell):
