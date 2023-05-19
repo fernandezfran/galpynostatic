@@ -40,43 +40,43 @@ class SurfaceSpline:
 
     Attributes
     ----------
-    logells : numpy.ndarray
+    logells_ : numpy.ndarray
         Unique :math:`\ell` possible values in the dataset.
 
-    logxis : numpy.ndarray
+    logxis_ : numpy.ndarray
         Unique :math:`\Xi` possible values in the dataset.
 
-    spline : scipy.interpolate.RectBivariateSpline
+    spline_ : scipy.interpolate.RectBivariateSpline
         Bivariate spline approximation over the discrete dataset.
     """
 
     def __init__(self, dataset):
-        self.logells = np.unique(dataset.l)
-        self.logxis = np.unique(dataset.xi)
+        self.logells_ = np.unique(dataset.l)
+        self.logxis_ = np.unique(dataset.xi)
 
         socs = dataset.xmax.to_numpy().reshape(
-            self.logells.size, self.logxis.size
+            self.logells_.size, self.logxis_.size
         )[:, ::-1]
 
-        self.spline = scipy.interpolate.RectBivariateSpline(
-            self.logells, self.logxis, socs
+        self.spline_ = scipy.interpolate.RectBivariateSpline(
+            self.logells_, self.logxis_, socs
         )
 
     def _mask_logell(self, logell):
         """Mask the value between the extrems of the interval."""
         return np.logical_and(
-            np.greater_equal(logell, self.logells.min()),
-            np.less_equal(logell, self.logells.max()),
+            np.greater_equal(logell, self.logells_.min()),
+            np.less_equal(logell, self.logells_.max()),
         )
 
     def _mask_logxi(self, logxi):
         """Mask the value between the extrems of the interval."""
         return np.logical_and(
-            np.greater_equal(logxi, self.logxis.min()),
-            np.less_equal(logxi, self.logxis.max()),
+            np.greater_equal(logxi, self.logxis_.min()),
+            np.less_equal(logxi, self.logxis_.max()),
         )
 
-    def soc(self, logell, logxi):
+    def soc(self, logell, logxi, grid=False):
         r"""Predicts the maximum values of the SOC with the spline.
 
         This is a linear function of the spline bounded in [0, 1], values
@@ -90,9 +90,14 @@ class SurfaceSpline:
         logxi : numpy.ndarray
             Log 10 value of :math:`\Xi` parameter.
 
+        grid : bool, default=False
+            Whether to evaluate the results on a grid spanned by the input
+            arrays, or at points specified by the input arrays, i.e. True
+            is a grid and False only the ordered pairs.
+
         Returns
         -------
         soc : numpy.ndarray
             The corresponding maximum SOC values in the surface spline.
         """
-        return np.clip(self.spline(logell, logxi, grid=False), 0, 1)
+        return np.clip(self.spline_(logell, logxi, grid=grid), 0, 1)

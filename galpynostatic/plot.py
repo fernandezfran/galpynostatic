@@ -66,17 +66,17 @@ class GalvanostaticPlotter:
         ax = plt.gca() if ax is None else ax
 
         logelleval = np.linspace(
-            np.min(self.greg._surface.logells),
-            np.max(self.greg._surface.logells),
+            np.min(self.greg._surface.logells_),
+            np.max(self.greg._surface.logells_),
             num=1000,
         )
         logxieval = np.linspace(
-            np.min(self.greg._surface.logxis),
-            np.max(self.greg._surface.logxis),
+            np.min(self.greg._surface.logxis_),
+            np.max(self.greg._surface.logxis_),
             num=1000,
         )
 
-        z = np.clip(self.greg._surface.spline(logelleval, logxieval), 0, 1)
+        z = self.greg._surface.soc(logelleval, logxieval, grid=True)
 
         im = ax.imshow(
             z.T,

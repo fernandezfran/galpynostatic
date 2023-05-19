@@ -85,7 +85,7 @@ def optimal_particle_size(
 
     logxi_value = logxi(c_rate, greg.dcoeff_, greg.k0_)
     logell_range = np.arange(
-        greg._surface.logells.min(), greg._surface.logells.max(), dlogell
+        greg._surface.logells_.min(), greg._surface.logells_.max(), dlogell
     )
 
     socs = greg._surface.soc(logell_range, logxi_value) - loaded

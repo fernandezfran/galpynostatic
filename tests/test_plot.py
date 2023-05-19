@@ -11,8 +11,6 @@
 # IMPORTS
 # =============================================================================
 
-import itertools as it
-
 import galpynostatic.model
 from galpynostatic.utils import logell, logxi
 
@@ -107,31 +105,13 @@ class TestPlots:
         # ref map
         ls = np.unique(spherical.l)
         xis = np.unique(spherical.xi)
-
-        k, soc = 0, []
-        for logell_value, logxi_value in it.product(ls, xis[::-1]):
-            xmax = 0
-            try:
-                if (
-                    logell_value == spherical.l[k]
-                    and logxi_value == spherical.xi[k]
-                ):
-                    xmax = spherical.xmax[k]
-                    k += 1
-            except KeyError:
-                ...
-            finally:
-                soc.append(xmax)
-
-        soc = np.asarray(soc).reshape(ls.size, xis.size)[:, ::-1]
+        soc = spherical.xmax.to_numpy().reshape(ls.size, xis.size)[:, ::-1]
 
         spl = scipy.interpolate.RectBivariateSpline(ls, xis, soc)
 
         leval = np.linspace(np.min(ls), np.max(ls), num=1000)
         xieval = np.linspace(np.min(xis), np.max(xis), num=1000)
-        z = spl(leval, xieval)
-        z[z > 1] = 1.0
-        z[z < 0] = 0.0
+        z = np.clip(spl(leval, xieval), 0, 1)
 
         im = ref_ax.imshow(
             z.T,
