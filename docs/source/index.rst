@@ -23,15 +23,15 @@ galpynostatic
    :target: https://pypistats.org/packages/galpynostatic
    :alt: pypi downloads
 
-.. image:: https://img.shields.io/badge/python-3.8%2B-77b7fe
+.. image:: https://img.shields.io/badge/python-3.8%2B-4584b6
    :target: https://www.python.org/
    :alt: python version
 
-.. image:: https://img.shields.io/badge/License-MIT-fcf695
+.. image:: https://img.shields.io/badge/License-MIT-ffde57
    :target: https://github.com/fernandezfran/galpynostatic/blob/main/LICENSE
    :alt: mit license
 
-.. image:: https://img.shields.io/badge/doi-TODO-b19cd9
+.. image:: https://img.shields.io/badge/doi-TODO-36abe8
    :target: https://www.doi.org/
    :alt: doi
 
