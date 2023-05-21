@@ -51,7 +51,13 @@ def spherical():
 def nishikawa():
     return {
         "dir_name": "LMNO",
-        "file_names": ("1nA.csv", "2nA.csv", "3nA.csv", "5nA.csv", "10nA.csv"),
+        "file_names": (
+            "2.5C.csv",
+            "5.0C.csv",
+            "7.5C.csv",
+            "12.5C.csv",
+            "25.0C.csv",
+        ),
         "eq_pot": 4.739,
         "d": np.sqrt(0.25 * 8.04e-6 / np.pi),
         "C_rates": np.array([2.5, 5, 7.5, 12.5, 25.0]).reshape(-1, 1),
