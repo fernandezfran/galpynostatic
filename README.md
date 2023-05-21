@@ -41,7 +41,7 @@ and then read the [API](https://galpynostatic.readthedocs.io/en/latest/api.html)
 
 Also, you can read the Jupyter Notebook in 
 [paper folder](https://github.com/fernandezfran/galpynostatic/tree/main/paper) 
-that reproduce the results of the article published.
+that reproduce the results of the published article.
 
 
 ## License
