@@ -39,6 +39,10 @@ To learn how to use galpynostatic you can start by following the
 [tutorials](https://galpynostatic.readthedocs.io/en/latest/tutorials/index.html)
 and then read the [API](https://galpynostatic.readthedocs.io/en/latest/api.html).
 
+Also, you can read the Jupyter Notebook in 
+[paper folder](https://github.com/fernandezfran/galpynostatic/tree/main/paper) 
+that reproduce the results of the article published.
+
 
 ## License
 
