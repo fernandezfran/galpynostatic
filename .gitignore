@@ -11,7 +11,3 @@ docs/build/
 .tox/
 result_images/
 .coverage
-
-examples/*cpp
-examples/*dat
-examples/*out
