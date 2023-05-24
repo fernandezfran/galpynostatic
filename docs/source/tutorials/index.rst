@@ -8,5 +8,5 @@ package.
    :maxdepth: 1
    :caption: Contents
 
-   model_fitting.ipynb
+   heuristic_model.ipynb
    map-driven_analysis.ipynb
