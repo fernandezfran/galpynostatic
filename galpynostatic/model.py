@@ -27,8 +27,8 @@ import sklearn.metrics
 from sklearn.base import BaseEstimator, RegressorMixin
 
 from .datasets import load_cylindrical, load_planar, load_spherical
+from .datasets.map import MapSpline
 from .plot import GalvanostaticPlotter
-from .surface import SurfaceSpline
 from .utils import logell, logxi
 
 # ============================================================================
@@ -39,14 +39,14 @@ from .utils import logell, logxi
 class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
     r"""A heuristic regressor for SOC versus C-rates galvanostatic data.
 
-    This physics-based heuristic model [1]_ uses the diagrams in
+    This physics-based heuristic model [1]_ uses the maps in
     :ref:`galpynostatic.datasets` to perform a grid search by taking different
     combinations of the diffusion coefficient, :math:`D`, and the
     kinetic-rate constant, :math:`k^0`, to fit experimental data of the
     State-of-Charge (SOC) of the electrode material as a function of the
     C-rates. This is done considering invariant all the other experimental
     values involved in the parameters :math:`\Xi` and :math:`\ell` of the
-    diagrams of the continuous galvanostatic model [2]_, such as the
+    maps of the continuous galvanostatic model [1]_, such as the
     characteristic diffusion length, :math:`d`, and the geometrical factor,
     :math:`z` (see :ref:`galpynostatic.utils`).
 
@@ -62,7 +62,7 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         spherical) to use the datasets distributed in this package which can
         also be loaded using the functions of the
         :ref:`galpynostatic.datasets` to give it as a ``pandas.DataFrame`` with
-        the diagram of the maximum SOC values as function of the internal
+        the map of the maximum SOC values as function of the internal
         parameters :math:`\log(\ell)` and :math:`\log(\Xi)`.
 
     d : float
@@ -93,7 +93,7 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
     same values are simulated (this is a restriction to perform the
     ``scipy.interpolate.RectBivariateSpline``, since `x` and `y` have to be
     strictly in a special order, which is handled internally by the
-    :ref:`galpynostatic.surface`).
+    :ref:`galpynostatic.map`).
 
     References
     ----------
@@ -135,7 +135,7 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
                 self.dataset = load_geometry[self.dataset]()
             else:
                 raise ValueError(f"{self.dataset} is not a valid geometry.")
-        self._surface = SurfaceSpline(self.dataset)
+        self._map = MapSpline(self.dataset)
 
     @property
     def dcoeffs(self):
@@ -191,7 +191,7 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         return self
 
     def predict(self, X):
-        """Predict using the heuristic model within the range of the diagram.
+        """Predict using the heuristic model within the range of the map.
 
         Parameters
         ----------
@@ -206,13 +206,11 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         logells = logell(X.ravel(), self.d, self.z, self.dcoeff_)
         logxis = logxi(X.ravel(), self.dcoeff_, self.k0_)
 
-        mask_logell = self._surface._mask_logell(logells)
-        mask_logxi = self._surface._mask_logxi(logxis)
+        mask_logell = self._map._mask_logell(logells)
+        mask_logxi = self._map._mask_logxi(logxis)
 
         return np.where(
-            mask_logell & mask_logxi,
-            self._surface.soc(logells, logxis),
-            np.nan,
+            mask_logell & mask_logxi, self._map.soc(logells, logxis), np.nan
         )
 
     def score(self, X, y, sample_weight=None):

@@ -42,7 +42,7 @@ class GetDischargeCapacities(TransformerMixin):
 
     vcut : float, default=0.15
         The cut-off potential in V, the default value corresponds to 150 mV,
-        which is the one defined by the data of the distributed diagrams.
+        which is the one defined by the data of the distributed maps.
 
     Notes
     -----

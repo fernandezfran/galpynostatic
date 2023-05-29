@@ -33,8 +33,8 @@ class GalvanostaticPlotter:
 
     Kind of plots to produce:
 
-    - 'surface' : the diagram on which the data were fitted.
-    - 'in_surface' : :math:`\Xi` and :math:`\ell` data points in the diagram.
+    - 'render_map' : the map on which the data were fitted.
+    - 'in_render_map' : :math:`\Xi` and :math:`\ell` data points in the map.
     - 'versus_data' : predicted and actual maximum SOC values versus C-rate.
 
     Parameters
@@ -44,7 +44,7 @@ class GalvanostaticPlotter:
 
     Notes
     -----
-    The diagram will only be plotted in ``self.in_surface(X)`` if ax is None,
+    The map will only be plotted in ``self.in_render_map(X)`` if ax is None,
     otherwise assumes it is already plotted and you just want to add
     the points on it, e.g. to compare different systems.
     """
@@ -52,8 +52,8 @@ class GalvanostaticPlotter:
     def __init__(self, greg):
         self.greg = greg
 
-    def surface(self, ax=None, clb=True, clb_label="maximum SOC"):
-        """Plot the diagram on which data was fitted.
+    def render_map(self, ax=None, clb=True, clb_label="maximum SOC"):
+        """Plot the map on which data was fitted.
 
         Parameters
         ----------
@@ -69,17 +69,17 @@ class GalvanostaticPlotter:
         ax = plt.gca() if ax is None else ax
 
         logelleval = np.linspace(
-            np.min(self.greg._surface.logells_),
-            np.max(self.greg._surface.logells_),
+            np.min(self.greg._map.logells_),
+            np.max(self.greg._map.logells_),
             num=1000,
         )
         logxieval = np.linspace(
-            np.min(self.greg._surface.logxis_),
-            np.max(self.greg._surface.logxis_),
+            np.min(self.greg._map.logxis_),
+            np.max(self.greg._map.logxis_),
             num=1000,
         )
 
-        z = self.greg._surface.soc(logelleval, logxieval, grid=True)
+        z = self.greg._map.soc(logelleval, logxieval, grid=True)
 
         im = ax.imshow(
             z.T,
@@ -102,8 +102,8 @@ class GalvanostaticPlotter:
 
         return ax
 
-    def in_surface(self, X, ax=None, **kwargs):
-        """Plot showing in which region of the diagram the fit is found.
+    def in_render_map(self, X, ax=None, **kwargs):
+        """Plot showing in which region of the map the fit is found.
 
         Parameters
         ----------
@@ -122,7 +122,7 @@ class GalvanostaticPlotter:
         ax : matplotlib.axes.Axes
             The current axes.
         """
-        ax = self.surface() if ax is None else ax
+        ax = self.render_map() if ax is None else ax
 
         keys = ["color", "marker", "linestyle", "label"]
         for key, value in zip(keys, ["k", "o", "--", "fitted data"]):

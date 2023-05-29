@@ -67,7 +67,7 @@ def optimal_particle_size(
 
     dlogell : float, default=0.01
         The delta for the logarithm value in base 10 of the :math:`\ell`
-        evaluation between the minimum and the maximum in the diagram.
+        evaluation between the minimum and the maximum in the map.
 
     Returns
     -------
@@ -85,10 +85,10 @@ def optimal_particle_size(
 
     logxi_value = logxi(c_rate, greg.dcoeff_, greg.k0_)
     logell_range = np.arange(
-        greg._surface.logells_.min(), greg._surface.logells_.max(), dlogell
+        greg._map.logells_.min(), greg._map.logells_.max(), dlogell
     )
 
-    socs = greg._surface.soc(logell_range, logxi_value) - loaded
+    socs = greg._map.soc(logell_range, logxi_value) - loaded
 
     spline = scipy.interpolate.InterpolatedUnivariateSpline(logell_range, socs)
     try:

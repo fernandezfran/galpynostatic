@@ -11,7 +11,7 @@
 # DOCS
 # ============================================================================
 
-"""Module with the spline to the diagram surface in the dataset."""
+"""Module with the spline to the discrete map dataset."""
 
 # ============================================================================
 # IMPORTS
@@ -26,25 +26,25 @@ import scipy.interpolate
 # ============================================================================
 
 
-class SurfaceSpline:
-    r"""Spline of the dataset discrete diagram.
+class MapSpline:
+    r"""Spline of the discrete map dataset.
 
     Parameters
     ----------
     dataset : pandas.DataFrame
-        Dataset with the diagram of the maximum SOC values as function of the
-        internal parameters :math:`\log(\ell)` and :math:`\log(\Xi)`, this can
-        be loaded using the functions of the :ref:`galpynostatic.datasets`.
-        See the Notes in :ref:`galpynostatic.model` to know the restrictions
-        of this dataframe.
+        Dataset with the discrete map data point of the maximum SOC values as
+        function of the internal parameters :math:`\log(\ell)` and
+        :math:`\log(\Xi)`, this can be loaded using the functions of the
+        :ref:`galpynostatic.datasets`. See the Notes in
+        :ref:`galpynostatic.model` to know the restrictions of this dataframe.
 
     Attributes
     ----------
     logells_ : numpy.ndarray
-        Unique :math:`\ell` possible values in the dataset.
+        Unique :math:`\ell` values defined in the dataset.
 
     logxis_ : numpy.ndarray
-        Unique :math:`\Xi` possible values in the dataset.
+        Unique :math:`\Xi` values defined in the dataset.
 
     spline_ : scipy.interpolate.RectBivariateSpline
         Bivariate spline approximation over the discrete dataset.
@@ -77,7 +77,7 @@ class SurfaceSpline:
         )
 
     def soc(self, logell, logxi, grid=False):
-        r"""Predicts the maximum values of the SOC with the spline.
+        r"""Predicts the maximum values of the SOC with the map spline.
 
         This is a linear function of the spline bounded in [0, 1], values
         exceeding this range are taken to the corresponding endpoint.
@@ -98,6 +98,6 @@ class SurfaceSpline:
         Returns
         -------
         soc : numpy.ndarray
-            The corresponding maximum SOC values in the surface spline.
+            The corresponding maximum SOC values in the map spline.
         """
         return np.clip(self.spline_(logell, logxi, grid=grid), 0, 1)

@@ -1,10 +1,5 @@
-galpynostatic API
-=================
-
-.. toctree::
-   :maxdepth: 4
-
-.. automodule:: galpynostatic
+galpynostatic modules
+=====================
 
 
 ``galpynostatic.make_prediction`` module
@@ -50,36 +45,12 @@ galpynostatic API
    :member-order: bysource
 
 
-.. _galpynostatic.surface:
-
-``galpynostatic.surface`` module
---------------------------------
-
-.. automodule:: galpynostatic.surface
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :member-order: bysource
-
-
 .. _galpynostatic.utils:
 
 ``galpynostatic.utils`` module
 ------------------------------
 
 .. automodule:: galpynostatic.utils
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :member-order: bysource
-
-
-.. _galpynostatic.datasets:
-
-``galpynostatic.datasets`` module
----------------------------------
-
-.. automodule:: galpynostatic.datasets
    :members:
    :undoc-members:
    :show-inheritance:

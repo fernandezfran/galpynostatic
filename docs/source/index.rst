@@ -86,13 +86,21 @@ Contact
 You can contact me if you have any questions at ffernandev@gmail.com
 
 
+Contents
+--------
+
 .. toctree::
    :maxdepth: 2
-   :caption: Contents
+   :caption: Tutorials
 
    install
    tutorials/index
-   api
+
+.. toctree::
+   :maxdepth: 3
+   :caption: API Reference
+
+   api/index
 
 
 Indices and tables

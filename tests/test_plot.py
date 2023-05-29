@@ -81,10 +81,10 @@ class TestPlots:
         ref_ax.set_xscale("log")
 
     @check_figures_equal(extensions=["png", "pdf"], tol=0.000001)
-    def test_plot_in_surface(
+    def test_plot_in_render_map(
         self, fig_test, fig_ref, experiment, request, spherical
     ):
-        """Test the plot of data points in surface."""
+        """Test the plot of data points in map."""
         experiment = request.getfixturevalue(experiment)
 
         greg = galpynostatic.model.GalvanostaticRegressor(
@@ -95,8 +95,8 @@ class TestPlots:
 
         # g reg plot
         test_ax = fig_test.subplots()
-        greg.plot.surface(ax=test_ax)
-        greg.plot.in_surface(experiment["C_rates"], ax=test_ax)
+        greg.plot.render_map(ax=test_ax)
+        greg.plot.in_render_map(experiment["C_rates"], ax=test_ax)
 
         # ref plot
         fig_ref.axes[0].set_visible(False)
