@@ -108,8 +108,14 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
     dcoeff_ : float
         Predicted diffusion coefficient in :math:`cm^2/s`.
 
+    dcoeff_err_ : float
+        Uncertainty in the predicted diffusion coefficient.
+
     k0_ : float
         Predicted kinetic rate constant in :math:`cm/s`.
+
+    k0_err_ : float
+        Uncertainty in the predicted kinetic rate constant.
 
     mse_ : float
         Mean squared error of the best fitted model.
@@ -121,6 +127,7 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         self.z = z
 
         self.dcoeff_, self.k0_, self.mse_ = None, None, None
+        self.dcoeff_err_, self.k0_err_ = None, None
 
         self._dcoeffs = np.logspace(-15, -6, num=100)
         self._k0s = np.logspace(-14, -5, num=100)
@@ -187,6 +194,10 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
 
         self.dcoeff_, self.k0_ = params[idx]
         self.mse_ = mse[idx]
+
+        self.dcoeff_err_, self.k0_err_ = _estimate_uncertainties(
+            self, X, y, ("dcoeff_", "k0_"), 1e-6
+        )
 
         return self
 
@@ -274,3 +285,34 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
     def plot(self):
         """Plot accessor to :ref:`galpynostatic.plot`."""
         return GalvanostaticPlotter(self)
+
+
+# ============================================================================
+# FUNCTIONS
+# ============================================================================
+
+
+def _estimate_uncertainties(greg, X, y, attrs, delta):
+    """Uncertainties of `attrs` estimations."""
+    residuals = y - greg.predict(X)
+
+    sigmas = np.zeros(len(attrs))
+    for i, attr in enumerate(attrs):
+        param = greg.__dict__[attr]
+
+        greg.__dict__[attr] = (1 + delta) * param
+        upper = greg.predict(X)
+
+        greg.__dict__[attr] = (1 - delta) * param
+        lower = greg.predict(X)
+
+        diff = upper - lower
+        mask = diff != 0
+
+        derivative = diff[mask] / (2 * delta * param)
+
+        ws = residuals[mask] / 2
+        norm = np.sum(ws**2) / (len(ws) - 1)
+        sigmas[i] = norm * np.sum((ws / derivative) ** 2)
+
+    return np.sqrt(sigmas) / len(residuals)
