@@ -164,7 +164,7 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         """Kinetic rate constants to evaluate in model training setter."""
         self._k0s = k0s
 
-    def fit(self, X, y):
+    def fit(self, X, y, sample_weight=None):
         """Fit the heuristic galvanostatic regressor model.
 
         Parameters
@@ -174,6 +174,9 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
 
         y : array-like of shape (n_measurements,)
             Target maximum SOC values.
+
+        sample_weight : array-like of shape(n_measurments,), default=None
+            Individual weights of each data point.
 
         Returns
         -------
@@ -186,7 +189,9 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         for k, (self.dcoeff_, self.k0_) in enumerate(params):
             pred = self.predict(X)
             try:
-                mse[k] = sklearn.metrics.mean_squared_error(y, pred)
+                mse[k] = sklearn.metrics.mean_squared_error(
+                    y, pred, sample_weight=sample_weight
+                )
             except ValueError:
                 ...
 
@@ -242,15 +247,17 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         y : array-like of shape (n_measurements,)
             Experimental maximum SOC values.
 
-        sample_weight : Ignored
-            Not used, presented for sklearn API consistency by convention.
+        sample_weight : array-like of shape(n_measurments,), default=None
+            Individual weights of each data point.
 
         Returns
         -------
         score : float
             :math:`R^2` of ``self.predict(X)`` wrt. `y`.
         """
-        return super(GalvanostaticRegressor, self).score(X, y, sample_weight)
+        return super(GalvanostaticRegressor, self).score(
+            X, y, sample_weight=sample_weight
+        )
 
     def to_dataframe(self, X, y=None):
         """Convert the train, the evaluation or both sets into a dataframe.
