@@ -76,6 +76,7 @@ def nishikawa():
             "soc": np.array([0.937788, 0.878488, 0.81915, 0.701, 0.427025]),
             "r2": 0.8443919,
             "particle_size": 11.855359,
+            "particle_size_err": 0.4888,
         },
     }
 
@@ -127,6 +128,7 @@ def mancini():
             ),
             "r2": 0.9941839,
             "particle_size": 3.916924,
+            "particle_size_err": 0.007355,
         },
     }
 
@@ -156,6 +158,7 @@ def he():
             ),
             "r2": 0.8859801,
             "particle_size": 0.692001,
+            "particle_size_err": 0.033863,
         },
     }
 
@@ -194,6 +197,7 @@ def wang():
             ),
             "r2": 0.9609059,
             "particle_size": 32.699122,
+            "particle_size_err": 4.203711,
         },
     }
 
@@ -239,6 +243,7 @@ def lei():
             ),
             "r2": 0.9589378,
             "particle_size": 0.118554,
+            "particle_size_err": 0.00168,
         },
     }
 
@@ -284,6 +289,7 @@ def bak():
             ),
             "r2": 0.5436138,
             "particle_size": 0.118554,
+            "particle_size_err": 1.324536,
         },
     }
 
@@ -319,5 +325,6 @@ def dokko():
             ),
             "r2": 0.8194799,
             "particle_size": 11.855359,
+            "particle_size_err": 0.538223,
         },
     }

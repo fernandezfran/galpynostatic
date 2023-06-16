@@ -71,9 +71,11 @@ def optimal_particle_size(
 
     Returns
     -------
-    particle_size : float
+    particle_size, particle_size_err : tuple
         The optimal particle size to charge the electrode to the desired
-        maximum SOC value in the desired time.
+        maximum SOC value in the desired time. The uncertainty is calculated
+        if `greg.dcoeff_err_` is defined, if is not defined then it returns
+        None for this value.
 
     Raises
     ------
@@ -99,6 +101,13 @@ def optimal_particle_size(
             "map constaints."
         )
 
-    return cm_to * np.sqrt(
-        (3600 * greg.z * greg.dcoeff_ * 10.0**optimal_logell) / c_rate
+    factor = np.sqrt((3600 * greg.z * 10.0**optimal_logell) / c_rate)
+
+    particle_size = cm_to * factor * np.sqrt(greg.dcoeff_)
+    particle_size_err = (
+        cm_to * 0.5 * factor * greg.dcoeff_err_ / np.sqrt(greg.dcoeff_)
+        if greg.dcoeff_err_
+        else None
     )
+
+    return particle_size, particle_size_err

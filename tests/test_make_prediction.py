@@ -45,11 +45,15 @@ def test_optimal_particle_size(experiment, request, spherical):
 
     # fit results
     greg.dcoeff_, greg.k0_ = experiment["dcoeff"], experiment["k0"]
+    greg.dcoeff_err_ = experiment["ref"]["dcoeff_err"]
 
-    length = galpynostatic.make_prediction.optimal_particle_size(greg)
+    size, size_err = galpynostatic.make_prediction.optimal_particle_size(greg)
 
     np.testing.assert_array_almost_equal(
-        length, experiment["ref"]["particle_size"], 6
+        size, experiment["ref"]["particle_size"], 6
+    )
+    np.testing.assert_array_almost_equal(
+        size_err, experiment["ref"]["particle_size_err"], 6
     )
 
 
