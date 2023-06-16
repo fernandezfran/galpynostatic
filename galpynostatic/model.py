@@ -300,7 +300,12 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
 
 
 def _estimate_uncertainties(greg, X, y, attrs, delta):
-    """Uncertainties of `attrs` estimations."""
+    """Uncertainties of `attrs` estimations.
+
+    See description of ``scipy.optimize.curve_fit``.
+    """
+    residuals = y - greg.predict(X)
+
     jacobian = np.zeros((len(attrs), len(y)))
     for i, attr in enumerate(attrs):
         param = greg.__dict__[attr]
@@ -315,6 +320,8 @@ def _estimate_uncertainties(greg, X, y, attrs, delta):
 
     hessian = np.dot(jacobian, jacobian.T)
 
-    covariance = np.var((y - greg.predict(X)) ** 2) * np.linalg.inv(hessian)
+    covariance = np.var(residuals) * np.linalg.inv(hessian)
 
-    return np.sqrt(np.diag(covariance))
+    chisq = np.sum(residuals**2) / (jacobian.shape[1] - jacobian.shape[0])
+
+    return np.sqrt(np.diag(chisq * covariance))
