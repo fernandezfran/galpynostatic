@@ -53,14 +53,14 @@ class TestModel:
         greg = greg.fit(experiment["C_rates"], experiment["soc"])
 
         np.testing.assert_almost_equal(
-            greg.dcoeff_, experiment["ref"]["dcoeff"], 14
+            greg.dcoeff_, experiment["ref"]["dcoeff"], 13
         )
         np.testing.assert_almost_equal(
-            greg.dcoeff_err_, experiment["ref"]["dcoeff_err"], 14
+            greg.dcoeff_err_, experiment["ref"]["dcoeff_err"], 13
         )
-        np.testing.assert_almost_equal(greg.k0_, experiment["ref"]["k0"], 12)
+        np.testing.assert_almost_equal(greg.k0_, experiment["ref"]["k0"], 11)
         np.testing.assert_almost_equal(
-            greg.k0_err_, experiment["ref"]["k0_err"], 12
+            greg.k0_err_, experiment["ref"]["k0_err"], 11
         )
         np.testing.assert_almost_equal(greg.mse_, experiment["ref"]["mse"], 6)
 

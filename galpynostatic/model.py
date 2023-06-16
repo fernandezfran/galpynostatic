@@ -201,7 +201,7 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         self.mse_ = mse[idx]
 
         self.dcoeff_err_, self.k0_err_ = _estimate_uncertainties(
-            self, X, y, ("dcoeff_", "k0_"), 1e-6
+            self, X, y, ("dcoeff_", "k0_"), np.cbrt(np.finfo(float).eps)
         )
 
         return self
@@ -301,9 +301,7 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
 
 def _estimate_uncertainties(greg, X, y, attrs, delta):
     """Uncertainties of `attrs` estimations."""
-    residuals = y - greg.predict(X)
-
-    sigmas = np.zeros(len(attrs))
+    jacobian = np.zeros((len(attrs), len(y)))
     for i, attr in enumerate(attrs):
         param = greg.__dict__[attr]
 
@@ -313,13 +311,10 @@ def _estimate_uncertainties(greg, X, y, attrs, delta):
         greg.__dict__[attr] = (1 - delta) * param
         lower = greg.predict(X)
 
-        diff = upper - lower
-        mask = diff != 0
+        jacobian[i] = (upper - lower) / (2 * delta * param)
 
-        derivative = diff[mask] / (2 * delta * param)
+    hessian = np.dot(jacobian, jacobian.T)
 
-        ws = residuals[mask] / 2
-        norm = np.sum(ws**2) / (len(ws) - 1)
-        sigmas[i] = norm * np.sum((ws / derivative) ** 2)
+    covariance = np.var((y - greg.predict(X)) ** 2) * np.linalg.inv(hessian)
 
-    return np.sqrt(sigmas) / len(residuals)
+    return np.sqrt(np.diag(covariance))
