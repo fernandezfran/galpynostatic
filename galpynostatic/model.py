@@ -196,11 +196,10 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
                 ...
 
         idx = np.argmin(mse)
-
         self.dcoeff_, self.k0_ = params[idx]
         self.mse_ = mse[idx]
 
-        self.dcoeff_err_, self.k0_err_ = _estimate_uncertainties(
+        self.dcoeff_err_, self.k0_err_ = _calculate_uncertainties(
             self, X, y, ("dcoeff_", "k0_"), np.cbrt(np.finfo(float).eps)
         )
 
@@ -299,12 +298,16 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
 # ============================================================================
 
 
-def _estimate_uncertainties(greg, X, y, attrs, delta):
-    """Uncertainties of `attrs` estimations.
+def _calculate_uncertainties(greg, X, y, attrs, delta):
+    """Uncertainties of `attrs` calculation.
 
-    See description of ``scipy.optimize.curve_fit``.
+    They are computed as the root squared values of the diagonal in the
+    covariance matrix, which is approximated with the inverse of the Hessian
+    matrix, calculated as the product of the Jacobian matrix with its
+    transpose.
     """
     residuals = y - greg.predict(X)
+    dfree = len(y) - len(attrs)
 
     jacobian = np.zeros((len(attrs), len(y)))
     for i, attr in enumerate(attrs):
@@ -322,6 +325,6 @@ def _estimate_uncertainties(greg, X, y, attrs, delta):
 
     covariance = np.var(residuals) * np.linalg.inv(hessian)
 
-    chisq = np.sum(residuals**2) / (jacobian.shape[1] - jacobian.shape[0])
+    chisq = np.sum(residuals**2) / dfree
 
     return np.sqrt(np.diag(chisq * covariance))
