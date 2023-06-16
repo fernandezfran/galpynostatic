@@ -103,9 +103,10 @@ def optimal_particle_size(
 
     factor = np.sqrt((3600 * greg.z * 10.0**optimal_logell) / c_rate)
 
-    particle_size = cm_to * factor * np.sqrt(greg.dcoeff_)
+    sqd = np.sqrt(greg.dcoeff_)
+    particle_size = cm_to * factor * sqd
     particle_size_err = (
-        cm_to * 0.5 * factor * greg.dcoeff_err_ / np.sqrt(greg.dcoeff_)
+        cm_to * factor * greg.dcoeff_err_ / (2 * sqd)
         if greg.dcoeff_err_
         else None
     )
