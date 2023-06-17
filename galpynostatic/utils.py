@@ -32,8 +32,8 @@ def logell(c_rate, d, z, dcoeff):
 
     Parameters
     ----------
-    c_rate : float or int
-        C-rate single value.
+    c_rate : float or int or array-like
+        C-rate values.
 
     d : float
         Characteristic diffusion length (particle size) in cm.
@@ -63,8 +63,8 @@ def logxi(c_rate, dcoeff, k0):
 
     Parameters
     ----------
-    c_rate : float or int
-        C-rate single value
+    c_rate : float or int or array-like
+        C-rate values.
 
     dcoeff : float
         Diffusion coefficient, :math:`D`, in :math:`cm^2/s`.
