@@ -301,9 +301,9 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
 def _calculate_uncertainties(greg, X, y, attrs, delta):
     """Uncertainties of `attrs` calculation.
 
-    They are computed as the root squared values of the diagonal in the
-    covariance matrix, which is approximated with the inverse of the Hessian
-    matrix, calculated as the product of the Jacobian matrix with its
+    The uncertainties are computed as the root squared values of the diagonal
+    in the covariance matrix, which is approximated with the inverse of the
+    Hessian matrix, calculated as the product of the Jacobian matrix with its
     transpose.
     """
     residuals = y - greg.predict(X)
