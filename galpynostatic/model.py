@@ -164,6 +164,37 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         """Kinetic rate constants to evaluate in model training setter."""
         self._k0s = k0s
 
+    def _calculate_uncertainties(self, X, y, attrs, delta):
+        """Uncertainties of `attrs` calculation.
+
+        The uncertainties are computed as the root squared values of the
+        diagonal in the covariance matrix, which is approximated with the
+        inverse of the Hessian matrix, calculated as the product of the
+        Jacobian matrix with its transpose.
+        """
+        residuals = y - self.predict(X)
+        dfree = len(y) - len(attrs)
+
+        jacobian = np.zeros((len(attrs), len(y)))
+        for i, attr in enumerate(attrs):
+            param = self.__dict__[attr]
+
+            self.__dict__[attr] = (1 + delta) * param
+            upper = self.predict(X)
+
+            self.__dict__[attr] = (1 - delta) * param
+            lower = self.predict(X)
+
+            jacobian[i] = (upper - lower) / (2 * delta * param)
+
+        hessian = np.dot(jacobian, jacobian.T)
+
+        covariance = np.var(residuals) * np.linalg.inv(hessian)
+
+        chisq = np.sum(residuals**2) / dfree
+
+        return np.sqrt(np.diag(chisq * covariance))
+
     def fit(self, X, y, sample_weight=None):
         """Fit the heuristic galvanostatic regressor model.
 
@@ -187,10 +218,9 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
 
         mse = np.full(params.shape[0], np.inf)
         for k, (self.dcoeff_, self.k0_) in enumerate(params):
-            pred = self.predict(X)
             try:
                 mse[k] = sklearn.metrics.mean_squared_error(
-                    y, pred, sample_weight=sample_weight
+                    y, self.predict(X), sample_weight=sample_weight
                 )
             except ValueError:
                 ...
@@ -199,8 +229,8 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         self.dcoeff_, self.k0_ = params[idx]
         self.mse_ = mse[idx]
 
-        self.dcoeff_err_, self.k0_err_ = _calculate_uncertainties(
-            self, X, y, ("dcoeff_", "k0_"), np.cbrt(np.finfo(float).eps)
+        self.dcoeff_err_, self.k0_err_ = self._calculate_uncertainties(
+            X, y, ("dcoeff_", "k0_"), np.cbrt(np.finfo(float).eps)
         )
 
         return self
@@ -291,40 +321,3 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
     def plot(self):
         """Plot accessor to :ref:`galpynostatic.plot`."""
         return GalvanostaticPlotter(self)
-
-
-# ============================================================================
-# FUNCTIONS
-# ============================================================================
-
-
-def _calculate_uncertainties(greg, X, y, attrs, delta):
-    """Uncertainties of `attrs` calculation.
-
-    The uncertainties are computed as the root squared values of the diagonal
-    in the covariance matrix, which is approximated with the inverse of the
-    Hessian matrix, calculated as the product of the Jacobian matrix with its
-    transpose.
-    """
-    residuals = y - greg.predict(X)
-    dfree = len(y) - len(attrs)
-
-    jacobian = np.zeros((len(attrs), len(y)))
-    for i, attr in enumerate(attrs):
-        param = greg.__dict__[attr]
-
-        greg.__dict__[attr] = (1 + delta) * param
-        upper = greg.predict(X)
-
-        greg.__dict__[attr] = (1 - delta) * param
-        lower = greg.predict(X)
-
-        jacobian[i] = (upper - lower) / (2 * delta * param)
-
-    hessian = np.dot(jacobian, jacobian.T)
-
-    covariance = np.var(residuals) * np.linalg.inv(hessian)
-
-    chisq = np.sum(residuals**2) / dfree
-
-    return np.sqrt(np.diag(chisq * covariance))
