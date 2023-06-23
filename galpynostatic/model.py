@@ -291,7 +291,7 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
     def to_dataframe(self, X, y=None):
         """Convert the train, the evaluation or both sets into a dataframe.
 
-        Get a dataframe with two or three columns (`C_rates`, `SOC_true` and
+        Get a dataframe with two or three columns (`C_rates`, `SOC_exp` and
         `SOC_pred`), depending on whether you have passed the `y` values or
         not.
 
@@ -311,7 +311,7 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         df = pd.DataFrame({"C_rates": X.ravel()})
 
         if y is not None:
-            df["SOC_true"] = y
+            df["SOC_exp"] = y
 
         df["SOC_pred"] = self.predict(X)
 

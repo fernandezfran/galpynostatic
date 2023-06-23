@@ -1,4 +1,4 @@
-C_rates,SOC_true,SOC_pred
+C_rates,SOC_exp,SOC_pred
 1,0.9617,0.9939179
 5,0.938762,0.9812231
 10,0.9069,0.96534604
