@@ -20,6 +20,7 @@ galpynostatic modules
 .. automodule:: galpynostatic.model
    :members:
    :undoc-members:
+   :show-inheritance:
    :member-order: bysource
 
 

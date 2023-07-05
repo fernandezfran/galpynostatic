@@ -26,7 +26,17 @@ release = galpynostatic.VERSION
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ["sphinx.ext.autodoc", "sphinx.ext.napoleon", "nbsphinx"]
+extensions = [
+    "sphinx.ext.autodoc",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.intersphinx",
+    "nbsphinx",
+]
+
+# intersphinx configuration
+intersphinx_mapping = {
+    "sklearn": ("https://scikit-learn.org/stable/", None),
+}
 
 # templates_path = ["_templates"]
 templates_path = []
