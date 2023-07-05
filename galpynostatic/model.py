@@ -57,7 +57,7 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
 
     Parameters
     ----------
-    dataset : str or pandas.DataFrame
+    dataset : str or pandas.DataFrame, default="spherical"
         A str indicating the particle geometry (planar, cylindrical or
         spherical) to use the datasets distributed in this package which can
         also be loaded using the functions of the
@@ -65,10 +65,10 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         the map of the maximum SOC values as function of the internal
         parameters :math:`\log(\ell)` and :math:`\log(\Xi)`.
 
-    d : float
+    d : float, default=1e-4
         Characteristic diffusion length (particle size) in cm.
 
-    z : int
+    z : int, default=3
         Geometric factor (1 for planar, 2 for cylinder and 3 for sphere).
 
     Raises
@@ -121,7 +121,7 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         Mean squared error of the best fitted model.
     """
 
-    def __init__(self, dataset, d, z):
+    def __init__(self, dataset="spherical", d=1e-4, z=3):
         self.dataset = dataset
         self.d = d
         self.z = z

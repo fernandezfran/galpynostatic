@@ -37,7 +37,7 @@ class GetDischargeCapacities(TransformerMixin):
 
     Parameters
     ----------
-    eq_pot : float
+    eq_pot : float, default=0.0
         The equilibrium potential in Volts (V).
 
     vcut : float, default=0.15
@@ -56,7 +56,7 @@ class GetDischargeCapacities(TransformerMixin):
     maximum SOC values are obtained.
     """
 
-    def __init__(self, eq_pot, vcut=0.15):
+    def __init__(self, eq_pot=0.0, vcut=0.15):
         self.eq_pot = eq_pot
         self.vcut = vcut
 
