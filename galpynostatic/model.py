@@ -169,6 +169,14 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
             else:
                 raise ValueError(f"{self.dataset} is not a valid geometry.")
 
+    def _grid_points(self):
+        """Grid points (D, k0) to evaluate in the grid search."""
+        dcoeffs = np.logspace(
+            self.dcoeff_lle, self.dcoeff_ule, self.dcoeff_num
+        )
+        k0s = np.logspace(self.k0_lle, self.k0_ule, self.k0_num)
+        return np.array(tuple(it.product(dcoeffs, k0s)))
+
     def _calculate_uncertainties(self, X, y, attrs, delta):
         """Uncertainties of `attrs` calculation.
 
@@ -230,12 +238,7 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
 
         self._map = MapSpline(self.dataset)
 
-        dcoeffs = np.logspace(
-            self.dcoeff_lle, self.dcoeff_ule, self.dcoeff_num
-        )
-        k0s = np.logspace(self.k0_lle, self.k0_ule, self.k0_num)
-
-        params = np.array(tuple(it.product(dcoeffs, k0s)))
+        params = self._grid_points()
 
         mse = np.full(params.shape[0], np.inf)
         for k, (self.dcoeff_, self.k0_) in enumerate(params):
