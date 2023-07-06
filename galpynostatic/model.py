@@ -23,8 +23,9 @@ import numpy as np
 
 import pandas as pd
 
-import sklearn.metrics
 from sklearn.base import BaseEstimator, RegressorMixin
+from sklearn.metrics import mean_squared_error as _skl_mse
+from sklearn.utils import validation as _skl_validation
 
 from .datasets import load_cylindrical, load_planar, load_spherical
 from .datasets.map import MapSpline
@@ -68,23 +69,35 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
     d : float, default=1e-4
         Characteristic diffusion length (particle size) in cm.
 
-    z : int, default=3
+    z : integer, default=3
         Geometric factor (1 for planar, 2 for cylinder and 3 for sphere).
 
-    Raises
-    ------
-    ValueError
-        When the dataset passed is a str but is not a valid geometry (planar,
-        cylindrical or spherical).
+    dcoeff_lle : integer, default=-15
+        The lower limit exponent of the diffusion coefficient line to generate
+        the grid.
+
+    dcoeff_ule : integer, default=-6
+        The upper limit exponent of the diffusion coefficient line to generate
+        the grid.
+
+    dcoeff_num : integer, default=100
+        Number of samples of diffusion coefficients to generate between the
+        lower and the upper limit exponent.
+
+    k0_lle : integer, default=-14
+        The lower limit exponent of the kinetic rate constant line to generate
+        the grid.
+
+    k0_ule : integer, default=-5
+        The upper limit exponent of the kinetic rate constant line to generate
+        the grid.
+
+    k0_num : integer
+        Number of samples of kinetic rate constants to generate between the
+        lower and the upper limit exponent.
 
     Notes
     -----
-    By default the grid search is performed on the values of
-    ``numpy.logspace(-15, -6, num=100)`` and
-    ``numpy.logspace(-14, -5, num=100)`` for :math:`D` and :math:`k^0`,
-    respectively. Their range and number of samples to be evaluated can be
-    modified through the properties ``dcoeffs`` and ``k0s``.
-
     You can also give your own dataset to another potential cut-off in the
     same format as the distributed ones and as ``pandas.DataFrame``, i.e. in
     the column of :math:`\ell` the different values have to be grouped in
@@ -101,7 +114,6 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
        Y. Ein-Eli, E. P. M. Leiva, 2023. Towards a fast-charging of LIBs
        electrode materials: a heuristic model based on galvanostatic
        simulations. _TODO_.
-
 
     Attributes
     ----------
@@ -121,48 +133,41 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         Mean squared error of the best fitted model.
     """
 
-    def __init__(self, dataset="spherical", d=1e-4, z=3):
+    def __init__(
+        self,
+        dataset="spherical",
+        d=1e-4,
+        z=3,
+        dcoeff_lle=-15,
+        dcoeff_ule=-6,
+        dcoeff_num=100,
+        k0_lle=-14,
+        k0_ule=-5,
+        k0_num=100,
+    ):
         self.dataset = dataset
         self.d = d
         self.z = z
+        self.dcoeff_lle = dcoeff_lle
+        self.dcoeff_ule = dcoeff_ule
+        self.dcoeff_num = dcoeff_num
+        self.k0_lle = k0_lle
+        self.k0_ule = k0_ule
+        self.k0_num = k0_num
 
-        self.dcoeff_, self.k0_, self.mse_ = None, None, None
-        self.dcoeff_err_, self.k0_err_ = None, None
-
-        self._dcoeffs = np.logspace(-15, -6, num=100)
-        self._k0s = np.logspace(-14, -5, num=100)
-
-        load_geometry = {
-            "planar": load_planar,
-            "cylindrical": load_cylindrical,
-            "spherical": load_spherical,
-        }
+    def _validate_geometry(self):
+        """Validate geometry (when dataset is a string)."""
         if isinstance(self.dataset, str):
+            load_geometry = {
+                "planar": load_planar,
+                "cylindrical": load_cylindrical,
+                "spherical": load_spherical,
+            }
+
             if self.dataset in load_geometry:
                 self.dataset = load_geometry[self.dataset]()
             else:
                 raise ValueError(f"{self.dataset} is not a valid geometry.")
-        self._map = MapSpline(self.dataset)
-
-    @property
-    def dcoeffs(self):
-        """Diffusion coefficients to evaluate in model training."""
-        return self._dcoeffs
-
-    @dcoeffs.setter
-    def dcoeffs(self, dcoeffs):
-        """Diffusion coefficients to evaluate in model training setter."""
-        self._dcoeffs = dcoeffs
-
-    @property
-    def k0s(self):
-        """Kinetic rate constants to evaluate in model training."""
-        return self._k0s
-
-    @k0s.setter
-    def k0s(self, k0s):
-        """Kinetic rate constants to evaluate in model training setter."""
-        self._k0s = k0s
 
     def _calculate_uncertainties(self, X, y, attrs, delta):
         """Uncertainties of `attrs` calculation.
@@ -213,21 +218,38 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         -------
         self : object
             Fitted model.
+
+        Raises
+        ------
+        ValueError
+            When the dataset instantiated is a str but is not a valid geometry
+            (planar, cylindrical or spherical).
         """
-        params = np.array(tuple(it.product(self._dcoeffs, self._k0s)))
+        X, y = _skl_validation.check_X_y(X, y)
+        self._validate_geometry()
+
+        self._map = MapSpline(self.dataset)
+
+        dcoeffs = np.logspace(
+            self.dcoeff_lle, self.dcoeff_ule, self.dcoeff_num
+        )
+        k0s = np.logspace(self.k0_lle, self.k0_ule, self.k0_num)
+
+        params = np.array(tuple(it.product(dcoeffs, k0s)))
 
         mse = np.full(params.shape[0], np.inf)
         for k, (self.dcoeff_, self.k0_) in enumerate(params):
             try:
-                mse[k] = sklearn.metrics.mean_squared_error(
+                mse[k] = _skl_mse(
                     y, self.predict(X), sample_weight=sample_weight
                 )
             except ValueError:
                 ...
 
         idx = np.argmin(mse)
-        self.dcoeff_, self.k0_ = params[idx]
         self.mse_ = mse[idx]
+
+        self.dcoeff_, self.k0_ = params[idx]
 
         self.dcoeff_err_, self.k0_err_ = self._calculate_uncertainties(
             X, y, ("dcoeff_", "k0_"), np.cbrt(np.finfo(float).eps)
@@ -248,6 +270,9 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         y : array-like of shape (n_measurements,)
             The predicted maximum SOC values for the C-rates inputs.
         """
+        _skl_validation.check_is_fitted(self)
+        X = _skl_validation.check_array(X)
+
         logells = logell(X.ravel(), self.d, self.z, self.dcoeff_)
         logxis = logxi(X.ravel(), self.dcoeff_, self.k0_)
 

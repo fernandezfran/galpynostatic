@@ -39,12 +39,9 @@ def test_optimal_particle_size(experiment, request, spherical):
     """Test the prediction of the optimal particle size."""
     experiment = request.getfixturevalue(experiment)
 
-    greg = galpynostatic.model.GalvanostaticRegressor(
-        spherical, experiment["d"], 3
-    )
-
-    # fit results
+    greg = galpynostatic.model.GalvanostaticRegressor(d=experiment["d"], z=3)
     greg.dcoeff_, greg.k0_ = experiment["dcoeff"], experiment["k0"]
+    greg._map = galpynostatic.datasets.map.MapSpline(spherical)
     greg.dcoeff_err_ = experiment["ref"]["dcoeff_err"]
 
     size, size_err = galpynostatic.make_prediction.optimal_particle_size(greg)
@@ -57,11 +54,11 @@ def test_optimal_particle_size(experiment, request, spherical):
     )
 
 
-def test_raise():
+def test_raise(spherical):
     """Test the raise of the ValueError."""
-    greg = galpynostatic.model.GalvanostaticRegressor("spherical", 0.0015, 3)
-
+    greg = galpynostatic.model.GalvanostaticRegressor(d=0.0015, z=3)
     greg.dcoeff_, greg.k0_ = 1.93e-10, 3.14e-7
+    greg._map = galpynostatic.datasets.map.MapSpline(spherical)
 
     with pytest.raises(ValueError):
         galpynostatic.make_prediction.optimal_particle_size(

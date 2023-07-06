@@ -11,6 +11,7 @@
 # IMPORTS
 # =============================================================================
 
+import galpynostatic.datasets.map
 import galpynostatic.model
 
 import numpy as np
@@ -44,11 +45,16 @@ class TestModel:
         experiment = request.getfixturevalue(experiment)
 
         greg = galpynostatic.model.GalvanostaticRegressor(
-            spherical, experiment["d"], 3
+            dataset=spherical,
+            d=experiment["d"],
+            z=3,
+            dcoeff_lle=-14,
+            dcoeff_ule=-7,
+            k0_lle=-13,
+            k0_ule=-6,
+            dcoeff_num=8,
+            k0_num=8,
         )
-
-        greg.dcoeffs = 10.0 ** np.arange(-14, -6, 1)
-        greg.k0s = 10.0 ** np.arange(-13, -5, 1)
 
         greg = greg.fit(experiment["C_rates"], experiment["soc"])
 
@@ -69,11 +75,16 @@ class TestModel:
         experiment = request.getfixturevalue(experiment)
 
         greg = galpynostatic.model.GalvanostaticRegressor(
-            "spherical", experiment["d"], 3
+            dataset="spherical",
+            d=experiment["d"],
+            z=3,
+            dcoeff_lle=-14,
+            dcoeff_ule=-7,
+            k0_lle=-13,
+            k0_ule=-6,
+            dcoeff_num=8,
+            k0_num=8,
         )
-
-        greg.dcoeffs = 10.0 ** np.arange(-14, -6, 1)
-        greg.k0s = 10.0 ** np.arange(-13, -5, 1)
 
         greg = greg.fit(experiment["C_rates"], experiment["soc"])
 
@@ -88,10 +99,10 @@ class TestModel:
         experiment = request.getfixturevalue(experiment)
 
         greg = galpynostatic.model.GalvanostaticRegressor(
-            spherical, experiment["d"], 3
+            d=experiment["d"], z=3
         )
-
         greg.dcoeff_, greg.k0_ = experiment["dcoeff"], experiment["k0"]
+        greg._map = galpynostatic.datasets.map.MapSpline(spherical)
 
         soc = greg.predict(experiment["C_rates"])
 
@@ -102,10 +113,10 @@ class TestModel:
         experiment = request.getfixturevalue(experiment)
 
         greg = galpynostatic.model.GalvanostaticRegressor(
-            spherical, experiment["d"], 3
+            d=experiment["d"], z=3
         )
-
         greg.dcoeff_, greg.k0_ = experiment["dcoeff"], experiment["k0"]
+        greg._map = galpynostatic.datasets.map.MapSpline(spherical)
 
         r2 = greg.score(experiment["C_rates"], experiment["soc"])
 
@@ -118,35 +129,18 @@ class TestModel:
         df_ref = pd.read_csv(data_path / experiment["dir_name"] / "df.csv")
 
         greg = galpynostatic.model.GalvanostaticRegressor(
-            spherical, experiment["d"], 3
+            d=experiment["d"], z=3
         )
-
         greg.dcoeff_, greg.k0_ = experiment["dcoeff"], experiment["k0"]
+        greg._map = galpynostatic.datasets.map.MapSpline(spherical)
 
         df = greg.to_dataframe(experiment["C_rates"], y=experiment["soc"])
 
         pd.testing.assert_frame_equal(df, df_ref)
 
 
-def test_dcoeffs(spherical):
-    """A property test."""
-    greg = galpynostatic.model.GalvanostaticRegressor(spherical, 1.0, 3)
-
-    np.testing.assert_array_almost_equal(
-        greg.dcoeffs, np.logspace(-15, -6, num=100)
-    )
-
-
-def test_k0s(spherical):
-    """A property test."""
-    greg = galpynostatic.model.GalvanostaticRegressor(spherical, 1.0, 3)
-
-    np.testing.assert_array_almost_equal(
-        greg.k0s, np.logspace(-14, -5, num=100)
-    )
-
-
 def test_raise():
     """Test the raise of the ValueError."""
+    greg = galpynostatic.model.GalvanostaticRegressor("spherica", 1.0, 3)
     with pytest.raises(ValueError):
-        galpynostatic.model.GalvanostaticRegressor("spherica", 1.0, 3)
+        greg.fit([[4.0]], [0.8])
