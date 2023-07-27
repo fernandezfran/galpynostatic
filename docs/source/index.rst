@@ -31,8 +31,8 @@ galpynostatic
    :target: https://github.com/fernandezfran/galpynostatic/blob/main/LICENSE
    :alt: mit license
 
-.. image:: https://img.shields.io/badge/doi-TODO-36abe8
-   :target: https://www.doi.org/
+.. image:: https://img.shields.io/badge/doi-10.1016/j.electacta.2023.142951-36abe8
+   :target: https://doi.org/10.1016/j.electacta.2023.142951
    :alt: doi
 
 

@@ -6,7 +6,7 @@
 [![pypi downloads](https://img.shields.io/pypi/dw/galpynostatic?label=PyPI%20Downloads)](https://pypistats.org/packages/galpynostatic)
 [![python version](https://img.shields.io/badge/python-3.8%2B-4584b6)](https://www.python.org/)
 [![mit license](https://img.shields.io/badge/License-MIT-ffde57)](https://github.com/fernandezfran/galpynostatic/blob/main/LICENSE)
-[![doi](https://img.shields.io/badge/doi-TODO-36abe8)](https://www.doi.org/)
+[![doi](https://img.shields.io/badge/doi-10.1016/j.electacta.2023.142951-36abe8)](https://doi.org/10.1016/j.electacta.2023.142951)
 
 **galpynostatic** is a Python package with a physics-based heuristic model to 
 predict the optimal electrode particle size for a fast-charging of lithium-ion
