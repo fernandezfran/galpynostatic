@@ -67,8 +67,8 @@ you could cite the following article:
 
    F. Fernandez, E. M. Gavilán-Arriazu, D. E. Barraco, A. Visintin, Y. Ein-Eli, 
    E. P. M. Leiva. "Towards a fast-charging of LIBs electrode materials: a 
-   heuristic model based on galvanostatic simulations" (2023). _Electrochimica
-   Acta_
+   heuristic model based on galvanostatic simulations" (2023). `Electrochimica 
+   Acta`.
 
 BibTeX entry:
 

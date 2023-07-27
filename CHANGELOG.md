@@ -1,6 +1,6 @@
 # Changelog of galpynostatic
 
-# v0.1.0 (2023-??-??)
+# v0.1.0 (2023-07-27)
 
 This is the first Python object-oriented version of galpynostatic.
 
