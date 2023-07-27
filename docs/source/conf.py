@@ -18,8 +18,8 @@ import galpynostatic
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = "galpynostatic"
-copyright = "2022, Francisco Fernandez"
+project = galpynostatic.NAME
+copyright = "2022-2023, Francisco Fernandez"
 author = "Francisco Fernandez"
 release = galpynostatic.VERSION
 
