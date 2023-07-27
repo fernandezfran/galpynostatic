@@ -5,3 +5,5 @@ nbsphinx
 
 ipykernel
 ipython>=8.8.0
+
+importlib_metadata
