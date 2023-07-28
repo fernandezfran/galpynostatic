@@ -37,7 +37,8 @@ python -m pip install -U galpynostatic
 
 To learn how to use galpynostatic you can start by following the 
 [tutorials](https://galpynostatic.readthedocs.io/en/latest/tutorials/index.html)
-and then read the [API](https://galpynostatic.readthedocs.io/en/latest/api.html).
+and then read the 
+[API](https://galpynostatic.readthedocs.io/en/latest/api/index.html).
 
 Also, you can read the Jupyter Notebook pipeline in the
 [paper folder](https://github.com/fernandezfran/galpynostatic/tree/main/paper) 
