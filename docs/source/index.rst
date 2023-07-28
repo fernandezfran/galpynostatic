@@ -11,6 +11,10 @@ galpynostatic
    :target: https://github.com/fernandezfran/galpynostatic/actions/workflows/CI.yml
    :alt: galpynostatic CI
 
+.. image:: https://coveralls.io/repos/github/fernandezfran/galpynostatic/badge.svg
+   :target: https://coveralls.io/github/fernandezfran/galpynostatic
+   :alt: coverage status
+
 .. image:: https://readthedocs.org/projects/galpynostatic/badge/?version=latest
    :target: https://galpynostatic.readthedocs.io/
    :alt: ReadTheDocs
@@ -18,10 +22,6 @@ galpynostatic
 .. image:: https://img.shields.io/pypi/v/galpynostatic
    :target: https://pypi.org/project/galpynostatic/
    :alt: PyPI Version
-
-.. image:: https://img.shields.io/pypi/dw/galpynostatic?label=PyPI%20Downloads
-   :target: https://pypistats.org/packages/galpynostatic
-   :alt: pypi downloads
 
 .. image:: https://img.shields.io/badge/python-3.8%2B-4584b6
    :target: https://www.python.org/
