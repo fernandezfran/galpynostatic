@@ -55,7 +55,7 @@ galpynostatic is under
 
 If you use galpynostatic in a scientific publication, we would appreciate it if 
 you could cite the following 
-[article](https://www.doi.org/10.1016/j.electacta.2023.142951)
+[article](https://authors.elsevier.com/c/1hVzk_JcNFx-6)
 
 > F. Fernandez, E. M. Gavilán-Arriazu, D. E. Barraco, A. Visintin, Y. Ein-Eli, 
 > E. P. M. Leiva. "Towards a fast-charging of LIBs electrode materials: a 
