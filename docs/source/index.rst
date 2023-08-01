@@ -11,10 +11,6 @@ galpynostatic
    :target: https://github.com/fernandezfran/galpynostatic/actions/workflows/CI.yml
    :alt: galpynostatic CI
 
-.. image:: https://coveralls.io/repos/github/fernandezfran/galpynostatic/badge.svg
-   :target: https://coveralls.io/github/fernandezfran/galpynostatic
-   :alt: coverage status
-
 .. image:: https://readthedocs.org/projects/galpynostatic/badge/?version=latest
    :target: https://galpynostatic.readthedocs.io/
    :alt: ReadTheDocs

@@ -1,7 +1,6 @@
 # galpynostatic
 
 [![galpynostatics CI](https://github.com/fernandezfran/galpynostatic/actions/workflows/CI.yml/badge.svg)](https://github.com/fernandezfran/galpynostatic/actions/workflows/CI.yml)
-[![coverage ctatus](https://coveralls.io/repos/github/fernandezfran/galpynostatic/badge.svg)](https://coveralls.io/github/fernandezfran/galpynostatic)
 [![documentation status](https://readthedocs.org/projects/galpynostatic/badge/?version=latest)](https://galpynostatic.readthedocs.io/en/latest/?badge=latest)
 [![pypi version](https://img.shields.io/pypi/v/galpynostatic)](https://pypi.org/project/galpynostatic/)
 [![python version](https://img.shields.io/badge/python-3.8%2B-4584b6)](https://www.python.org/)
