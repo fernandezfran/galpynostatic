@@ -32,7 +32,7 @@ galpynostatic
    :alt: mit license
 
 .. image:: https://img.shields.io/badge/doi-10.1016/j.electacta.2023.142951-36abe8
-   :target: https://doi.org/10.1016/j.electacta.2023.142951
+   :target: https://authors.elsevier.com/c/1hVzk_JcNFx-6
    :alt: doi
 
 
