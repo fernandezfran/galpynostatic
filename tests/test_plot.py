@@ -99,7 +99,7 @@ class TestPlots:
         greg.plot.in_render_map(experiment["C_rates"], ax=test_ax)
 
         # ref plot
-        fig_ref.axes[0].set_visible(False)
+        # fig_ref.axes[0].set_visible(False)
         ref_ax = fig_ref.subplots()
 
         # ref map
