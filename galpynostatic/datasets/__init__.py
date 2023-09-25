@@ -21,9 +21,10 @@ wide range of possible values of the experimental variables involved.
 
 References
 ----------
-.. [2] Gavilán-Arriazu, E.M., Barraco, D., Ein-Eli, Y. and Leiva, E.P.M., 2022.
-   Galvanostatic Fast Charging of Alkali‐Ion Battery Materials at the
-   Single‐Particle Level: A Map‐Driven Diagnosis. `ChemPhysChem`.
+.. [2] E. M. Gavilán-Arriazu, D. E. Barraco, D., Y. Ein-Eli and E. P. M. Leiva.
+   "Galvanostatic Fast Charging of Alkali‐Ion Battery Materials at the
+   Single‐Particle Level: A Map‐Driven Diagnosis.i" `ChemPhysChem` 24, no. 6
+   (2023): e202200665.
 """
 
 # ============================================================================

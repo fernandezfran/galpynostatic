@@ -1,5 +1,12 @@
 # Changelog of galpynostatic
 
+# v0.1.1 (2023-09-25)
+
+## Bug fixes
+
+- Fix citation link, BibTeX and doi.
+
+
 # v0.1.0 (2023-07-27)
 
 This is the first Python object-oriented version of galpynostatic.
