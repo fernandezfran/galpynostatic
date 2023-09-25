@@ -185,9 +185,6 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         inverse of the Hessian matrix, calculated as the product of the
         Jacobian matrix with its transpose.
         """
-        residuals = y - self.predict(X)
-        dfree = len(y) - len(attrs)
-
         jacobian = np.zeros((len(attrs), len(y)))
         for i, attr in enumerate(attrs):
             param = self.__dict__[attr]
@@ -201,12 +198,11 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
             jacobian[i] = (upper - lower) / (2 * delta * param)
 
         hessian = np.dot(jacobian, jacobian.T)
+        covariance = np.linalg.inv(hessian)
 
-        covariance = np.var(residuals) * np.linalg.inv(hessian)
+        stdsq = np.sum((y - self.predict(X)) ** 2) / (len(y) - len(attrs))
 
-        chisq = np.sum(residuals**2) / dfree
-
-        return np.sqrt(np.diag(chisq * covariance))
+        return stdsq * np.sqrt(np.diag(covariance))
 
     def fit(self, X, y, sample_weight=None):
         """Fit the heuristic galvanostatic regressor model.
