@@ -5,6 +5,7 @@
 ## Bug fixes
 
 - Fix citation link, BibTeX and doi.
+- py38 plot tests -> py39+
 
 
 # v0.1.0 (2023-07-27)

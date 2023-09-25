@@ -3,7 +3,7 @@
 [![galpynostatics CI](https://github.com/fernandezfran/galpynostatic/actions/workflows/CI.yml/badge.svg)](https://github.com/fernandezfran/galpynostatic/actions/workflows/CI.yml)
 [![documentation status](https://readthedocs.org/projects/galpynostatic/badge/?version=latest)](https://galpynostatic.readthedocs.io/en/latest/?badge=latest)
 [![pypi version](https://img.shields.io/pypi/v/galpynostatic)](https://pypi.org/project/galpynostatic/)
-[![python version](https://img.shields.io/badge/python-3.8%2B-4584b6)](https://www.python.org/)
+[![python version](https://img.shields.io/badge/python-3.9%2B-4584b6)](https://www.python.org/)
 [![mit license](https://img.shields.io/badge/License-MIT-ffde57)](https://github.com/fernandezfran/galpynostatic/blob/main/LICENSE)
 [![doi](https://img.shields.io/badge/doi-10.1016/j.electacta.2023.142951-36abe8)](https://doi.org/10.1016/j.electacta.2023.142951)
 
@@ -14,7 +14,7 @@ batteries.
 
 ## Requirements
 
-You need Python 3.8+ to run galpynostatic. All other dependencies, which are the 
+You need Python 3.9+ to run galpynostatic. All other dependencies, which are the 
 usual ones of the scientific computing stack
 ([matplotlib](https://matplotlib.org/), [NumPy](https://numpy.org/), 
 [pandas](https://pandas.pydata.org/), [scikit-learn](https://scikit-learn.org/) 
