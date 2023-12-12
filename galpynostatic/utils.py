@@ -49,7 +49,7 @@ def logell(c_rate, d, z, dcoeff):
 
     Returns
     -------
-    logell : float
+    logell : float or array-like
         The log 10 value of :math:`\ell` internal parameter.
     """
     return np.log10((c_rate * d**2) / (3600 * z * dcoeff))
@@ -74,7 +74,7 @@ def logxi(c_rate, dcoeff, k0):
 
     Returns
     -------
-    logxi : float
+    logxi : float or array-like
         The log 10 value of :math:`\Xi` internal parameter.
     """
     return np.log10(k0 * np.sqrt(3600 / (c_rate * dcoeff)))

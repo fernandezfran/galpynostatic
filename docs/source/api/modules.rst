@@ -12,6 +12,16 @@ galpynostatic modules
    :member-order: bysource
 
 
+``galpynostatic.metric`` module
+-------------------------------
+
+.. automodule:: galpynostatic.metric
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :member-order: bysource
+
+
 .. _galpynostatic.model:
 
 ``galpynostatic.model`` module
