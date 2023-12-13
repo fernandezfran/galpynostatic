@@ -19,6 +19,7 @@
 
 import numpy as np
 
+from .datasets.map import MapSpline
 from .model import GalvanostaticRegressor
 
 # ============================================================================
@@ -26,7 +27,7 @@ from .model import GalvanostaticRegressor
 # ============================================================================
 
 
-def bmx_fc(greg, minutes=15, loaded=0.8, full_output=False):
+def bmx_fc(greg, minutes=15, loaded=0.8, full_output=False, **kwargs):
     r"""Universal metric for benchmarking fast-charging electrode materials.
 
     This universal metric for Benchmarking electrode Materials for an eXtreme
@@ -59,6 +60,10 @@ def bmx_fc(greg, minutes=15, loaded=0.8, full_output=False):
         `galpynostatic.model.GalvanostaticRegregssor` to allow further
         predictions and plots.
 
+    **kwargs
+        Additional keyword arguments that are passed and are documented in
+        `galpynostatic.model.GalvanostaticRegressor`.
+
     Returns
     -------
     soc : float
@@ -68,36 +73,26 @@ def bmx_fc(greg, minutes=15, loaded=0.8, full_output=False):
         A dict present if `full_output=True` and described there.
     """
     if isinstance(greg, dict):
-        dcoeff_log10 = np.log10(greg.dcoeff_)
-        k0_log10 = np.log10(greg.k0_)
+        greg_ = GalvanostaticRegressor(d=greg["d"], **kwargs)
+        greg_._validate_geometry()
+        greg_._map = MapSpline(greg_.dataset)
+        greg_.dcoeff_, greg_.k0_ = greg["dcoeff_"], greg["k0_"]
+        greg_.dcoeff_err_ = None
+    else:
+        greg_ = greg
 
-        greg = GalvanostaticRegressor(
-            d=greg.d,
-            dcoeff_lle=dcoeff_log10,
-            dcoeff_ule=dcoeff_log10,
-            dcoeff_num=1,
-            k0_lle=k0_log10,
-            k0_ule=k0_log10,
-            k0_num=1,
-        )
-
-        X = np.logspace(-1, 0, 10).reshape(-1, 1)
-        y = 1 - 2 * np.arctan(np.logspace(-1, 1, 10)) / np.pi
-
-        greg.fit(X, y)
-
-    soc = greg.predict(np.array([[60.0 / minutes]]))[0]
+    soc = greg_.predict(np.array([[4.0]]))[0]
 
     criteria = soc >= loaded
 
     return (
         soc
         if not full_output
-        else {"soc": soc, "criteria": criteria, "greg": greg}
+        else {"soc": soc, "criteria": criteria, "greg": greg_}
     )
 
 
-def fom(dcoeff, d):
+def fom(d, dcoeff):
     r"""Figure-of-Merit (FOM) for fast-charging comparisons.
 
     This metric was proposed by Xia et al. [1]_ and combines the diffusion
@@ -106,11 +101,11 @@ def fom(dcoeff, d):
 
     Parameters
     ----------
-    dceoff : float
-        Diffusion coefficient in :math:`cm^2/s`.
-
     d : float
         Geometric size in :math:`cm`.
+
+    dceoff : float
+        Diffusion coefficient in :math:`cm^2/s`.
 
     Returns
     -------
