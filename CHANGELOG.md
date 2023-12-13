@@ -1,37 +1,37 @@
 # Changelog of galpynostatic
 
-# Unreleased
+## Unreleased
 
-## Bug fixed
+### Bug fixed
 
 - Allow the modification of C-rate with minutes parameter in `bmx_fc` of `metric` module.
 
 
-# v0.2.0 (2023-12-12)
+## v0.2.0 (2023-12-12)
 
-## Features
+### Features
 
 - An implementation of a new module with two metrics for benchmarking an extreme fast-charging of battery electrode materials.
 
-## Bug fixes
+### Bug fixes
 
 - Fixed test errors in make_prediction module due to uncertaintes calculations.
 
 
-# v0.1.1 (2023-09-25)
+## v0.1.1 (2023-09-25)
 
-## Bug fixes
+### Bug fixes
 
 - Fixed the citation link, the BibTeX file and the doi.
 - The test of the plots with Python3.9+ instead of Python3.8
 - Fixed the uncertainties calculations.
 
 
-# v0.1.0 (2023-07-27)
+## v0.1.0 (2023-07-27)
 
 This is the first Python object-oriented version of galpynostatic.
 
-## Features
+### Features
 
 - A galvanostatic regressor to fit maximum State-of-Charge (SOC) values versus C-rates experimental data with the physics-based heuristic model implemented here. 
 - Visualization in different formats through a plotter.
@@ -39,7 +39,7 @@ This is the first Python object-oriented version of galpynostatic.
 - A preprocessing tool to obtain discharge capacities from galvanostatic profiles, useful to define the maximum SOC values.
 - Surface datasets of the continuous computational physics previous model for different single-particle geometries. 
 
-## Software quality assurance
+### Software quality assurance
 
 - Runs on Ubuntu with Python 3.8+.
 - Documentation available in readthedocs with installation guide, tutorials and API reference.
