@@ -1,6 +1,6 @@
 # Changelog of galpynostatic
 
-# v0.2.0 (2023-12-??)
+# v0.2.0 (2023-12-12)
 
 ## Features
 
