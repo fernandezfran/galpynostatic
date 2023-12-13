@@ -1,12 +1,23 @@
 # Changelog of galpynostatic
 
+# v0.2.0 (2023-12-??)
+
+## Features
+
+- An implementation of a new module with two metrics for benchmarking an extreme fast-charging of battery electrode materials.
+
+## Bug fixes
+
+- Fixed test errors in make_prediction module due to uncertaintes calculations.
+
+
 # v0.1.1 (2023-09-25)
 
 ## Bug fixes
 
-- Citation link, BibTeX and doi.
-- py38 plot tests -> py39+
-- Uncertainties calculations.
+- Fixed the citation link, the BibTeX file and the doi.
+- The test of the plots with Python3.9+ instead of Python3.8
+- Fixed the uncertainties calculations.
 
 
 # v0.1.0 (2023-07-27)

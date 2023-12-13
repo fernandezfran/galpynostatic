@@ -13,4 +13,4 @@ exclude tox.ini
 
 recursive-exclude docs *
 recursive-exclude tests *
-recursive-exclude paper *
+recursive-exclude papers *

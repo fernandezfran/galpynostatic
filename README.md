@@ -39,9 +39,9 @@ To learn how to use galpynostatic you can start by following the
 and then read the 
 [API](https://galpynostatic.readthedocs.io/en/latest/api/index.html).
 
-Also, you can read the Jupyter Notebook pipeline in the
-[paper folder](https://github.com/fernandezfran/galpynostatic/tree/main/paper) 
-to reproduce the results of the published article.
+Also, you can read the Jupyter Notebook pipelines in the
+[papers folder](https://github.com/fernandezfran/galpynostatic/tree/main/papers) 
+to reproduce the results of the published articles.
 
 
 ## License
