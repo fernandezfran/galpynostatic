@@ -15,7 +15,7 @@
 
 ### Bug fixes
 
-- Fixed test errors in make_prediction module due to uncertaintes calculations.
+- Fixed test errors in `make_prediction` module due to uncertaintes calculations.
 
 
 ## v0.1.1 (2023-09-25)
