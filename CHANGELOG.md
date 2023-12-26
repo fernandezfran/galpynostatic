@@ -2,7 +2,7 @@
 
 ## v0.2.1 (2023-12-26)
 
-### Bug fixed
+### Bug fixes
 
 - Allow the modification of C-rate with minutes parameter in `bmx_fc` of `metric` module.
 - Citation of theoretical framework in `CITATION.bib` file.
