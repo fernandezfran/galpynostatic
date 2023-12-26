@@ -75,6 +75,10 @@ BibTeX entry:
 }
 ```
 
+Other related citations can be found in the 
+[CITATION.bib](https://github.com/fernandezfran/galpynostatic/blob/main/CITATION.bib)
+file.
+
 
 ## Contact
 

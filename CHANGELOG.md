@@ -1,10 +1,11 @@
 # Changelog of galpynostatic
 
-## Unreleased
+## v0.2.1 (2023-12-26)
 
 ### Bug fixed
 
 - Allow the modification of C-rate with minutes parameter in `bmx_fc` of `metric` module.
+- Citation of theoretical framework in `CITATION.bib` file.
 
 
 ## v0.2.0 (2023-12-12)
