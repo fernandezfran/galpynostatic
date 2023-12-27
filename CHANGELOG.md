@@ -1,5 +1,12 @@
 # Changelog of galpynostatic
 
+## v0.2.2 (2023-12-27)
+
+### Bug fixes
+
+- Change the name of the `bmx_fc` metric to `umbem`, which is the name of the metric in the cited PhD thesis.
+- Replace the `test_metric` to use `pytest.mark.parametrize` and have a test for each value insted of the dataframe all togheter.
+
 ## v0.2.1 (2023-12-26)
 
 ### Bug fixes
