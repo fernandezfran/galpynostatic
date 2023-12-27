@@ -1,0 +1,33 @@
+Material,particle_size_micro,dcoeff_cm2s
+Ternary,10,7.8e-11
+Ternary,8,1.7e-11 to 6.5e-9
+Ternary,2-5,1e-11 to 3e-11
+LCO,5-10,1e-11 to 1e-7
+LCO,,1e-10 to 1.5e-9
+LCO,0.5,1e-10 to 1e-8
+LCO,1-5,4e-11 to 1.7e-10
+LCO,0.1,1.34e-11
+LMO,0.2,9.04e-11
+LMO,,1.5e-12
+LMO,0.3,2.97e-12
+LMO,2-5,1.57e-7
+LMO,10,1e-9 to 1e-7
+LFP,0.1,1.07e-12
+LFP,0.2,1.3e-14 to 1.7e-14
+LFP,0.2-0.5,1.11e-12 to 6.86e-11
+LFP,0.2-0.4,7.86e-15 to 1.24e-14
+LFP,0.05-0.35,1.25e-14 to 1.06e-13
+LFP,0.1-0.5,1.13e-12 to 1.83e-11
+LFP,0.8,6.48e-17 to 1.29e-14
+LTO,0.45,1e-12 to 1.6e-11
+LTO,,2e-13 to 1.1e-12
+LTO,0.2,1.03e-13
+LTO,1-5,5.12e-14
+LTO,0.09,1.04e-13
+LTO,,1e-12 to 1e-10
+Graphite,,1.0e-11
+Graphite,15,1.06e-10 to 1.93e-10
+Graphite,10,1.1e-10 to 2.0e-9
+Graphite,,7.6e-11
+Graphite,,4.4e-6
+Graphite,1-100,1e-9 to 1e-5

@@ -10,3 +10,4 @@ package.
 
    heuristic_model.ipynb
    map-driven_analysis.ipynb
+   benchmarking_metrics.ipynb
