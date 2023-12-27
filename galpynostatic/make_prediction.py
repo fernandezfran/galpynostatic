@@ -37,7 +37,7 @@ def optimal_particle_size(
 ):
     r"""Predict the optimal electrode particle size to charge in certain time.
 
-    Once the physics-based heuristic model is fitted, the diffusion
+    Once the physics-based heuristic model [1]_ is fitted, the diffusion
     coefficient, :math:`D`, and the kinetic-rate constant, :math:`k^0`,
     parameters of the active material in the electrode remain fixed. The other
     two parameters of the model, the characteristic diffusion lenght,
@@ -83,6 +83,13 @@ def optimal_particle_size(
     ValueError
         When the material does not meet the defined criterion given the map
         constraints.
+
+    References
+    ----------
+    .. [1] F. Fernandez, E. M. Gavilán-Arriazu, D. E. Barraco, A. Visintin,
+       Y. Ein-Eli and E. P. M. Leiva. "Towards a fast-charging of LIBs
+       electrode materials: a heuristic model based on galvanostatic
+       simulations." `Electrochimica Acta 464` (2023): 142951.
     """
     c_rate = 60.0 / minutes
 

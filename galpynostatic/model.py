@@ -40,14 +40,14 @@ from .utils import logell, logxi
 class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
     r"""A heuristic regressor for SOC versus C-rates galvanostatic data.
 
-    This physics-based heuristic model [2]_ uses the maps in
+    This physics-based heuristic model [4]_ uses the maps in
     :ref:`galpynostatic.datasets` to perform a grid search by taking different
     combinations of the diffusion coefficient, :math:`D`, and the
     kinetic-rate constant, :math:`k^0`, to fit experimental data of the
     State-of-Charge (SOC) of the electrode material as a function of the
     C-rates. This is done considering invariant all the other experimental
     values involved in the parameters :math:`\Xi` and :math:`\ell` of the
-    maps of the continuous galvanostatic model [2]_, such as the
+    maps of the continuous galvanostatic model [4]_, such as the
     characteristic diffusion length, :math:`d`, and the geometrical factor,
     :math:`z` (see :ref:`galpynostatic.utils`).
 
@@ -110,7 +110,7 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
 
     References
     ----------
-    .. [2] F. Fernandez, E. M. Gavilán-Arriazu, D. E. Barraco, A. Visintin,
+    .. [4] F. Fernandez, E. M. Gavilán-Arriazu, D. E. Barraco, A. Visintin,
        Y. Ein-Eli and E. P. M. Leiva. "Towards a fast-charging of LIBs
        electrode materials: a heuristic model based on galvanostatic
        simulations." `Electrochimica Acta 464` (2023): 142951.

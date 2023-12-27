@@ -22,7 +22,7 @@ import importlib_metadata
 
 from . import datasets
 from .make_prediction import optimal_particle_size
-from .metric import bmx_fc, fom
+from .metric import fom, umbem
 from .model import GalvanostaticRegressor
 from .preprocessing import GetDischargeCapacities
 
@@ -32,12 +32,12 @@ from .preprocessing import GetDischargeCapacities
 # =============================================================================
 
 __all__ = [
-    "bmx_fc",
-    "fom",
     "datasets",
+    "fom",
     "GalvanostaticRegressor",
     "GetDischargeCapacities",
     "optimal_particle_size",
+    "umbem",
 ]
 
 

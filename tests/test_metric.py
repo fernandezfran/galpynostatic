@@ -26,8 +26,18 @@ import pytest
 # =============================================================================
 
 
+def test_fom(data_path):
+    """Test the Figure of Merit for fast-charging of Xia et al."""
+    df = pd.read_csv(data_path / "metric_dataset.csv")
+
+    for d, dcoeff, ref in zip(df["d"], df["dcoeff"], df["ref_tau"]):
+        value = galpynostatic.metric.fom(1e-4 * d, dcoeff)
+
+        np.testing.assert_almost_equal(value, ref, 6)
+
+
 @pytest.mark.parametrize(("fit"), [(True), (False)])
-def test_bmx_fc(fit, data_path):
+def test_umbem(fit, data_path):
     """Test the Benchmarking Materials for eXtreme fast-charging metric."""
     df = pd.read_csv(data_path / "metric_dataset.csv")
 
@@ -41,16 +51,6 @@ def test_bmx_fc(fit, data_path):
             greg.dcoeff_, greg.k0_ = dcoeff, 1e-7
             greg.dcoeff_err_ = None
 
-        value = galpynostatic.metric.bmx_fc(greg)
-
-        np.testing.assert_almost_equal(value, ref, 6)
-
-
-def test_fom(data_path):
-    """Test the Figure of Merit for fast-charging of Xia et al."""
-    df = pd.read_csv(data_path / "metric_dataset.csv")
-
-    for d, dcoeff, ref in zip(df["d"], df["dcoeff"], df["ref_tau"]):
-        value = galpynostatic.metric.fom(1e-4 * d, dcoeff)
+        value = galpynostatic.metric.umbem(greg)
 
         np.testing.assert_almost_equal(value, ref, 6)

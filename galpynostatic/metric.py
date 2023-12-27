@@ -27,14 +27,14 @@ from .model import GalvanostaticRegressor
 # ============================================================================
 
 
-def bmx_fc(greg, minutes=15, loaded=0.8, full_output=False, **kwargs):
+def umbem(greg, minutes=15, loaded=0.8, full_output=False, **kwargs):
     r"""Universal metric for benchmarking fast-charging electrode materials.
 
-    This universal metric for Benchmarking electrode Materials for an eXtreme
-    fast charging (BMX-FC) is defined as the maximum State-of-Charge retained
-    when a material is charged for 15 minutes under constant current
-    conditions. The evaluation of the BMX-FC is performed with a generic model
-    that considers finite diffusion, charge transfer, particle size and the
+    This Universal Metric for Benchmarking fast-charging Electrode Materials
+    is defined as the maximum State-of-Charge retained when a material is
+    charged for 15 minutes under constant current conditions [2]_. The
+    evaluation of the UMBEM is performed with a generic model that considers
+    finite diffusion, charge transfer, particle size and the
     overall charging rate.
 
     Parameters
@@ -67,10 +67,16 @@ def bmx_fc(greg, minutes=15, loaded=0.8, full_output=False, **kwargs):
     Returns
     -------
     soc : float
-        BMX-FC value.
+        UMBEM value.
 
     res : dict, optional
         A dict present if `full_output=True` and described there.
+
+    References
+    ----------
+    .. [2] Fernandez, Francisco. `Modelado computacional para el desarrollo de
+       electrodos de baterías de ion-litio de próxima generación`. PhD thesis,
+       Universidad Nacional de Córdoba, 2024.
     """
     if isinstance(greg, dict):
         greg_ = GalvanostaticRegressor(d=greg["d"], **kwargs)
@@ -95,7 +101,7 @@ def bmx_fc(greg, minutes=15, loaded=0.8, full_output=False, **kwargs):
 def fom(d, dcoeff):
     r"""Figure-of-Merit (FOM) for fast-charging comparisons.
 
-    This metric was proposed by Xia et al. [1]_ and combines the diffusion
+    This metric was proposed by Xia et al. [3]_ and combines the diffusion
     coefficient and the geometric size to define th characteristic time
     of diffusion.
 
@@ -114,7 +120,7 @@ def fom(d, dcoeff):
 
     References
     ----------
-    .. [1] H. Xia, W. Zhang, S. Cao and X. Chen. "A figure of merit for
+    .. [3] H. Xia, W. Zhang, S. Cao and X. Chen. "A figure of merit for
        fast-charging Li-ion battery materials." `ACS Nano, 16` (2022):
        8525-8530.
     """

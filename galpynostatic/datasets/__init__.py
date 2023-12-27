@@ -14,14 +14,14 @@
 r"""The ``galpynostatic.dataset`` module loads the data needed for the fits.
 
 These datasets were obtained using a continuous computational physics model for
-different geometries [3]_. They come from a cutoff to multiple galvanostatic
+different geometries [5]_. They come from a cutoff to multiple galvanostatic
 profiles at a given cell potential, with respect to equilibrium, with different
 combinations of the internal parameters :math:`\Xi` and :math:`\ell` covering a
 wide range of possible values of the experimental variables involved.
 
 References
 ----------
-.. [3] E. M. Gavilán-Arriazu, D. E. Barraco, D., Y. Ein-Eli and E. P. M. Leiva.
+.. [5] E. M. Gavilán-Arriazu, D. E. Barraco, D., Y. Ein-Eli and E. P. M. Leiva.
    "Galvanostatic Fast Charging of Alkali‐Ion Battery Materials at the
    Single‐Particle Level: A Map‐Driven Diagnosis.i" `ChemPhysChem` 24, no. 6
    (2023): e202200665.
