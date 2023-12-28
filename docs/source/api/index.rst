@@ -10,3 +10,4 @@ galpynostatic package
 
    modules
    submodules
+   dev_base_modules

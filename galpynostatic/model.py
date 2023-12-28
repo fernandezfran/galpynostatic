@@ -106,7 +106,7 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
     same values are simulated (this is a restriction to perform the
     ``scipy.interpolate.RectBivariateSpline``, since `x` and `y` have to be
     strictly in a special order, which is handled internally by the
-    :ref:`galpynostatic.map`).
+    :ref:`galpynostatic.base`).
 
     References
     ----------
