@@ -5,6 +5,7 @@
 ### Bug fixes
 
 - Create the `base` module with the `MapSpline` class.
+- Change the project description.
 
 
 ## v0.2.2 (2023-12-27)

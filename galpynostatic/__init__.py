@@ -11,8 +11,8 @@
 # DOCS
 # =============================================================================
 
-"""A physics-based heuristic model to predict the optimal electrode particle \
-size for a fast-charging of lithium-ion batteries."""
+"""A Python package with physics-based models to predict optimal conditions \
+for fast-charging lithium-ion batteries."""
 
 # =============================================================================
 # IMPORTS
