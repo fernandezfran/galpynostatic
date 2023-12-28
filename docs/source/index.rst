@@ -80,6 +80,10 @@ BibTeX entry:
      publisher={Elsevier}
    }
 
+Other related citations can be found in the 
+`CITATION.bib <https://github.com/fernandezfran/galpynostatic/blob/main/CITATION.bib>`__ 
+file.
+
 Contact
 -------
 
