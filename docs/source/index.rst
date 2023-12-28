@@ -103,7 +103,7 @@ Contents
    :maxdepth: 3
    :caption: API Reference
 
-   api/index
+   api/api
 
 
 Indices and tables
