@@ -27,8 +27,8 @@ from sklearn.base import BaseEstimator, RegressorMixin
 from sklearn.metrics import mean_squared_error as _skl_mse
 from sklearn.utils import validation as _skl_validation
 
+from .base import MapSpline
 from .datasets import load_cylindrical, load_planar, load_spherical
-from .datasets.map import MapSpline
 from .plot import GalvanostaticPlotter
 from .utils import logell, logxi
 

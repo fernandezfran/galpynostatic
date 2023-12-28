@@ -19,7 +19,7 @@
 
 import numpy as np
 
-from .datasets.map import MapSpline
+from .base import MapSpline
 from .model import GalvanostaticRegressor
 
 # ============================================================================

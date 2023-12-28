@@ -11,7 +11,7 @@
 # IMPORTS
 # =============================================================================
 
-import galpynostatic.datasets.map
+import galpynostatic.base
 import galpynostatic.model
 
 import numpy as np
@@ -102,7 +102,7 @@ class TestModel:
             d=experiment["d"], z=3
         )
         greg.dcoeff_, greg.k0_ = experiment["dcoeff"], experiment["k0"]
-        greg._map = galpynostatic.datasets.map.MapSpline(spherical)
+        greg._map = galpynostatic.base.MapSpline(spherical)
 
         soc = greg.predict(experiment["C_rates"])
 
@@ -116,7 +116,7 @@ class TestModel:
             d=experiment["d"], z=3
         )
         greg.dcoeff_, greg.k0_ = experiment["dcoeff"], experiment["k0"]
-        greg._map = galpynostatic.datasets.map.MapSpline(spherical)
+        greg._map = galpynostatic.base.MapSpline(spherical)
 
         r2 = greg.score(experiment["C_rates"], experiment["soc"])
 
@@ -132,7 +132,7 @@ class TestModel:
             d=experiment["d"], z=3
         )
         greg.dcoeff_, greg.k0_ = experiment["dcoeff"], experiment["k0"]
-        greg._map = galpynostatic.datasets.map.MapSpline(spherical)
+        greg._map = galpynostatic.base.MapSpline(spherical)
 
         df = greg.to_dataframe(experiment["C_rates"], y=experiment["soc"])
 

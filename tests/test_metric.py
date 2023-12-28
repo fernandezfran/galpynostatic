@@ -11,7 +11,7 @@
 # IMPORTS
 # =============================================================================
 
-import galpynostatic.datasets.map
+import galpynostatic.base
 import galpynostatic.metric
 import galpynostatic.model
 
@@ -71,7 +71,7 @@ class TestMetric:
         """Test the UMBEM metric without fitting the model."""
         greg = galpynostatic.model.GalvanostaticRegressor(d=1e-4 * d)
         greg._validate_geometry()
-        greg._map = galpynostatic.datasets.map.MapSpline(greg.dataset)
+        greg._map = galpynostatic.base.MapSpline(greg.dataset)
         greg.dcoeff_, greg.k0_ = dcoeff, 1e-7
         greg.dcoeff_err_ = None
 

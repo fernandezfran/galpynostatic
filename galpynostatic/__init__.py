@@ -21,6 +21,7 @@ size for a fast-charging of lithium-ion batteries."""
 import importlib_metadata
 
 from . import datasets
+from .base import MapSpline
 from .make_prediction import optimal_particle_size
 from .metric import fom, umbem
 from .model import GalvanostaticRegressor
@@ -36,6 +37,7 @@ __all__ = [
     "fom",
     "GalvanostaticRegressor",
     "GetDischargeCapacities",
+    "MapSpline",
     "optimal_particle_size",
     "umbem",
 ]

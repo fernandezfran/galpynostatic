@@ -11,7 +11,7 @@
 # DOCS
 # ============================================================================
 
-"""Module with the spline to the discrete map dataset."""
+"""Classes common to different modules."""
 
 # ============================================================================
 # IMPORTS
@@ -27,7 +27,7 @@ import scipy.interpolate
 
 
 class MapSpline:
-    r"""Spline of the discrete map dataset.
+    r"""Spline of a discrete map dataset.
 
     Parameters
     ----------

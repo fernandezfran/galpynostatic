@@ -54,7 +54,7 @@ class TestPlots:
             d=experiment["d"], z=3
         )
         greg.dcoeff_, greg.k0_ = experiment["dcoeff"], experiment["k0"]
-        greg._map = galpynostatic.datasets.map.MapSpline(spherical)
+        greg._map = galpynostatic.base.MapSpline(spherical)
 
         # g reg plot
         test_ax = fig_test.subplots()
@@ -91,7 +91,7 @@ class TestPlots:
             d=experiment["d"], z=3
         )
         greg.dcoeff_, greg.k0_ = experiment["dcoeff"], experiment["k0"]
-        greg._map = galpynostatic.datasets.map.MapSpline(spherical)
+        greg._map = galpynostatic.base.MapSpline(spherical)
 
         # g reg plot
         test_ax = fig_test.subplots()
