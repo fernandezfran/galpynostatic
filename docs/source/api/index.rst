@@ -8,6 +8,11 @@ galpynostatic package
    :maxdepth: 2
    :caption: Contents
 
-   modules
-   submodules
-   dev_base_modules
+   make_prediction
+   metric
+   model
+   plot
+   preprocessing
+   utils
+   datasets
+   base
