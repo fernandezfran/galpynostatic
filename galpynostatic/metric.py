@@ -122,4 +122,4 @@ def fom(d, dcoeff):
        fast-charging Li-ion battery materials." `ACS Nano, 16` (2022):
        8525-8530.
     """
-    return d ** 2 / dcoeff
+    return d**2 / dcoeff
