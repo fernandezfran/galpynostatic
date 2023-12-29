@@ -89,12 +89,10 @@ def umbem(greg, minutes=15, loaded=0.8, full_output=False, **kwargs):
 
     soc = greg_.predict(np.array([[60.0 / minutes]]))[0]
 
-    criteria = soc >= loaded
-
     return (
         soc
         if not full_output
-        else {"soc": soc, "criteria": criteria, "greg": greg_}
+        else {"soc": soc, "criteria": soc >= loaded, "greg": greg_}
     )
 
 
@@ -124,4 +122,4 @@ def fom(d, dcoeff):
        fast-charging Li-ion battery materials." `ACS Nano, 16` (2022):
        8525-8530.
     """
-    return d**2 / dcoeff
+    return d ** 2 / dcoeff
