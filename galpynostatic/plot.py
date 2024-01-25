@@ -35,7 +35,8 @@ class GalvanostaticPlotter:
 
     - 'render_map' : the map on which the data were fitted.
     - 'in_render_map' : :math:`\Xi` and :math:`\ell` data points in the map.
-    - 'versus_data' : predicted and actual maximum SOC values versus C-rate.
+    - 'versus_data' : predicted and actual maximum State-of-Charge (SOC) values
+      versus galvanostatic charging rate (C-rate).
 
     Parameters
     ----------
@@ -108,7 +109,7 @@ class GalvanostaticPlotter:
         Parameters
         ----------
         X : array-like of shape (n_measurements, 1)
-            C-rates used in experiments.
+            C-rates data of experiments.
 
         ax : matplotlib.axes.Axes, default=None
             The current matplotlib axes.
@@ -139,12 +140,12 @@ class GalvanostaticPlotter:
     def versus_data(
         self, X, y, X_eval=None, ax=None, data_kws=None, pred_kws=None
     ):
-        """Plot SOC predictions against actual data as a function of C-rates.
+        """Plot SOC predictions against target data as a function of C-rate.
 
         Parameters
         ----------
         X : array-like of shape (n_measurements, 1)
-            C-rates used in experiments.
+            C-rates data of experiments.
 
         y : array-like of shape (n_measurements,)
             Target maximum SOC values.

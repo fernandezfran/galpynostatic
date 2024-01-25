@@ -11,7 +11,7 @@
 # DOCS
 # ============================================================================
 
-"""Metrics to compare fast-charging battery electrode materials."""
+"""Metrics to benchmark fast-charging battery electrode materials."""
 
 # ============================================================================
 # IMPORTS
@@ -31,18 +31,19 @@ def umbem(greg, minutes=15, loaded=0.8, full_output=False, **kwargs):
     r"""Universal metric for benchmarking fast-charging electrode materials.
 
     This Universal Metric for Benchmarking fast-charging Electrode Materials
-    is defined as the maximum State-of-Charge retained when a material is
-    charged for 15 minutes under constant current conditions [2]_. The
-    evaluation of the UMBEM is performed with a generic model that considers
-    finite diffusion, charge transfer, particle size and the
-    overall charging rate.
+    is defined as the maximum State-of-Charge (SOC) retained when a material
+    is charged for 15 minutes under constant current conditions [2]_. The
+    evaluation of the UMBEM is performed with the model of this package that
+    considers finite diffusion, charge transfer, particle size and the overall
+    charging rate.
 
     Parameters
     ----------
     greg : galpynostatic.model.GalvanostaticRegressor or dict
         An already fitted GalvanostaticRegressor model or a dict containing
-        the following keys with float values definened: `d` in :math:`cm`,
-        `dcoeff_` in :math:`cm^2/s` and `k0_` in :math:`cm/s`.
+        the following keys with float values definened: `d` in :math:`cm`
+        (particle size), `dcoeff_` in :math:`cm^2/s` (diffusion coefficient)
+        and `k0_` in :math:`cm/s` (kinetic rate constant).
 
     minutes : int or float, default=15
         Minutes of charging.
@@ -52,10 +53,10 @@ def umbem(greg, minutes=15, loaded=0.8, full_output=False, **kwargs):
         capabilities.
 
     full_output : bool, default=False
-        If `full_output` is False (default), the SOC value is returned. If
-        True a dict is returned with the keys `soc`, `criteria` and `greg`,
-        where the first one correspond with the SOC value, the second is a
-        boolean with True if the electrode material is classified as a
+        If `full_output` is `False` (default case), the SOC value is returned.
+        If it is `True` a dict is returned with the keys `soc`, `criteria` and
+        `greg`, where the first one correspond with the SOC value, the second
+        is a boolean with True if the electrode material is classified as a
         fast-charging one and False if is not and `greg` with the
         `galpynostatic.model.GalvanostaticRegregssor` to allow further
         predictions and plots.
@@ -100,8 +101,8 @@ def fom(d, dcoeff):
     r"""Figure-of-Merit (FOM) for fast-charging comparisons.
 
     This metric was proposed by Xia et al. [3]_ and combines the diffusion
-    coefficient and the geometric size to define th characteristic time
-    of diffusion.
+    coefficient, :math:`D`, and the geometric size, :math:`d`, to define the
+    characteristic time of diffusion, :math:`\tau`.
 
     Parameters
     ----------
@@ -114,7 +115,7 @@ def fom(d, dcoeff):
     Returns
     -------
     float
-        The FOM characteristic time of diffusion value.
+        The FOM characteristic time of diffusion (:math:`\tau`) value.
 
     References
     ----------

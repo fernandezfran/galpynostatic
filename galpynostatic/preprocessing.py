@@ -42,12 +42,14 @@ class GetDischargeCapacities(TransformerMixin):
 
     vcut : float, default=0.15
         The cut-off potential in V, the default value corresponds to 150 mV,
-        which is the one defined by the data of the distributed maps.
+        which is the one defined by the data of the distributed maps in
+        :ref:`galpynostatic.datasets`.
 
     Notes
     -----
-    Discharge capacities are useful to define the maximum value of SOC for a
-    given C-rate, which is the appropiate way to have the data for the
+    Discharge capacities are useful to define the maximum value of the
+    State-of-Charge (SOC) for a given galvanostatic charging rate (C-rate),
+    which is the appropiate way to have the data for the
     :ref:`galpynostatic.model`. Our suggestion for determining the maximum
     value of SOC is to take the maximum value for the discharge capacities
     that corresponds with the value of the C-rate to which the curve already
@@ -89,9 +91,9 @@ class GetDischargeCapacities(TransformerMixin):
 
         Returns
         -------
-        X_new : array-like of shape (n_measurement,)
+        X_new : array-like of shape (n_measurements, 1)
             Discharge capacities in the same order as ``pandas.DataFrame`` in
-            the input list.
+            the input list but reshaped for fitting purpose.
         """
         X_new = np.zeros(len(X))
 
@@ -108,7 +110,7 @@ class GetDischargeCapacities(TransformerMixin):
             except IndexError:
                 ...
 
-        return X_new
+        return X_new.reshape(-1, 1)
 
     def fit_transform(self, X, y=None, **fit_params):
         """Transform the curves to discharge capacities with optional params.
@@ -128,9 +130,9 @@ class GetDischargeCapacities(TransformerMixin):
 
         Returns
         -------
-        X_new : array-like of shape (n_measurement,)
+        X_new : array-like of shape (n_measurements, 1)
             Discharge capacities in the same order as ``pandas.DataFrame`` in
-            the input list.
+            the input list but reshaped for fitting purpose.
         """
         return super(GetDischargeCapacities, self).fit_transform(
             X, y, **fit_params

@@ -13,11 +13,12 @@
 
 r"""The ``galpynostatic.dataset`` module loads the data needed for the fits.
 
-These datasets were obtained using a continuous computational physics model for
-different geometries [5]_. They come from a cutoff to multiple galvanostatic
+These datasets were obtained using a continuum computational physics model for
+different geometries [5]_. They come from a cutoff of multiple galvanostatic
 profiles at a given cell potential, with respect to equilibrium, with different
-combinations of the internal parameters :math:`\Xi` and :math:`\ell` covering a
-wide range of possible values of the experimental variables involved.
+combinations of the internal unitless parameters :math:`\Xi` and :math:`\ell`
+covering a wide range of possible values of the experimental descriptors
+involved.
 
 References
 ----------

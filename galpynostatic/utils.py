@@ -11,7 +11,7 @@
 # DOCS
 # ============================================================================
 
-"""Internal parameters functions."""
+"""Internal unitless parameters functions."""
 
 # ============================================================================
 # IMPORTS
@@ -27,8 +27,11 @@ import numpy as np
 def logell(c_rate, d, z, dcoeff):
     r"""Obtain log value in base 10 of :math:`\ell` internal parameter.
 
-    Where :math:`\ell = \frac{d^2 C_{rate}}{z t_h D}` with :math:`t_h` the
-    equivalent to one hour in suitable time units, here 3600 seconds.
+    :math:`\ell = \frac{d^2 C_{rate}}{z t_h D}` where :math:`d` is the
+    particle size, :math:`C_{rate}` is the galvanostatic charging rate,
+    :math:`z` is a geometrical factor, :math:`D` is the diffusion coefficient
+    and :math:`t_h` is the time equivalent to one hour in suitable time units,
+    here 3600 seconds.
 
     Parameters
     ----------
@@ -36,7 +39,7 @@ def logell(c_rate, d, z, dcoeff):
         C-rate values.
 
     d : float
-        Characteristic diffusion length (particle size) in cm.
+        Characteristic diffusion length (particle size) in :math:`cm`.
 
     z : int
         Geometric factor: 1 for planar, 2 for cylinder and 3 for sphere.
@@ -58,8 +61,10 @@ def logell(c_rate, d, z, dcoeff):
 def logxi(c_rate, dcoeff, k0):
     r"""Obtain log value in base 10 of :math:`\Xi` internal parameter.
 
-    Where :math:`\Xi = k^0 \sqrt{\frac{t_h}{C_{rate} D}}` with :math:`t_h` the
-    equivalent to one hour in suitable time units, here 3600 seconds.
+    :math:`\Xi = k^0 \sqrt{\frac{t_h}{C_{rate} D}}` where :math:`k^0` is the
+    kinetic rate constant, :math:`t_h` is the time equivalent to one hour in
+    suitable time units, here 3600 seconds, :math:`C_{rate}` is the
+    galvanostatic charging rate and :math:`D` is the diffusion coefficient.
 
     Parameters
     ----------

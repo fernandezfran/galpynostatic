@@ -32,11 +32,11 @@ class MapSpline:
     Parameters
     ----------
     dataset : pandas.DataFrame
-        Dataset with the discrete map data point of the maximum SOC values as
-        function of the internal parameters :math:`\log(\ell)` and
-        :math:`\log(\Xi)`, this can be loaded using the functions of the
+        Dataset with the discrete map data point of the maximum State-of-Charge
+        (SOC) values as function of the internal parameters :math:`\log(\ell)`
+        and :math:`\log(\Xi)`, this can be loaded using the functions of the
         :ref:`galpynostatic.datasets`. See the Notes in
-        :ref:`galpynostatic.model` to know the restrictions of this dataframe.
+        :ref:`galpynostatic.model` to know the restrictions of these dataframe.
 
     Attributes
     ----------
@@ -63,21 +63,21 @@ class MapSpline:
         )
 
     def _mask_logell(self, logell):
-        """Mask the value between the extrems of the interval."""
+        """Mask the values between the extrems of the interval."""
         return np.logical_and(
             np.greater_equal(logell, self.logells_.min()),
             np.less_equal(logell, self.logells_.max()),
         )
 
     def _mask_logxi(self, logxi):
-        """Mask the value between the extrems of the interval."""
+        """Mask the values between the extrems of the interval."""
         return np.logical_and(
             np.greater_equal(logxi, self.logxis_.min()),
             np.less_equal(logxi, self.logxis_.max()),
         )
 
     def soc(self, logell, logxi, grid=False):
-        r"""Predicts the maximum values of the SOC with the map spline.
+        r"""Predicts the maximum SOC values with the map spline.
 
         This is a linear function of the spline bounded in [0, 1], values
         exceeding this range are taken to the corresponding endpoint.

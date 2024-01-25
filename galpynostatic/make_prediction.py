@@ -17,9 +17,9 @@ Once the physics-based heuristic model [1]_ is fitted, the diffusion
 coefficient, :math:`D`, and the kinetic-rate constant, :math:`k^0`, parameters
 of the active material in the electrode remain fixed. The other two parameters
 of the model, the characteristic diffusion lenght, :math:`d`, (particle size)
-and the C-rate (charging rate) can vary. With this in mind, the model can be
-used to predict both optimal particle size, at a given C-rate, and optimal
-charging rate, fixing the particle size, to obtain a desired maximum
+and the galvanostatic charging rate (C-rate) can vary. With this in mind, the
+model can be used to predict both optimal particle size, at a given C-rate, and
+optimal charging rate, fixing the particle size, to obtain a desired maximum
 State-of-Charge (SOC) value.
 
 References
@@ -63,20 +63,21 @@ def optimal_charging_rate(
         Desired maximum SOC value, between 0 and 1.
 
     unit : str, default='C-rate'
-        The desired unit of the return value, it can be `C-rate` or `minutes`.
+        The desired unit of the return value, it can be `"C-rate"` or
+        `"minutes"`.
 
     dlogxi : float, default=0.01
         The delta for the logarithm value in base 10 of the :math:`\Xi`
-        evaluation between the minimum and the maximum in the map.
+        parameter evaluation between the minimum and the maximum in the map.
 
     dlogell : float, default=0.01
         The delta for the logarithm value in base 10 of the :math:`\ell`
-        evaluation between the minimum and the maximum in the map.
+        parameter evaluation between the minimum and the maximum in the map.
 
     Returns
     -------
     float
-        The optimal charging rate in C-rate or minutes units.
+        The optimal galvanostatic charging rate in C-rate or minutes units.
 
     Raises
     ------
@@ -144,7 +145,7 @@ def optimal_particle_size(
         A GalvanostaticRegressor already fitted.
 
     minutes : int or float, default=15
-        Desired minutes to reach the established load.
+        Desired minutes to reach the established SOC.
 
     loaded : float, default=0.8
         Desired maximum SOC value, between 0 and 1.
@@ -155,7 +156,7 @@ def optimal_particle_size(
 
     dlogell : float, default=0.01
         The delta for the logarithm value in base 10 of the :math:`\ell`
-        evaluation between the minimum and the maximum in the map.
+        parameter evaluation between the minimum and the maximum in the map.
 
     Returns
     -------

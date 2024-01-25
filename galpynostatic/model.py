@@ -38,39 +38,39 @@ from .utils import logell, logxi
 
 
 class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
-    r"""A heuristic regressor for SOC versus C-rates galvanostatic data.
+    r"""A heuristic regressor for State-of-Charge (SOC) versus C-rates data.
 
     This physics-based heuristic model [4]_ uses the maps in
     :ref:`galpynostatic.datasets` to perform a grid search by taking different
     combinations of the diffusion coefficient, :math:`D`, and the
     kinetic-rate constant, :math:`k^0`, to fit experimental data of the
     State-of-Charge (SOC) of the electrode material as a function of the
-    C-rates. This is done considering invariant all the other experimental
-    values involved in the parameters :math:`\Xi` and :math:`\ell` of the
-    maps of the continuous galvanostatic model [4]_, such as the
-    characteristic diffusion length, :math:`d`, and the geometrical factor,
-    :math:`z` (see :ref:`galpynostatic.utils`).
+    galvanostatic charging rate (C-rate). This is done considering invariant
+    all the other experimental descriptors involved in the parameters
+    :math:`\Xi` and :math:`\ell` of the maps of the continuum model [4]_, such
+    as the characteristic diffusion length, :math:`d`, and the geometrical
+    factor, :math:`z` (see :ref:`galpynostatic.utils`).
 
     Each time a set of parameters :math:`D` and :math:`k^0` is taken, the
     SOC values are predicted and the mean square error (MSE) is calculated.
     Then, the set of parameters that minimizes the MSE is obtained, thus
-    providing fundamental parameters of the system.
+    providing fundamental description of the system.
 
     Parameters
     ----------
     dataset : str or pandas.DataFrame, default="spherical"
-        A str indicating the particle geometry (planar, cylindrical or
-        spherical) to use the datasets distributed in this package which can
-        also be loaded using the functions of the
+        A str indicating the particle geometry (`"planar"`, `"cylindrical"` or
+        `"spherical"`) to use the datasets distributed in this package which
+        can also be loaded using the functions of the
         :ref:`galpynostatic.datasets` to give it as a ``pandas.DataFrame`` with
-        the map of the maximum SOC values as function of the internal
+        the mapping of maximum SOC values as function of the internal
         parameters :math:`\log(\ell)` and :math:`\log(\Xi)`.
 
     d : float, default=1e-4
         Characteristic diffusion length (particle size) in cm.
 
     z : integer, default=3
-        Geometric factor (1 for planar, 2 for cylinder and 3 for sphere).
+        Geometric factor (`1` for planar, `2` for cylinder and `3` for sphere).
 
     dcoeff_lle : integer, default=-15
         The lower limit exponent of the diffusion coefficient line to generate
@@ -110,10 +110,10 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
 
     References
     ----------
-    .. [4] F. Fernandez, E. M. Gavilán-Arriazu, D. E. Barraco, A. Visintin,
-       Y. Ein-Eli and E. P. M. Leiva. "Towards a fast-charging of LIBs
-       electrode materials: a heuristic model based on galvanostatic
-       simulations." `Electrochimica Acta 464` (2023): 142951.
+    .. [4] F. Fernandez, E. M. Gavilán-Arriazu, D. E. Barraco, A. Visintin, Y.
+       Ein-Eli and E. P. M. Leiva. "Towards a fast-charging of LIBs electrode
+       materials: a heuristic model based on galvanostatic simulations."
+       `Electrochimica Acta 464` (2023): 142951.
 
     Attributes
     ----------
@@ -172,9 +172,9 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
     def _grid_points(self):
         """Grid points (D, k0) to evaluate in the grid search."""
         dcoeffs = np.logspace(
-            self.dcoeff_lle, self.dcoeff_ule, self.dcoeff_num
+            self.dcoeff_lle, self.dcoeff_ule, num=self.dcoeff_num
         )
-        k0s = np.logspace(self.k0_lle, self.k0_ule, self.k0_num)
+        k0s = np.logspace(self.k0_lle, self.k0_ule, num=self.k0_num)
         return np.array(tuple(it.product(dcoeffs, k0s)))
 
     def _calculate_uncertainties(self, X, y, attrs, delta):
@@ -210,10 +210,10 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         Parameters
         ----------
         X : array-like of shape (n_measurements, 1)
-            C-rates used in experiments.
+            C-rates date of experiments.
 
         y : array-like of shape (n_measurements,)
-            Target maximum SOC values.
+            Target maximum SOC values, between 0 and 1.
 
         sample_weight : array-like of shape(n_measurments,), default=None
             Individual weights of each data point.
@@ -227,7 +227,7 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         ------
         ValueError
             When the dataset instantiated is a str but is not a valid geometry
-            (planar, cylindrical or spherical).
+            (`"planar"`, `"cylindrical"` or `"spherical"`).
         """
         X, y = _skl_validation.check_X_y(X, y)
         self._validate_geometry()
@@ -257,12 +257,12 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         return self
 
     def predict(self, X):
-        """Predict using the heuristic model within the range of the map.
+        """Predict using the heuristic model within the map constrains.
 
         Parameters
         ----------
         X : array-like of shape (n_measurements, 1)
-            C-rates used in experiments.
+            C-rates input points.
 
         Returns
         -------
@@ -296,7 +296,7 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         Parameters
         ----------
         X : array-like of shape (n_measurements, 1)
-            C-rates used in experiments.
+            C-rates data of experiments.
 
         y : array-like of shape (n_measurements,)
             Experimental maximum SOC values.
@@ -323,7 +323,7 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         Parameters
         ----------
         X : array-like of shape (n_measurements, 1)
-            C-rates.
+            C-rates points.
 
         y : array-like of shape (n_measurements,), default=None
             maximum SOC values.
