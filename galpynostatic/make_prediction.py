@@ -107,15 +107,14 @@ def optimal_charging_rate(
 
     try:
         optimal_h = scipy.optimize.newton(lambda h: spline(h), hypot / 2)
-
-        optimal_logell = logell_min + optimal_h * np.cos(angle)
-        optimal_logxi = logxi_max - optimal_h * np.sin(angle)
-
     except RuntimeError:
         raise ValueError(
             "This material does not reach the desired SOC for a C-rate that "
             "is between the map constaints."
         )
+
+    optimal_logell = logell_min + optimal_h * np.cos(angle)
+    optimal_logxi = logxi_max - optimal_h * np.sin(angle)
 
     c1 = (3600 * (greg.k0_) ** 2) / (greg.dcoeff_ * 10 ** (2 * optimal_logxi))
     c2 = (3600 * greg.dcoeff_ * greg.z * 10**optimal_logell) / (greg.d**2)
