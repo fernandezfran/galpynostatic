@@ -4,7 +4,7 @@
 
 ### Features
 
-- Add a new function in the `make_prediction` module to predict the optimal charging rate to reach a desired SOC.
+- Add a new function in the `make_prediction` module to predict the optimal C-rate to reach a desired SOC.
 
 ### Bug fixes
 

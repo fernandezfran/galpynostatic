@@ -105,17 +105,16 @@ def optimal_charging_rate(
 
     spline = scipy.interpolate.InterpolatedUnivariateSpline(h_range, socs)
 
-    optimal_h = scipy.optimize.newton(lambda h: spline(h), hypot / 2)
+    try:
+        optimal_h = scipy.optimize.newton(lambda h: spline(h), hypot / 2)
 
-    optimal_logell = logell_min + optimal_h * np.cos(angle)
-    optimal_logxi = logxi_max - optimal_h * np.sin(angle)
+        optimal_logell = logell_min + optimal_h * np.cos(angle)
+        optimal_logxi = logxi_max - optimal_h * np.sin(angle)
 
-    if (~greg._map._mask_logell(optimal_logell)) or (
-        ~greg._map._mask_logxi(optimal_logxi)
-    ):
+    except RuntimeError:
         raise ValueError(
-            "This material does not reach the desired SOC for a C-rate that is "
-            "between the map constaints."
+            "This material does not reach the desired SOC for a C-rate that "
+            "is between the map constaints."
         )
 
     c1 = (3600 * (greg.k0_) ** 2) / (greg.dcoeff_ * 10 ** (2 * optimal_logxi))
@@ -185,9 +184,13 @@ def optimal_particle_size(
 
     spline = scipy.interpolate.InterpolatedUnivariateSpline(logell_range, socs)
 
-    optimal_logell = scipy.optimize.newton(lambda l: spline(l), -0.5)
+    try:
+        optimal_logell = scipy.optimize.newton(lambda lr: spline(lr), -0.5)
 
-    if not greg._map._mask_logell(optimal_logell):
+        if not greg._map._mask_logell(optimal_logell):
+            raise RuntimeError
+
+    except RuntimeError:
         raise ValueError(
             "This material does not meet the defined criterion given the "
             "map constaints."
