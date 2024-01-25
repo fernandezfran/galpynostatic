@@ -11,7 +11,24 @@
 # DOCS
 # ============================================================================
 
-"""Make predictions using the physics-based heuristic model."""
+"""Make predictions using the physics-based heuristic model.
+
+Once the physics-based heuristic model [1]_ is fitted, the diffusion
+coefficient, :math:`D`, and the kinetic-rate constant, :math:`k^0`, parameters
+of the active material in the electrode remain fixed. The other two parameters
+of the model, the characteristic diffusion lenght, :math:`d`, (particle size)
+and the C-rate (charging rate) can vary. With this in mind, the model can be
+used to predict both optimal particle size, at a given C-rate, and optimal
+charging rate, fixing the particle size, to obtain a desired maximum
+State-of-Charge (SOC) value.
+
+References
+----------
+.. [1] F. Fernandez, E. M. Gavilán-Arriazu, D. E. Barraco, A. Visintin, Y.
+   Ein-Eli and E. P. M. Leiva. "Towards a fast-charging of LIBs electrode
+   materials: a heuristic model based on galvanostatic simulations."
+   `Electrochimica Acta 464` (2023): 142951.
+"""
 
 # ============================================================================
 # IMPORTS
@@ -20,12 +37,93 @@
 import numpy as np
 
 import scipy.interpolate
+import scipy.optimize
 
 from .utils import logxi
 
 # ============================================================================
 # FUNCTIONS
 # ============================================================================
+
+
+def optimal_charging_rate(
+    greg, loaded=0.8, unit="C-rate", dlogell=0.01, dlogxi=0.01
+):
+    r"""Predict the optimal C-rate to reach a desired SOC.
+
+    The default parameters of this function predicts the C-rate required to
+    reach the 80% of the electrode charge.
+
+    Parameters
+    ----------
+    greg : galpynostatic.model.GalvanostaticRegressor
+        A GalvanostaticRegressor already fitted.
+
+    loaded : float, default=0.8
+        Desired maximum SOC value, between 0 and 1.
+
+    unit : str, default='C-rate'
+        The desired unit of the return value, it can be `C-rate` or `minutes`.
+
+    dlogxi : float, default=0.01
+        The delta for the logarithm value in base 10 of the :math:`\Xi`
+        evaluation between the minimum and the maximum in the map.
+
+    dlogell : float, default=0.01
+        The delta for the logarithm value in base 10 of the :math:`\ell`
+        evaluation between the minimum and the maximum in the map.
+
+    Returns
+    -------
+    float
+        The optimal charging rate in C-rate or minutes units.
+
+    Raises
+    ------
+    ValueError
+        When the material does not meet the defined criterion given the map
+        constraints.
+    """
+    intercept = np.log10(
+        (greg.k0_ * greg.d) / (greg.dcoeff_ * np.sqrt(greg.z))
+    )
+
+    logell_min, logell_max = greg._map.logells_.min(), greg._map.logells_.max()
+    logell_range = np.arange(logell_min, logell_max, dlogell)
+
+    logxi_range = intercept - 0.5 * logell_range
+    logxi_min, logxi_max = logxi_range.min(), logxi_range.max()
+
+    socs = greg._map.soc(logell_range, logxi_range) - loaded
+
+    dell = logell_max - logell_min
+    dxi = logxi_max - logxi_min
+    angle = np.arctan(dxi / dell)
+    hypot = np.hypot(dell, dxi)
+
+    h_range = np.linspace(0, hypot, socs.size)
+
+    spline = scipy.interpolate.InterpolatedUnivariateSpline(h_range, socs)
+
+    optimal_h = scipy.optimize.newton(lambda h: spline(h), hypot / 2)
+
+    optimal_logell = logell_min + optimal_h * np.cos(angle)
+    optimal_logxi = logxi_max - optimal_h * np.sin(angle)
+
+    if (~greg._map._mask_logell(optimal_logell)) or (
+        ~greg._map._mask_logxi(optimal_logxi)
+    ):
+        raise ValueError(
+            "This material does not reach the desired SOC for a C-rate that is "
+            "between the map constaints."
+        )
+
+    c1 = (3600 * (greg.k0_) ** 2) / (greg.dcoeff_ * 10 ** (2 * optimal_logxi))
+    c2 = (3600 * greg.dcoeff_ * greg.z * 10**optimal_logell) / (greg.d**2)
+
+    c_rate = np.mean([c1, c2])
+
+    return c_rate if unit == "C-rate" else 60 / c_rate
 
 
 def optimal_particle_size(
@@ -36,14 +134,6 @@ def optimal_particle_size(
     dlogell=0.01,
 ):
     r"""Predict the optimal electrode particle size to charge in certain time.
-
-    Once the physics-based heuristic model [1]_ is fitted, the diffusion
-    coefficient, :math:`D`, and the kinetic-rate constant, :math:`k^0`,
-    parameters of the active material in the electrode remain fixed. The other
-    two parameters of the model, the characteristic diffusion lenght,
-    :math:`d`, (i.e. particle size) and the C-rate can vary. With this in mind,
-    the model can be used to predict the particle size at a given C-rate to
-    obtain a desired maximum State-of-Charge (SOC) value.
 
     The default parameters of this function define the criteria of reaching 80%
     of the electrode charge in 15 minutes, which translates into a maximum SOC
@@ -83,13 +173,6 @@ def optimal_particle_size(
     ValueError
         When the material does not meet the defined criterion given the map
         constraints.
-
-    References
-    ----------
-    .. [1] F. Fernandez, E. M. Gavilán-Arriazu, D. E. Barraco, A. Visintin,
-       Y. Ein-Eli and E. P. M. Leiva. "Towards a fast-charging of LIBs
-       electrode materials: a heuristic model based on galvanostatic
-       simulations." `Electrochimica Acta 464` (2023): 142951.
     """
     c_rate = 60.0 / minutes
 
@@ -101,9 +184,10 @@ def optimal_particle_size(
     socs = greg._map.soc(logell_range, logxi_value) - loaded
 
     spline = scipy.interpolate.InterpolatedUnivariateSpline(logell_range, socs)
-    try:
-        optimal_logell = spline.roots()[0]
-    except IndexError:
+
+    optimal_logell = scipy.optimize.newton(lambda l: spline(l), -0.5)
+
+    if not greg._map._mask_logell(optimal_logell):
         raise ValueError(
             "This material does not meet the defined criterion given the "
             "map constaints."

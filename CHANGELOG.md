@@ -1,5 +1,16 @@
 # Changelog of galpynostatic
 
+## v0.3.0 (2024-01-??)
+
+### Features
+
+- Add a new function in the `make_prediction` module to predict the optimal charging rate to reach a desired SOC.
+
+### Bug fixes
+
+- Explicitly use Newton optimization method in `make_prediction` module.
+
+
 ## v0.2.3 (2023-12-28)
 
 ### Bug fixes
