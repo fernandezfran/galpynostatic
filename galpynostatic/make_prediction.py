@@ -13,14 +13,14 @@
 
 """Make predictions using the physics-based heuristic model.
 
-Once the physics-based heuristic model [1]_ is fitted, the diffusion
-coefficient, :math:`D`, and the kinetic-rate constant, :math:`k^0`, parameters
+Once the physics-based heuristic model [1]_ has been fitted, the diffusion
+coefficient, :math:`D`, and the kinetic rate constant, :math:`k^0`, parameters
 of the active material in the electrode remain fixed. The other two parameters
-of the model, the characteristic diffusion lenght, :math:`d`, (particle size)
-and the galvanostatic charging rate (C-rate) can vary. With this in mind, the
-model can be used to predict both optimal particle size, at a given C-rate, and
-optimal charging rate, fixing the particle size, to obtain a desired maximum
-State-of-Charge (SOC) value.
+of the model, the characteristic diffusion length, :math:`d`, (particle size)
+and the galvanostatic charging rate (C-rate) can be varied. In this way, the
+model can be used to predict both the optimum particle size for a given C-rate
+and the optimum charging rate for a given particle size to achieve a desired
+maximum State-of-Charge (SOC).
 
 References
 ----------
@@ -51,13 +51,13 @@ def optimal_charging_rate(
 ):
     r"""Predict the optimal C-rate to reach a desired SOC.
 
-    The default parameters of this function predicts the C-rate required to
+    The default parameters of this function predict the C-rate required to
     reach the 80% of the electrode charge.
 
     Parameters
     ----------
     greg : galpynostatic.model.GalvanostaticRegressor
-        A GalvanostaticRegressor already fitted.
+        An already fitted GalvanostaticRegressor.
 
     loaded : float, default=0.8
         Desired maximum SOC value, between 0 and 1.
@@ -82,7 +82,7 @@ def optimal_charging_rate(
     Raises
     ------
     ValueError
-        When the material does not meet the defined criterion given the map
+        If the material does not meet the defined criterion given the map
         constraints.
     """
     intercept = np.log10(
@@ -135,8 +135,8 @@ def optimal_particle_size(
     r"""Predict the optimal electrode particle size to charge in certain time.
 
     The default parameters of this function define the criteria of reaching 80%
-    of the electrode charge in 15 minutes, which translates into a maximum SOC
-    value of 0.8 and a C-rate of 4C, which is the USABC (`United States
+    of the electrode charge in 15 minutes, which corresponds to a maximum SOC
+    of 0.8 and a C-rate of 4C, which is the USABC (`United States
     Advanced Battery Consortium`) standard for fast charging.
 
     Parameters
@@ -152,7 +152,7 @@ def optimal_particle_size(
 
     cm_to : float, default=10000
         A factor to convert from cm to another unit, in the default case to
-        micrometers.
+        microns.
 
     dlogell : float, default=0.01
         The delta for the logarithm value in base 10 of the :math:`\ell`
@@ -170,7 +170,7 @@ def optimal_particle_size(
     Raises
     ------
     ValueError
-        When the material does not meet the defined criterion given the map
+        If the material does not meet the defined criterion given the map
         constraints.
     """
     c_rate = 60.0 / minutes

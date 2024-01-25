@@ -32,10 +32,10 @@ class MapSpline:
     Parameters
     ----------
     dataset : pandas.DataFrame
-        Dataset with the discrete map data point of the maximum State-of-Charge
-        (SOC) values as function of the internal parameters :math:`\log(\ell)`
-        and :math:`\log(\Xi)`, this can be loaded using the functions of the
-        :ref:`galpynostatic.datasets`. See the Notes in
+        Dataset with the discrete map data points of the maximum
+        State-of-Charge (SOC) values as a function of the internal parameters
+        :math:`\log(\ell)` and :math:`\log(\Xi)`, this can be loaded using the
+        functions of the :ref:`galpynostatic.datasets`. See the Notes in the
         :ref:`galpynostatic.model` to know the restrictions of these dataframe.
 
     Attributes
@@ -77,10 +77,10 @@ class MapSpline:
         )
 
     def soc(self, logell, logxi, grid=False):
-        r"""Predicts the maximum SOC values with the map spline.
+        r"""Predicts the maximum SOC values using the map spline.
 
         This is a linear function of the spline bounded in [0, 1], values
-        exceeding this range are taken to the corresponding endpoint.
+        outside this range are taken to the corresponding endpoint.
 
         Parameters
         ----------

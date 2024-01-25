@@ -22,7 +22,7 @@ and [SciPy](https://scipy.org/)), are installed automatically.
 
 ## Installation
 
-You can install the most recent stable release of galpynostatic with 
+You can install the latest stable release of galpynostatic with 
 [pip](https://pip.pypa.io/en/latest/)
 
 ```
@@ -38,14 +38,14 @@ To learn how to use galpynostatic you can start by following the
 and then read the 
 [API](https://galpynostatic.readthedocs.io/en/latest/api/index.html).
 
-Also, you can read the Jupyter Notebook pipelines in the
+You can also read the Jupyter Notebook pipelines in the
 [papers folder](https://github.com/fernandezfran/galpynostatic/tree/main/papers) 
 to reproduce the results of the published articles.
 
 
 ## License
 
-galpynostatic is under 
+galpynostatic is licensed under the 
 [MIT License](https://github.com/fernandezfran/galpynostatic/blob/main/LICENSE).
 
 
@@ -81,4 +81,4 @@ file.
 
 ## Contact
 
-You can contact me if you have any questions at <ffernandev@gmail.com>
+If you have any questions, you can contact me at <ffernandev@gmail.com>

@@ -86,7 +86,7 @@ file.
 Contact
 -------
 
-You can contact me if you have any questions at ffernandev@gmail.com
+If you have any questions, you can contact me at ffernandev@gmail.com
 
 
 Contents

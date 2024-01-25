@@ -1,6 +1,6 @@
 # Changelog of galpynostatic
 
-## v0.3.0 (2024-01-??)
+## v0.3.0 (2024-01-25)
 
 ### Features
 
@@ -9,6 +9,8 @@
 ### Bug fixes
 
 - Explicitly use Newton optimization method in `make_prediction` module.
+- Change the return of the transform `GetDischargeCapacities` in `preprocessing` module to the shape required for the model fitting.
+- Improved self-consistency and grammar of documentation.
 
 
 ## v0.2.3 (2023-12-28)

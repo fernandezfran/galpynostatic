@@ -40,30 +40,30 @@ from .utils import logell, logxi
 class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
     r"""A heuristic regressor for State-of-Charge (SOC) versus C-rates data.
 
-    This physics-based heuristic model [4]_ uses the maps in
-    :ref:`galpynostatic.datasets` to perform a grid search by taking different
+    This physics-based heuristic model [4]_ uses the maps in the
+    :ref:`galpynostatic.datasets` to perform a grid search, using different
     combinations of the diffusion coefficient, :math:`D`, and the
-    kinetic-rate constant, :math:`k^0`, to fit experimental data of the
+    kinetic rate constant, :math:`k^0`, to fit experimental data of the
     State-of-Charge (SOC) of the electrode material as a function of the
-    galvanostatic charging rate (C-rate). This is done considering invariant
+    galvanostatic charging rate (C-rate). This is done while keeping invariant
     all the other experimental descriptors involved in the parameters
-    :math:`\Xi` and :math:`\ell` of the maps of the continuum model [4]_, such
-    as the characteristic diffusion length, :math:`d`, and the geometrical
+    :math:`\Xi` and :math:`\ell` of the continuum model [4]_, such
+    as the characteristic diffusion length, :math:`d`, and the geometric
     factor, :math:`z` (see :ref:`galpynostatic.utils`).
 
-    Each time a set of parameters :math:`D` and :math:`k^0` is taken, the
+    Each time a set of parameters :math:`D` and :math:`k^0` are taken, the
     SOC values are predicted and the mean square error (MSE) is calculated.
-    Then, the set of parameters that minimizes the MSE is obtained, thus
-    providing fundamental description of the system.
+    The set of parameters that minimises the MSE is then obtained, providing
+    a fundamental description of the system.
 
     Parameters
     ----------
     dataset : str or pandas.DataFrame, default="spherical"
-        A str indicating the particle geometry (`"planar"`, `"cylindrical"` or
-        `"spherical"`) to use the datasets distributed in this package which
+        A str specifying the particle geometry (`"planar"`, `"cylindrical"` or
+        `"spherical"`) to use the datasets distributed in this package, which
         can also be loaded using the functions of the
-        :ref:`galpynostatic.datasets` to give it as a ``pandas.DataFrame`` with
-        the mapping of maximum SOC values as function of the internal
+        :ref:`galpynostatic.datasets` to get it as a ``pandas.DataFrame`` with
+        the mapping of maximum SOC values as a function of the internal
         parameters :math:`\log(\ell)` and :math:`\log(\Xi)`.
 
     d : float, default=1e-4
@@ -73,28 +73,28 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         Geometric factor (`1` for planar, `2` for cylinder and `3` for sphere).
 
     dcoeff_lle : integer, default=-15
-        The lower limit exponent of the diffusion coefficient line to generate
-        the grid.
+        The lower limit exponent of the diffusion coefficient line used to
+        generate the grid.
 
     dcoeff_ule : integer, default=-6
-        The upper limit exponent of the diffusion coefficient line to generate
-        the grid.
+        The upper limit exponent of the diffusion coefficient line used to
+        generate the grid.
 
     dcoeff_num : integer, default=100
         Number of samples of diffusion coefficients to generate between the
-        lower and the upper limit exponent.
+        lower and the upper limit exponents.
 
     k0_lle : integer, default=-14
-        The lower limit exponent of the kinetic rate constant line to generate
-        the grid.
+        The lower limit exponent of the kinetic rate constant line used to
+        generate the grid.
 
     k0_ule : integer, default=-5
-        The upper limit exponent of the kinetic rate constant line to generate
-        the grid.
+        The upper limit exponent of the kinetic rate constant line used to
+        generate the grid.
 
     k0_num : integer
         Number of samples of kinetic rate constants to generate between the
-        lower and the upper limit exponent.
+        lower and the upper limit exponents.
 
     Notes
     -----
@@ -102,9 +102,9 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
     same format as the distributed ones and as ``pandas.DataFrame``, i.e. in
     the column of :math:`\ell` the different values have to be grouped in
     ascending order and for each of these groups the :math:`\Xi` have to be in
-    decreasing order and respecting that for each group of :math:`\ell` the
+    descending order and respecting that for each group of :math:`\ell` the
     same values are simulated (this is a restriction to perform the
-    ``scipy.interpolate.RectBivariateSpline``, since `x` and `y` have to be
+    ``scipy.interpolate.RectBivariateSpline``, since `x` and `y` must be
     strictly in a special order, which is handled internally by the
     :ref:`galpynostatic.base`).
 
@@ -121,13 +121,13 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         Predicted diffusion coefficient in :math:`cm^2/s`.
 
     dcoeff_err_ : float
-        Uncertainty in the predicted diffusion coefficient.
+        Uncertainty of the predicted diffusion coefficient.
 
     k0_ : float
         Predicted kinetic rate constant in :math:`cm/s`.
 
     k0_err_ : float
-        Uncertainty in the predicted kinetic rate constant.
+        Uncertainty of the predicted kinetic rate constant.
 
     mse_ : float
         Mean squared error of the best fitted model.
@@ -210,12 +210,12 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         Parameters
         ----------
         X : array-like of shape (n_measurements, 1)
-            C-rates date of experiments.
+            C-rates data of the experiments.
 
         y : array-like of shape (n_measurements,)
             Target maximum SOC values, between 0 and 1.
 
-        sample_weight : array-like of shape(n_measurments,), default=None
+        sample_weight : array-like of shape(n_measurements,), default=None
             Individual weights of each data point.
 
         Returns
@@ -226,7 +226,7 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         Raises
         ------
         ValueError
-            When the dataset instantiated is a str but is not a valid geometry
+            If the instantiated dataset is an str but is not a valid geometry
             (`"planar"`, `"cylindrical"` or `"spherical"`).
         """
         X, y = _skl_validation.check_X_y(X, y)
@@ -257,7 +257,7 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         return self
 
     def predict(self, X):
-        """Predict using the heuristic model within the map constrains.
+        """Predict using the heuristic model within the map constraints.
 
         Parameters
         ----------
@@ -267,7 +267,7 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         Returns
         -------
         y : array-like of shape (n_measurements,)
-            The predicted maximum SOC values for the C-rates inputs.
+            The predicted maximum SOC values for the C-rate inputs.
         """
         _skl_validation.check_is_fitted(self)
         X = _skl_validation.check_array(X)
@@ -296,12 +296,12 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         Parameters
         ----------
         X : array-like of shape (n_measurements, 1)
-            C-rates data of experiments.
+            C-rates data of the experiments.
 
         y : array-like of shape (n_measurements,)
-            Experimental maximum SOC values.
+            Maximum SOC values of the experiments.
 
-        sample_weight : array-like of shape(n_measurments,), default=None
+        sample_weight : array-like of shape(n_measurements,), default=None
             Individual weights of each data point.
 
         Returns
@@ -317,21 +317,22 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         """Convert the train, the evaluation or both sets into a dataframe.
 
         Get a dataframe with two or three columns (`C_rates`, `SOC_exp` and
-        `SOC_pred`), depending on whether you have passed the `y` values or
+        `SOC_pred`), depending on whether you have passed the `y`-values or
         not.
 
         Parameters
         ----------
         X : array-like of shape (n_measurements, 1)
-            C-rates points.
+            C-rate points.
 
         y : array-like of shape (n_measurements,), default=None
-            maximum SOC values.
+            Maximum SOC values.
 
         Returns
         -------
         df : pandas.DataFrame
-            A ``pandas.DataFrame`` with the train, the evaluation or both sets.
+            A ``pandas.DataFrame`` containing the train, the evaluation or both
+            sets.
         """
         df = pd.DataFrame({"C_rates": X.ravel()})
 
@@ -344,5 +345,5 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
 
     @property
     def plot(self):
-        """Plot accessor to :ref:`galpynostatic.plot`."""
+        """Plot accessor for the :ref:`galpynostatic.plot`."""
         return GalvanostaticPlotter(self)

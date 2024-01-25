@@ -31,31 +31,31 @@ from sklearn.base import TransformerMixin
 class GetDischargeCapacities(TransformerMixin):
     """Obtain the discharge capacities at a given cut-off potential.
 
-    This Transformer will subtract from all galvanostatic profiles the
-    equilibrium potential, `eq_pot`, to find the discharge capacity for each
-    curve where the potential is cut off by `vcut`.
+    This Transformer subtracts the equilibrium potential, `eq_pot`,
+    from all galvanostatic profiles the to find the discharge capacity for
+    each curve where the potential is cut off by `vcut`.
 
     Parameters
     ----------
     eq_pot : float, default=0.0
-        The equilibrium potential in Volts (V).
+        The equilibrium potential in volts (V).
 
     vcut : float, default=0.15
-        The cut-off potential in V, the default value corresponds to 150 mV,
-        which is the one defined by the data of the distributed maps in
+        The cut-off potential in V. The default value is 150 mV, which is the
+        value defined by the distributed map data in the
         :ref:`galpynostatic.datasets`.
 
     Notes
     -----
     Discharge capacities are useful to define the maximum value of the
     State-of-Charge (SOC) for a given galvanostatic charging rate (C-rate),
-    which is the appropiate way to have the data for the
+    which is the appropriate way to have the data for the
     :ref:`galpynostatic.model`. Our suggestion for determining the maximum
-    value of SOC is to take the maximum value for the discharge capacities
-    that corresponds with the value of the C-rate to which the curve already
-    converges with respect to the previous one. In this case, all the values
-    obtained for the discharge capacities are divided by this one and the
-    maximum SOC values are obtained.
+    value of the SOC is to take the maximum value of the discharging
+    capacities corresponding to the value of the C-rate to which the curve
+    already converges with respect to the previous one. In this case, all the
+    values obtained for the discharge capacities are divided by this value and
+    the maximum SOC values are obtained.
     """
 
     def __init__(self, eq_pot=0.0, vcut=0.15):
@@ -71,7 +71,7 @@ class GetDischargeCapacities(TransformerMixin):
             Not used, presented for API consistency.
 
         y : Ignored
-            Not used, presented for sklearn API consistency by convention.
+            Not used, presented by convention for sklearn API consistency.
 
         **fit_params
             Additional keyword arguments that are passed and are documented in
@@ -86,14 +86,14 @@ class GetDischargeCapacities(TransformerMixin):
         Parameters
         ----------
         X : list of pandas.DataFrame
-            Dataframes that have only two columns, where the first is the
-            capacity and the second is the voltage.
+            DataFrames having only two columns, the first being the capacity
+            and the second being the voltage.
 
         Returns
         -------
         X_new : array-like of shape (n_measurements, 1)
-            Discharge capacities in the same order as ``pandas.DataFrame`` in
-            the input list but reshaped for fitting purpose.
+            Discharge capacities in the same order as the ``pandas.DataFrame``
+            in the input list, but reshaped to fit.
         """
         X_new = np.zeros(len(X))
 
@@ -118,8 +118,8 @@ class GetDischargeCapacities(TransformerMixin):
         Parameters
         ----------
         X : list of pandas.DataFrame
-            Dataframes that have only two columns, where the first is the
-            capacity and the second is the voltage.
+            DataFrames having only two columns, the first being the capacity
+            and the second being the voltage.
 
         y : Ignored
             Not used, presented for sklearn API consistency by convention.
@@ -131,8 +131,8 @@ class GetDischargeCapacities(TransformerMixin):
         Returns
         -------
         X_new : array-like of shape (n_measurements, 1)
-            Discharge capacities in the same order as ``pandas.DataFrame`` in
-            the input list but reshaped for fitting purpose.
+            Discharge capacities in the same order as the ``pandas.DataFrame``
+            in the input list, but reshaped to fit.
         """
         return super(GetDischargeCapacities, self).fit_transform(
             X, y, **fit_params

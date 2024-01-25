@@ -31,9 +31,9 @@ from .utils import logell, logxi
 class GalvanostaticPlotter:
     r"""GalvanostaticRegressor plot utilities.
 
-    Kind of plots to produce:
+    Type of plots to produce:
 
-    - 'render_map' : the map on which the data were fitted.
+    - 'render_map' : the map on which the data have been fitted.
     - 'in_render_map' : :math:`\Xi` and :math:`\ell` data points in the map.
     - 'versus_data' : predicted and actual maximum State-of-Charge (SOC) values
       versus galvanostatic charging rate (C-rate).
@@ -45,16 +45,16 @@ class GalvanostaticPlotter:
 
     Notes
     -----
-    The map will only be plotted in ``self.in_render_map(X)`` if ax is None,
-    otherwise assumes it is already plotted and you just want to add
-    the points on it, e.g. to compare different systems.
+    The map is only plotted in ``self.in_render_map(X)`` if ax is None,
+    otherwise it is assumed to be already plotted and you just want to add
+    the points to it, e.g. to compare different systems.
     """
 
     def __init__(self, greg):
         self.greg = greg
 
     def render_map(self, ax=None, clb=True, clb_label="maximum SOC"):
-        """Plot the map on which data was fitted.
+        """Plot the map to which the data has been fitted.
 
         Parameters
         ----------
@@ -62,10 +62,10 @@ class GalvanostaticPlotter:
             The current axes.
 
         clb: bool, default=True
-            Add the colorbar to the figure.
+            Add the colorbar to the plot.
 
         clb_label : str, default="maximum SOC"
-            The label for the color bar.
+            The label for the colorbar.
         """
         ax = plt.gca() if ax is None else ax
 
@@ -109,7 +109,7 @@ class GalvanostaticPlotter:
         Parameters
         ----------
         X : array-like of shape (n_measurements, 1)
-            C-rates data of experiments.
+            C-rate data from the experiments.
 
         ax : matplotlib.axes.Axes, default=None
             The current matplotlib axes.
@@ -140,19 +140,19 @@ class GalvanostaticPlotter:
     def versus_data(
         self, X, y, X_eval=None, ax=None, data_kws=None, pred_kws=None
     ):
-        """Plot SOC predictions against target data as a function of C-rate.
+        """Plot SOC predictions versus target data as a function of the C-rate.
 
         Parameters
         ----------
         X : array-like of shape (n_measurements, 1)
-            C-rates data of experiments.
+            C-rates data of the experiments.
 
         y : array-like of shape (n_measurements,)
             Target maximum SOC values.
 
         X_eval : array-like of shape (n_measurements, 1), default=None.
-            C-rates values to evalute the model and compare it with the data.
-            When set to `None`, it evaluates 250 points between the maximum
+            C-rates values to evaluate the model and compare it with the data.
+            If set to `None`, it will evaluate 250 points between the maximum
             and minimum of X.
 
         ax : matplotlib.axes.Axes, default=None
@@ -164,7 +164,7 @@ class GalvanostaticPlotter:
 
         pred_kws : dict, default=None
             Additional keyword arguments that are passed and are documented in
-            ``matplotlib.axes.Axes.plot`` for the predictions values.
+            ``matplotlib.axes.Axes.plot`` for the prediction values.
 
         Returns
         -------
