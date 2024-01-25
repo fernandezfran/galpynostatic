@@ -64,4 +64,4 @@ def test_get_discharge_capacities_internal_raise():
     gdc = galpynostatic.preprocessing.GetDischargeCapacities(1.0)
     dc = gdc.fit_transform(dfs)
 
-    np.testing.assert_array_almost_equal(dc, np.zeros(1))
+    np.testing.assert_array_almost_equal(dc, [[0]])
