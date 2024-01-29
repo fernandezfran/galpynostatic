@@ -69,30 +69,30 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
     d : float, default=1e-4
         Characteristic diffusion length (particle size) in cm.
 
-    z : integer, default=3
+    z : int, default=3
         Geometric factor (`1` for planar, `2` for cylinder and `3` for sphere).
 
-    dcoeff_lle : integer, default=-15
+    dcoeff_lle : int, default=-15
         The lower limit exponent of the diffusion coefficient line used to
         generate the grid.
 
-    dcoeff_ule : integer, default=-6
+    dcoeff_ule : int, default=-6
         The upper limit exponent of the diffusion coefficient line used to
         generate the grid.
 
-    dcoeff_num : integer, default=100
+    dcoeff_num : int, default=100
         Number of samples of diffusion coefficients to generate between the
         lower and the upper limit exponents.
 
-    k0_lle : integer, default=-14
+    k0_lle : int, default=-14
         The lower limit exponent of the kinetic rate constant line used to
         generate the grid.
 
-    k0_ule : integer, default=-5
+    k0_ule : int, default=-5
         The upper limit exponent of the kinetic rate constant line used to
         generate the grid.
 
-    k0_num : integer
+    k0_num : int, default=100
         Number of samples of kinetic rate constants to generate between the
         lower and the upper limit exponents.
 
