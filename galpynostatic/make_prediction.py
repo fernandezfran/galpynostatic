@@ -85,7 +85,7 @@ def optimal_charging_rate(greg, c0=1.0, loaded=0.8, **kwargs):
         The optimal galvanostatic charging rate to charge the electrode to the
         desired maximum SOC value.
 
-    c_rate_err : float
+    c_rate_err : float, optional
         The uncertainty is only returned if `greg.dcoeff_err_` and
         `greg.k0_err_` are both defined.
 
@@ -158,7 +158,7 @@ def optimal_particle_size(
         The optimal particle size to charge the electrode to the desired
         maximum SOC value in the desired time.
 
-    particle_size_err : float
+    particle_size_err : float, optional
         The uncertainty is only returned if `greg.dcoeff_err_` is defined.
 
     Raises
