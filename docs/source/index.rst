@@ -27,10 +27,6 @@ galpynostatic
    :target: https://github.com/fernandezfran/galpynostatic/blob/main/LICENSE
    :alt: mit license
 
-.. image:: https://img.shields.io/badge/doi-10.1016/j.electacta.2023.142951-36abe8
-   :target: https://doi.org/10.1016/j.electacta.2023.142951
-   :alt: doi
-
 
 **galpynostatic** is a Python package with physics-based models to predict
 optimal conditions for fast-charging lithium-ion batteries
@@ -58,6 +54,10 @@ Citation
 If you use galpynostatic in a scientific publication, we would appreciate it if 
 you could cite the following article:
 
+.. image:: https://img.shields.io/badge/doi-10.1016/j.electacta.2023.142951-36abe8
+   :target: https://doi.org/10.1016/j.electacta.2023.142951
+   :alt: doi
+
 .. pull-quote::
 
    F. Fernandez, E. M. Gavilán-Arriazu, D. E. Barraco, A. Visintin, Y. Ein-Eli 
@@ -65,21 +65,22 @@ you could cite the following article:
    heuristic model based on galvanostatic simulations." `Electrochimica Acta 464`
    (2023): 142951.
 
-BibTeX entry:
+For the theoretical framework and the universal map datasets 
+(``galpynostatic.datasets`` submodule) refer to:
 
-.. code-block:: bibtex
+.. image:: https://img.shields.io/badge/doi-10.1002/cphc.202200665-2f4995
+   :target: https://doi.org/10.1002/cphc.202200665
+   :alt: datasets
 
-   @article{fernandez2023towards,
-     title={Towards a fast-charging of LIBs electrode materials: a heuristic model based on galvanostatic simulations},
-     author={Fernandez, F and Gavil{\'a}n-Arriazu, EM and Barraco, DE and Visintin, A and Ein-Eli, Y and Leiva, EPM},
-     journal={Electrochimica Acta},
-     volume={464},
-     pages={142951},
-     year={2023},
-     publisher={Elsevier}
-   }
+.. pull-quote::
 
-Other related citations can be found in the 
+   E. M. Gavilán‐Arriazu, D. E. Barraco, Y. Ein‐Eli and E. P. M. Leiva. 
+   "Galvanostatic Fast Charging of Alkali‐Ion Battery Materials at the 
+   Single‐Particle Level: A Map‐Driven Diagnosis". _ChemPhysChem, 24_.6 (2023): 
+   e202200665.
+
+
+BibTeX entries can be found in the 
 `CITATION.bib <https://github.com/fernandezfran/galpynostatic/blob/main/CITATION.bib>`__ 
 file.
 
