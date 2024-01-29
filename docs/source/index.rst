@@ -76,7 +76,7 @@ For the theoretical framework and the universal map datasets
 
    E. M. Gavilán‐Arriazu, D. E. Barraco, Y. Ein‐Eli and E. P. M. Leiva. 
    "Galvanostatic Fast Charging of Alkali‐Ion Battery Materials at the 
-   Single‐Particle Level: A Map‐Driven Diagnosis". _ChemPhysChem, 24_.6 (2023): 
+   Single‐Particle Level: A Map‐Driven Diagnosis". `ChemPhysChem, 24`.6 (2023): 
    e202200665.
 
 
