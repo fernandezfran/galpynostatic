@@ -42,6 +42,7 @@ def test_optimal_charging_rate(experiment, request, spherical):
     greg = galpynostatic.model.GalvanostaticRegressor(d=experiment["d"], z=3)
     greg.dcoeff_, greg.k0_ = experiment["dcoeff"], experiment["k0"]
     greg._map = galpynostatic.base.MapSpline(spherical)
+    greg.dcoeff_err_, greg.k0_err_ = None, None
 
     c_rate = galpynostatic.make_prediction.optimal_charging_rate(greg)
 
@@ -62,20 +63,25 @@ def test_optimal_charging_rate(experiment, request, spherical):
         ("dokko"),
     ],
 )
-def test_optimal_charging_rate_min(experiment, request, spherical):
-    """Test the prediction of the optimal C-rate in minutes."""
+def test_optimal_charging_rate_err(experiment, request, spherical):
+    """Test the prediction of the optimal C-rate."""
     experiment = request.getfixturevalue(experiment)
 
     greg = galpynostatic.model.GalvanostaticRegressor(d=experiment["d"], z=3)
     greg.dcoeff_, greg.k0_ = experiment["dcoeff"], experiment["k0"]
     greg._map = galpynostatic.base.MapSpline(spherical)
+    greg.dcoeff_err_ = experiment["ref"]["dcoeff_err"]
+    greg.k0_err_ = experiment["ref"]["k0_err"]
 
-    c_rate = galpynostatic.make_prediction.optimal_charging_rate(
-        greg, unit="minutes"
+    c_rate, c_rate_err = galpynostatic.make_prediction.optimal_charging_rate(
+        greg
     )
 
     np.testing.assert_array_almost_equal(
-        c_rate, experiment["ref"]["minutes"], 6
+        c_rate, experiment["ref"]["c_rate"], 6
+    )
+    np.testing.assert_array_almost_equal(
+        c_rate_err, experiment["ref"]["c_rate_err"], 6
     )
 
 
@@ -86,7 +92,9 @@ def test_raise_optimal_charging_rate(spherical):
     greg._map = galpynostatic.base.MapSpline(spherical)
 
     with pytest.raises(ValueError):
-        galpynostatic.make_prediction.optimal_charging_rate(greg, loaded=1)
+        galpynostatic.make_prediction.optimal_charging_rate(
+            greg, c0=4.0, loaded=1
+        )
 
 
 @pytest.mark.parametrize(
@@ -108,9 +116,41 @@ def test_optimal_particle_size(experiment, request, spherical):
     greg = galpynostatic.model.GalvanostaticRegressor(d=experiment["d"], z=3)
     greg.dcoeff_, greg.k0_ = experiment["dcoeff"], experiment["k0"]
     greg._map = galpynostatic.base.MapSpline(spherical)
+    greg.dcoeff_err_ = None
+
+    size = galpynostatic.make_prediction.optimal_particle_size(
+        greg, d0=1.2 * experiment["ref"]["particle_size"] / 10_000
+    )
+
+    np.testing.assert_array_almost_equal(
+        size, experiment["ref"]["particle_size"], 6
+    )
+
+
+@pytest.mark.parametrize(
+    ("experiment"),
+    [
+        ("nishikawa"),
+        ("mancini"),
+        ("he"),
+        ("wang"),
+        ("lei"),
+        ("bak"),
+        ("dokko"),
+    ],
+)
+def test_optimal_particle_size_err(experiment, request, spherical):
+    """Test the prediction of the optimal particle size."""
+    experiment = request.getfixturevalue(experiment)
+
+    greg = galpynostatic.model.GalvanostaticRegressor(d=experiment["d"], z=3)
+    greg.dcoeff_, greg.k0_ = experiment["dcoeff"], experiment["k0"]
+    greg._map = galpynostatic.base.MapSpline(spherical)
     greg.dcoeff_err_ = experiment["ref"]["dcoeff_err"]
 
-    size, size_err = galpynostatic.make_prediction.optimal_particle_size(greg)
+    size, size_err = galpynostatic.make_prediction.optimal_particle_size(
+        greg, d0=1.2 * experiment["ref"]["particle_size"] / 10_000
+    )
 
     np.testing.assert_array_almost_equal(
         size, experiment["ref"]["particle_size"], 6
@@ -128,5 +168,5 @@ def test_raise_optimal_particle_size(spherical):
 
     with pytest.raises(ValueError):
         galpynostatic.make_prediction.optimal_particle_size(
-            greg, minutes=1, loaded=1
+            greg, c_rate=60, loaded=1
         )

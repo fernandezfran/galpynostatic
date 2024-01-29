@@ -1,5 +1,14 @@
 # Changelog of galpynostatic
 
+## v0.3.1 (2024-01-29)
+
+### Bug fixes
+
+- Include the optimal C-rate uncertainty calculation like in particle size.
+- Changed the inner workings of functions in the `make_prediction` module to use `GalvanostaticRegressor` model methods instead of geometric reordering to find the optimal point.
+- Add `**kwargs` to `scipy.optimize.newton` in `make_prediction` module.
+
+
 ## v0.3.0 (2024-01-25)
 
 ### Features

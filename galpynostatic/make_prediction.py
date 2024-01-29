@@ -13,14 +13,15 @@
 
 """Make predictions using the physics-based heuristic model.
 
-Once the physics-based heuristic model [1]_ has been fitted, the diffusion
-coefficient, :math:`D`, and the kinetic rate constant, :math:`k^0`, parameters
-of the active material in the electrode remain fixed. The other two parameters
-of the model, the characteristic diffusion length, :math:`d`, (particle size)
-and the galvanostatic charging rate (C-rate) can be varied. In this way, the
-model can be used to predict both the optimum particle size for a given C-rate
-and the optimum charging rate for a given particle size to achieve a desired
-maximum State-of-Charge (SOC).
+The physics-based heuristic model [1]_ presented in this package allows to fit
+State-of-Charge (SOC) battery data as a function of galvanostatic charging
+rate (C-rate). Once this model has been fitted, the diffusion coefficient,
+:math:`D`, and the kinetic rate constant, :math:`k^0`, parameters of the active
+material in the electrode remain fixed. The other two parameters of the model,
+the characteristic diffusion length, :math:`d`, (particle size) and the C-rate
+can be varied. In this way, the model can be used to predict both the optimum
+particle size for a given C-rate and the optimum charging rate for a given
+particle size to achieve a desired maximum SOC.
 
 References
 ----------
@@ -39,16 +40,24 @@ import numpy as np
 import scipy.interpolate
 import scipy.optimize
 
-from .utils import logxi
+from .utils import logell, logxi
+
+# ============================================================================
+# CONSTANTS
+# ============================================================================
+
+VALUE_ERROR_MESSAGE = (
+    "This system fails to find the desired point given conditions that may be "
+    "due to map constraints or input parameters (such as `loaded`, initial "
+    "estimate or keyword arguments passed to `scipy.optimize.newton`)."
+)
 
 # ============================================================================
 # FUNCTIONS
 # ============================================================================
 
 
-def optimal_charging_rate(
-    greg, loaded=0.8, unit="C-rate", dlogell=0.01, dlogxi=0.01
-):
+def optimal_charging_rate(greg, c0=1.0, loaded=0.8, **kwargs):
     r"""Predict the optimal C-rate to reach a desired SOC.
 
     The default parameters of this function predict the C-rate required to
@@ -59,78 +68,59 @@ def optimal_charging_rate(
     greg : galpynostatic.model.GalvanostaticRegressor
         An already fitted GalvanostaticRegressor.
 
+    c0 : float, default=4.0
+        An initial estimate of the optimal charging rate that should be
+        somewhere near the actual prediction.
+
     loaded : float, default=0.8
-        Desired maximum SOC value, between 0 and 1.
+        Desired maximum SOC, between 0 and 1.
 
-    unit : str, default='C-rate'
-        The desired unit of the return value, it can be `"C-rate"` or
-        `"minutes"`.
-
-    dlogxi : float, default=0.01
-        The delta for the logarithm value in base 10 of the :math:`\Xi`
-        parameter evaluation between the minimum and the maximum in the map.
-
-    dlogell : float, default=0.01
-        The delta for the logarithm value in base 10 of the :math:`\ell`
-        parameter evaluation between the minimum and the maximum in the map.
+    **kwargs
+        Additional keyword arguments that are passed and are documented in
+        ``scipy.optimize.newton``.
 
     Returns
     -------
-    float
-        The optimal galvanostatic charging rate in C-rate or minutes units.
+    c_rate : float
+        The optimal galvanostatic charging rate to charge the electrode to the
+        desired maximum SOC value.
+
+    c_rate_err : float
+        The uncertainty is only returned if `greg.dcoeff_err_` and
+        `greg.k0_err_` are both defined.
 
     Raises
     ------
     ValueError
-        If the material does not meet the defined criterion given the map
-        constraints.
+        If the material does not meet the defined criterion given the input
+        parameters or map constraints.
     """
-    intercept = np.log10(
-        (greg.k0_ * greg.d) / (greg.dcoeff_ * np.sqrt(greg.z))
-    )
 
-    logell_min, logell_max = greg._map.logells_.min(), greg._map.logells_.max()
-    logell_range = np.arange(logell_min, logell_max, dlogell)
-
-    logxi_range = intercept - 0.5 * logell_range
-    logxi_min, logxi_max = logxi_range.min(), logxi_range.max()
-
-    socs = greg._map.soc(logell_range, logxi_range) - loaded
-
-    dell = logell_max - logell_min
-    dxi = logxi_max - logxi_min
-    angle = np.arctan(dxi / dell)
-    hypot = np.hypot(dell, dxi)
-
-    h_range = np.linspace(0, hypot, socs.size)
-
-    spline = scipy.interpolate.InterpolatedUnivariateSpline(h_range, socs)
+    def objfunc(cr, greg, loaded):
+        return greg.predict(np.reshape([cr], (-1, 1)))[0] - loaded
 
     try:
-        optimal_h = scipy.optimize.newton(lambda h: spline(h), hypot / 2)
-    except RuntimeError:
-        raise ValueError(
-            "This material does not reach the desired SOC for a C-rate that "
-            "is between the map constaints."
+        c_rate = scipy.optimize.newton(
+            objfunc, c0, args=(greg, loaded), **kwargs
+        )
+    except (RuntimeError, ValueError):
+        raise ValueError(VALUE_ERROR_MESSAGE)
+
+    if greg.dcoeff_err_ is None or greg.k0_err_ is None:
+        return c_rate
+
+    else:
+        optimal_xi = 10.0 ** logxi(c_rate, greg.dcoeff_, greg.k0_)
+        frac = greg.k0_ / greg.dcoeff_
+        c_rate_err = (60.0 * np.sqrt(frac) / optimal_xi) * np.hypot(
+            frac * greg.dcoeff_err_, 2 * greg.k0_err_
         )
 
-    optimal_logell = logell_min + optimal_h * np.cos(angle)
-    optimal_logxi = logxi_max - optimal_h * np.sin(angle)
-
-    c1 = (3600 * (greg.k0_) ** 2) / (greg.dcoeff_ * 10 ** (2 * optimal_logxi))
-    c2 = (3600 * greg.dcoeff_ * greg.z * 10**optimal_logell) / (greg.d**2)
-
-    c_rate = np.mean([c1, c2])
-
-    return c_rate if unit == "C-rate" else 60 / c_rate
+        return c_rate, c_rate_err
 
 
 def optimal_particle_size(
-    greg,
-    minutes=15,
-    loaded=0.8,
-    cm_to=10_000,
-    dlogell=0.01,
+    greg, d0=1e-4, loaded=0.8, c_rate=4.0, cm_to=10_000, **kwargs
 ):
     r"""Predict the optimal electrode particle size to charge in certain time.
 
@@ -144,19 +134,23 @@ def optimal_particle_size(
     greg : galpynostatic.model.GalvanostaticRegressor
         A GalvanostaticRegressor already fitted.
 
-    minutes : int or float, default=15
-        Desired minutes to reach the established SOC.
+    d0 : float, default=1e-4
+        An initial estimate of the optimal particle size rate that should be
+        somewhere near the actual prediction.
 
     loaded : float, default=0.8
         Desired maximum SOC value, between 0 and 1.
+
+    c_rate : int or float, default=4.0
+        Desired C-rate to reach the established SOC.
 
     cm_to : float, default=10000
         A factor to convert from cm to another unit, in the default case to
         microns.
 
-    dlogell : float, default=0.01
-        The delta for the logarithm value in base 10 of the :math:`\ell`
-        parameter evaluation between the minimum and the maximum in the map.
+    **kwargs
+        Additional keyword arguments that are passed and are documented in
+        ``scipy.optimize.newton``.
 
     Returns
     -------
@@ -170,39 +164,31 @@ def optimal_particle_size(
     Raises
     ------
     ValueError
-        If the material does not meet the defined criterion given the map
-        constraints.
+        If the material does not meet the defined criterion given the input
+        parameters or map constraints.
     """
-    c_rate = 60.0 / minutes
 
-    logxi_value = logxi(c_rate, greg.dcoeff_, greg.k0_)
-    logell_range = np.arange(
-        greg._map.logells_.min(), greg._map.logells_.max(), dlogell
-    )
-
-    socs = greg._map.soc(logell_range, logxi_value) - loaded
-
-    spline = scipy.interpolate.InterpolatedUnivariateSpline(logell_range, socs)
+    def objfunc(d, greg, c_rate, loaded):
+        greg.d = d
+        return greg.predict(np.reshape([c_rate], (-1, 1)))[0] - loaded
 
     try:
-        optimal_logell = scipy.optimize.newton(lambda lr: spline(lr), -0.5)
+        particle_size = scipy.optimize.newton(
+            objfunc, d0, args=(greg, c_rate, loaded), **kwargs
+        )
+    except (RuntimeError, ValueError):
+        raise ValueError(VALUE_ERROR_MESSAGE)
 
-        if not greg._map._mask_logell(optimal_logell):
-            raise RuntimeError
+    if greg.dcoeff_err_ is None:
+        return cm_to * particle_size
 
-    except RuntimeError:
-        raise ValueError(
-            "This material does not meet the defined criterion given the "
-            "map constaints."
+    else:
+        optimal_ell = 10.0 ** logell(
+            c_rate, particle_size, greg.z, greg.dcoeff_
+        )
+        factor = np.sqrt((3600 * greg.z * optimal_ell) / c_rate)
+        particle_size_err = (
+            cm_to * factor * greg.dcoeff_err_ / (2 * np.sqrt(greg.dcoeff_))
         )
 
-    factor = np.sqrt((3600 * greg.z * 10.0**optimal_logell) / c_rate)
-
-    sqd = np.sqrt(greg.dcoeff_)
-    particle_size = cm_to * factor * sqd
-
-    return (
-        particle_size
-        if greg.dcoeff_err_ is None
-        else (particle_size, cm_to * factor * greg.dcoeff_err_ / (2 * sqd))
-    )
+        return (cm_to * particle_size, particle_size_err)
