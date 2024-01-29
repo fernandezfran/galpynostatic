@@ -68,7 +68,7 @@ For the theoretical framework and the universal map datasets
 > E. M. Gavilán‐Arriazu, D. E. Barraco, Y. Ein‐Eli and E. P. M. Leiva. 
 > "Galvanostatic Fast Charging of Alkali‐Ion Battery Materials at the 
 > Single‐Particle Level: A Map‐Driven Diagnosis". _ChemPhysChem, 24_.6 (2023): 
-> e202200665. [![datasets](https://img.shields.io/badge/doi-10.1002/cphc.202200665-2f4995)](https://doi.org/10.1002/cphc.202200665)
+> e202200665. 
 
 BibTeX entries can be found in the 
 [CITATION.bib](https://github.com/fernandezfran/galpynostatic/blob/main/CITATION.bib)
