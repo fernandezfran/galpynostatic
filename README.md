@@ -61,6 +61,7 @@ you could cite the following article:
 
 For the theoretical framework and the universal map datasets 
 (`galpynostatic.datasets` submodule) refer to:
+[![datasets]](https://img.shields.io/badge/doi-10.1002/cphc.202200665-2f4995)](https://doi.org/10.1002/cphc.202200665)
 
 > E. M. Gavilán‐Arriazu, D. E. Barraco, Y. Ein‐Eli and E. P. M. Leiva. 
 > "Galvanostatic Fast Charging of Alkali‐Ion Battery Materials at the 
