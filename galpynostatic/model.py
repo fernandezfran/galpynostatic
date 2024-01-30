@@ -158,10 +158,7 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
     def _validate_geometry(self):
         """Validate geometry (when dataset is a string)."""
         if isinstance(self.dataset, str):
-            if self.dataset in ("spherical", "cylindrical", "planar"):
-                self.dataset = load_dataset(geometry=self.dataset)
-            else:
-                raise ValueError(f"{self.dataset} is not a valid geometry.")
+            self.dataset = load_dataset(geometry=self.dataset)
 
     def _grid_points(self):
         """Grid points (D, k0) to evaluate in the grid search."""
