@@ -1,5 +1,10 @@
 # Changelog of galpynostatic
 
+## Unreleased
+
+- `base` and `utils` modules are now tested directly.
+
+
 ## v0.3.1 (2024-01-29)
 
 ### Bug fixes
