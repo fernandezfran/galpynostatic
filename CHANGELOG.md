@@ -8,8 +8,6 @@
 
 ## v0.3.1 (2024-01-29)
 
-### Bug fixes
-
 - Include the optimal C-rate uncertainty calculation like in particle size.
 - Changed the inner workings of functions in the `make_prediction` module to use `GalvanostaticRegressor` model methods instead of geometric reordering to find the optimal point.
 - Add `**kwargs` to `scipy.optimize.newton` in `make_prediction` module.
@@ -17,12 +15,7 @@
 
 ## v0.3.0 (2024-01-25)
 
-### Features
-
 - Add a new function in the `make_prediction` module to predict the optimal C-rate to reach a desired SOC.
-
-### Bug fixes
-
 - Explicitly use Newton optimization method in `make_prediction` module.
 - Change the return of the transform `GetDischargeCapacities` in `preprocessing` module to the shape required for the model fitting.
 - Improved self-consistency and grammar of documentation.
@@ -30,15 +23,11 @@
 
 ## v0.2.3 (2023-12-28)
 
-### Bug fixes
-
 - Create the `base` module with the `MapSpline` class.
 - Change the project description.
 
 
 ## v0.2.2 (2023-12-27)
-
-### Bug fixes
 
 - Change the name of the `bmx_fc` metric to `umbem`, which is the name of the metric in the cited PhD thesis.
 - Replace the `test_metric` to use `pytest.mark.parametrize` and have a test for each value insted of the dataframe all togheter.
@@ -46,26 +35,17 @@
 
 ## v0.2.1 (2023-12-26)
 
-### Bug fixes
-
 - Allow the modification of C-rate with minutes parameter in `bmx_fc` of `metric` module.
 - Citation of theoretical framework in `CITATION.bib` file.
 
 
 ## v0.2.0 (2023-12-12)
 
-### Features
-
 - An implementation of a new module with two metrics for benchmarking an extreme fast-charging of battery electrode materials.
-
-### Bug fixes
-
 - Fixed test errors in `make_prediction` module due to uncertaintes calculations.
 
 
 ## v0.1.1 (2023-09-25)
-
-### Bug fixes
 
 - Fixed the citation link, the BibTeX file and the doi.
 - The test of the plots with Python3.9+ instead of Python3.8
