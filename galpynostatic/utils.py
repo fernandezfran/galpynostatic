@@ -47,15 +47,12 @@ def logell(c_rate, d, z, dcoeff):
     dcoeff : float
         Diffusion coefficient, :math:`D`, in :math:`cm^2/s`.
 
-    k0 : float
-        Kinetic rate constant, :math:`k^0`, in :math:`cm/s`.
-
     Returns
     -------
     logell : float or array-like
         The log 10 value of :math:`\ell` internal parameter.
     """
-    return np.log10((c_rate * d**2) / (3600 * z * dcoeff))
+    return np.log10((np.asarray(c_rate) * d**2) / (3600 * z * dcoeff))
 
 
 def logxi(c_rate, dcoeff, k0):
@@ -82,4 +79,4 @@ def logxi(c_rate, dcoeff, k0):
     logxi : float or array-like
         The log 10 value of :math:`\Xi` internal parameter.
     """
-    return np.log10(k0 * np.sqrt(3600 / (c_rate * dcoeff)))
+    return np.log10(k0 * np.sqrt(3600 / (np.asarray(c_rate) * dcoeff)))

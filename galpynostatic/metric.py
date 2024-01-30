@@ -88,7 +88,7 @@ def umbem(greg, minutes=15, loaded=0.8, full_output=False, **kwargs):
     else:
         greg_ = greg
 
-    soc = greg_.predict(np.array([[60.0 / minutes]]))[0]
+    soc = greg_.predict(np.reshape([60.0 / minutes], (-1, 1)))[0]
 
     return (
         soc
