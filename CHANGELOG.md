@@ -1,9 +1,9 @@
 # Changelog of galpynostatic
 
-## Unreleased
+## v0.3.2 (2024-01-30)
 
 - `base` and `utils` modules are now tested directly.
-- Better docs of `datasets` submodule and the three functions replaced in only one.
+- Better docs of `datasets` submodule and the three functions replaced in only one. For each assert now there is a test.
 
 
 ## v0.3.1 (2024-01-29)
