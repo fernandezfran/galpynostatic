@@ -33,18 +33,8 @@ def data_path():
 
 
 @pytest.fixture()
-def planar():
-    return galpynostatic.datasets.load_planar()
-
-
-@pytest.fixture()
-def cylindrical():
-    return galpynostatic.datasets.load_cylindrical()
-
-
-@pytest.fixture()
 def spherical():
-    return galpynostatic.datasets.load_spherical()
+    return galpynostatic.datasets.load_dataset()
 
 
 @pytest.fixture()

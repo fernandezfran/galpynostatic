@@ -28,7 +28,7 @@ from sklearn.metrics import mean_squared_error as _skl_mse
 from sklearn.utils import validation as _skl_validation
 
 from .base import MapSpline
-from .datasets import load_cylindrical, load_planar, load_spherical
+from .datasets import load_dataset
 from .plot import GalvanostaticPlotter
 from .utils import logell, logxi
 
@@ -158,14 +158,8 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
     def _validate_geometry(self):
         """Validate geometry (when dataset is a string)."""
         if isinstance(self.dataset, str):
-            load_geometry = {
-                "planar": load_planar,
-                "cylindrical": load_cylindrical,
-                "spherical": load_spherical,
-            }
-
-            if self.dataset in load_geometry:
-                self.dataset = load_geometry[self.dataset]()
+            if self.dataset in ("spherical", "cylindrical", "planar"):
+                self.dataset = load_dataset(geometry=self.dataset)
             else:
                 raise ValueError(f"{self.dataset} is not a valid geometry.")
 

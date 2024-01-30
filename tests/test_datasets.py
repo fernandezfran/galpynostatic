@@ -17,6 +17,8 @@ import numpy as np
 
 import pandas as pd
 
+import pytest
+
 
 # =============================================================================
 # TESTS
@@ -25,7 +27,7 @@ import pandas as pd
 
 def test_load_planar():
     """Test the planar dataset."""
-    pla = galpynostatic.datasets.load_planar()
+    pla = galpynostatic.datasets.load_dataset(geometry="planar")
 
     assert isinstance(pla, pd.DataFrame)
 
@@ -44,7 +46,7 @@ def test_load_planar():
 
 def test_load_cylindrical():
     """Test the cylindrical dataset."""
-    cyl = galpynostatic.datasets.load_cylindrical()
+    cyl = galpynostatic.datasets.load_dataset(geometry="cylindrical")
 
     assert isinstance(cyl, pd.DataFrame)
 
@@ -63,7 +65,7 @@ def test_load_cylindrical():
 
 def test_load_spherical():
     """Test the spherical dataset."""
-    sph = galpynostatic.datasets.load_spherical()
+    sph = galpynostatic.datasets.load_dataset()
 
     assert isinstance(sph, pd.DataFrame)
 
@@ -78,3 +80,9 @@ def test_load_spherical():
     np.testing.assert_almost_equal(sph.xmax.min(), 0.0, 6)
     np.testing.assert_almost_equal(sph.xmax.max(), 0.99706, 6)
     np.testing.assert_almost_equal(sph.xmax.mean(), 0.518575, 6)
+
+
+def test_raise():
+    """Test the raise of the ValueError."""
+    with pytest.raises(ValueError):
+        galpynostatic.datasets.load_dataset(geometry="plane")

@@ -48,16 +48,26 @@ PATH = pathlib.Path(os.path.abspath(os.path.dirname(__file__)))
 # ============================================================================
 
 
-def load_planar():
-    """Galvanostatic planar map for a cut-off potential of 150 mV."""
-    return pd.read_csv(PATH / "planar.csv")
+def load_dataset(geometry="spherical"):
+    """Galvanostatic map for a cut-off potential of 150 mV.
 
+    Parameters
+    ----------
+    geometry : str, default="spherical"
+        The geometry of the electrode. It can be `"spherical"`, `"cylindrical"`
+        or `"planar"`.
 
-def load_cylindrical():
-    """Galvanostatic cylindrical map for a cut-off potential of 150 mV."""
-    return pd.read_csv(PATH / "cylindrical.csv")
+    Returns
+    -------
+    pandas.DataFrame
+        The geometry dataset as a ``pandas.DataFrame``.
 
+    Raises
+    ------
+    ValueError
+        If the geometry is not `"spherical"`, `"cylindrical"` or `"planar"`.
+    """
+    if geometry not in ("spherical", "cylindrical", "planar"):
+        raise ValueError(f"{geometry} is not a valid geometry.")
 
-def load_spherical():
-    """Galvanostatic spherical map for a cut-off potential of 150 mV."""
-    return pd.read_csv(PATH / "spherical.csv")
+    return pd.read_csv(PATH / f"{geometry}.csv")

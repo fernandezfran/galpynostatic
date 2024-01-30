@@ -66,6 +66,11 @@ class GalvanostaticPlotter:
 
         clb_label : str, default="maximum SOC"
             The label for the colorbar.
+
+        Returns
+        -------
+        ax : matplotlib.axes.Axes
+            The current axes.
         """
         ax = plt.gca() if ax is None else ax
 

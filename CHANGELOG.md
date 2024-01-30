@@ -3,6 +3,7 @@
 ## Unreleased
 
 - `base` and `utils` modules are now tested directly.
+- Better docs of `datasets` submodule and the three functions replaced in only one.
 
 
 ## v0.3.1 (2024-01-29)
