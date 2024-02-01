@@ -69,5 +69,5 @@ def load_dataset(geometry="spherical"):
     """
     if geometry not in ("spherical", "cylindrical", "planar"):
         raise ValueError(f"{geometry} is not a valid geometry.")
-
-    return pd.read_csv(PATH / f"{geometry}.csv")
+    else:
+        return pd.read_csv(PATH / f"{geometry}.csv")

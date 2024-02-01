@@ -61,6 +61,7 @@ class TestPlots:
         greg.plot.versus_data(
             experiment["C_rates"], experiment["soc"], ax=test_ax
         )
+        plt.clf()
 
         # ref plot
         ref_ax = fig_ref.subplots()
@@ -97,6 +98,7 @@ class TestPlots:
         test_ax = fig_test.subplots()
         greg.plot.render_map(ax=test_ax)
         greg.plot.in_render_map(experiment["C_rates"], ax=test_ax)
+        plt.clf()
 
         # ref plot
         ref_ax = fig_ref.subplots()
