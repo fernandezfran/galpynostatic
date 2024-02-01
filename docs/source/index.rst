@@ -48,8 +48,8 @@ Code Repository
 https://github.com/fernandezfran/galpynostatic/
 
 
-Citation
---------
+Citations
+---------
 
 If you use galpynostatic in a scientific publication, we would appreciate it if 
 you could cite the following article:
@@ -81,7 +81,7 @@ For the theoretical framework and the universal map datasets
 
 
 BibTeX entries can be found in the 
-`CITATION.bib <https://github.com/fernandezfran/galpynostatic/blob/main/CITATION.bib>`__ 
+`CITATIONS.bib <https://github.com/fernandezfran/galpynostatic/blob/main/CITATIONS.bib>`__ 
 file.
 
 Contact

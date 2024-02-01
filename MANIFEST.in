@@ -1,11 +1,11 @@
 include CHANGELOG.md
-include CITATION.bib
+include CITATIONS.bib
 include LICENSE
 include README.md
 include pyproject.toml
 
-recursive-include galpynostatic *.py
 recursive-include galpynostatic *.csv
+recursive-include galpynostatic *.py
 
 exclude .readthedocs.yaml
 exclude requirements_dev.txt

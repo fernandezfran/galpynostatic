@@ -48,7 +48,7 @@ galpynostatic is licensed under the
 [MIT License](https://github.com/fernandezfran/galpynostatic/blob/main/LICENSE).
 
 
-## Citation
+## Citations
 
 If you use galpynostatic in a scientific publication, we would appreciate it if 
 you could cite the following article:
@@ -71,7 +71,7 @@ For the theoretical framework and the universal map datasets
 > e202200665. 
 
 BibTeX entries can be found in the 
-[CITATION.bib](https://github.com/fernandezfran/galpynostatic/blob/main/CITATION.bib)
+[CITATIONS.bib](https://github.com/fernandezfran/galpynostatic/blob/main/CITATIONS.bib)
 file.
 
 
