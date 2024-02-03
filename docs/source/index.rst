@@ -48,6 +48,23 @@ Code Repository
 https://github.com/fernandezfran/galpynostatic/
 
 
+Contents
+--------
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Tutorials
+
+   install
+   tutorials/index
+
+.. toctree::
+   :maxdepth: 3
+   :caption: API Reference
+
+   api/api
+
+
 Citations
 ---------
 
@@ -88,23 +105,6 @@ Contact
 -------
 
 If you have any questions, you can contact me at ffernandev@gmail.com
-
-
-Contents
---------
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Tutorials
-
-   install
-   tutorials/index
-
-.. toctree::
-   :maxdepth: 3
-   :caption: API Reference
-
-   api/api
 
 
 Indices and tables
