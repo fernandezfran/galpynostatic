@@ -91,7 +91,7 @@ class GetDischargeCapacities(TransformerMixin):
 
         Returns
         -------
-        X_new : array-like of shape (n_measurements, )
+        X_new : array-like of shape (n_measurements,)
             Discharge capacities in the same order as the ``pandas.DataFrame``
             in the input list, but reshaped to fit.
         """
@@ -130,7 +130,7 @@ class GetDischargeCapacities(TransformerMixin):
 
         Returns
         -------
-        X_new : array-like of shape (n_measurements, )
+        X_new : array-like of shape (n_measurements,)
             Discharge capacities in the same order as the ``pandas.DataFrame``
             in the input list, but reshaped to fit.
         """
