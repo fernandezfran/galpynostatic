@@ -67,7 +67,7 @@ def load_dataset(geometry="spherical"):
     ValueError
         If the geometry is not `"spherical"`, `"cylindrical"` or `"planar"`.
     """
-    if geometry not in ("spherical", "cylindrical", "planar"):
-        raise ValueError(f"{geometry} is not a valid geometry.")
-    else:
+    try:
         return pd.read_csv(PATH / f"{geometry}.csv")
+    except FileNotFoundError:
+        raise ValueError(f"{geometry} is not a valid geometry.")

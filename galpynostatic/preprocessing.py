@@ -91,7 +91,7 @@ class GetDischargeCapacities(TransformerMixin):
 
         Returns
         -------
-        X_new : array-like of shape (n_measurements, 1)
+        X_new : array-like of shape (n_measurements, )
             Discharge capacities in the same order as the ``pandas.DataFrame``
             in the input list, but reshaped to fit.
         """
@@ -110,7 +110,7 @@ class GetDischargeCapacities(TransformerMixin):
             except IndexError:
                 ...
 
-        return X_new.reshape(-1, 1)
+        return X_new
 
     def fit_transform(self, X, y=None, **fit_params):
         """Transform the curves to discharge capacities with optional params.
@@ -130,7 +130,7 @@ class GetDischargeCapacities(TransformerMixin):
 
         Returns
         -------
-        X_new : array-like of shape (n_measurements, 1)
+        X_new : array-like of shape (n_measurements, )
             Discharge capacities in the same order as the ``pandas.DataFrame``
             in the input list, but reshaped to fit.
         """

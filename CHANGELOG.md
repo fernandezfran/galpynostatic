@@ -1,5 +1,11 @@
 # Changelog of galpynostatic
 
+## v0.3.3 (2024-02-05)
+
+- Fix a bug in the shape of the return of `GetDischargeCapacities` in `preprocessing` module.
+- Change the `if/else` condition in the `datasets` submodule by a `try/except` block.
+
+
 ## v0.3.2 (2024-01-30)
 
 - `base` and `utils` modules are now tested directly.
