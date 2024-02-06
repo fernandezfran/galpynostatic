@@ -35,9 +35,8 @@ python -m pip install --upgrade galpynostatic
 To learn how to use galpynostatic you can start by following the 
 [tutorials](https://galpynostatic.readthedocs.io/en/latest/tutorials/index.html)
 and then read the 
-[API](https://galpynostatic.readthedocs.io/en/latest/api/index.html).
-
-You can also read the Jupyter Notebook pipelines in the
+[API](https://galpynostatic.readthedocs.io/en/latest/api/index.html). You can 
+also read the Jupyter Notebook pipelines in the 
 [papers folder](https://github.com/fernandezfran/galpynostatic/tree/main/papers) 
 to reproduce the results of the published articles.
 
