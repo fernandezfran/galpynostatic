@@ -37,7 +37,6 @@ References
 
 import numpy as np
 
-import scipy.interpolate
 import scipy.optimize
 
 from .utils import logell, logxi
