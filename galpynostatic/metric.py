@@ -28,7 +28,7 @@ from .model import GalvanostaticRegressor
 
 
 def umbem(greg, minutes=15, loaded=0.8, full_output=False, **kwargs):
-    r"""Universal benchmarking metric for fast charging electrode materials.
+    r"""Universal metric for benchmarking fast charging electrode materials.
 
     This Universal Metric for Benchmarking fast-charging Electrode Materials
     is defined as the maximum State-of-Charge (SOC) retained when a material
