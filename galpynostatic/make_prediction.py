@@ -172,8 +172,10 @@ def optimal_particle_size(
         return greg.predict(np.reshape([c_rate], (-1, 1)))[0] - loaded
 
     try:
-        particle_size = scipy.optimize.newton(
-            objfunc, d0, args=(greg, c_rate, loaded), **kwargs
+        particle_size = np.abs(
+            scipy.optimize.newton(
+                objfunc, d0, args=(greg, c_rate, loaded), **kwargs
+            )
         )
     except (RuntimeError, ValueError):
         raise ValueError(VALUE_ERROR_MESSAGE)
