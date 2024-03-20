@@ -23,7 +23,7 @@ import importlib_metadata
 from . import datasets
 from .base import MapSpline
 from .make_prediction import optimal_charging_rate, optimal_particle_size
-from .metric import fom, umbem
+from .metric import bmxfc, fom
 from .model import GalvanostaticRegressor
 from .preprocessing import GetDischargeCapacities
 
@@ -33,6 +33,7 @@ from .preprocessing import GetDischargeCapacities
 # =============================================================================
 
 __all__ = [
+    "bmxfc",
     "datasets",
     "fom",
     "GalvanostaticRegressor",
@@ -40,7 +41,6 @@ __all__ = [
     "MapSpline",
     "optimal_charging_rate",
     "optimal_particle_size",
-    "umbem",
 ]
 
 

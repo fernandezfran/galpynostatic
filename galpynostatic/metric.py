@@ -27,15 +27,15 @@ from .model import GalvanostaticRegressor
 # ============================================================================
 
 
-def umbem(greg, minutes=15, loaded=0.8, full_output=False, **kwargs):
-    r"""Universal metric for benchmarking fast charging electrode materials.
+def bmxfc(greg, minutes=15, loaded=0.8, full_output=False, **kwargs):
+    r"""Metric for benchmarking an extreme fast charging of Li-ion materials.
 
-    This Universal Metric for Benchmarking fast-charging Electrode Materials
-    is defined as the maximum State-of-Charge (SOC) retained when a material
-    is charged for 15 minutes under constant current conditions [2]_. The
-    evaluation of the UMBEM is performed using the model in this package, which
-    accounts for finite diffusion, charge transfer, particle size and the total
-    charging rate.
+    This universal metric for Benchmarking battery electrode Materials for an
+    eXtreme Fast Charging (BMXFC) is defined as the maximum State-of-Charge
+    (SOC) retained when a material is charged for 15 minutes under constant
+    current conditions [2]_. The evaluation of the BMXFC is performed using the
+    model in this package, which accounts for finite diffusion, charge
+    transfer, particle size and the total charging rate.
 
     Parameters
     ----------
@@ -68,16 +68,16 @@ def umbem(greg, minutes=15, loaded=0.8, full_output=False, **kwargs):
     Returns
     -------
     soc : float
-        UMBEM value.
+        BMXFC value.
 
     res : dict, optional
         A dict present if `full_output=True` and described there.
 
     References
     ----------
-    .. [2] Fernandez, Francisco. `Modelado computacional para el desarrollo de
-       electrodos de baterías de ion-litio de próxima generación`. PhD thesis,
-       Universidad Nacional de Córdoba, 2024.
+    .. [2] F. Fernandez, E. M. Gavilán-Arriazu, D. E. Barraco, Y. Ein-Eli and
+       E. P. M. Leiva. "A metric for benchmarking an extreme fast-charging of
+       Li-ion battery electrode materials." `Journal TODO`.
     """
     if isinstance(greg, dict):
         greg_ = GalvanostaticRegressor(d=greg["d"], **kwargs)

@@ -1,5 +1,10 @@
 # Changelog of galpynostatic
 
+## v0.4.0 (2023-03-20)
+
+- Change the name of the metric `umbem` (thesis version) to `bmxfc` (paper version).
+
+
 ## v0.3.3 (2024-02-05)
 
 - Fix a bug in the shape of the return of `GetDischargeCapacities` in `preprocessing` module.

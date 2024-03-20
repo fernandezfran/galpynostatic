@@ -67,22 +67,22 @@ class TestMetric:
 
         np.testing.assert_almost_equal(value, ref[1], 6)
 
-    def test_umbem(self, d, dcoeff, ref):
-        """Test the UMBEM metric without fitting the model."""
+    def test_bmxfc(self, d, dcoeff, ref):
+        """Test the BMXFC metric without fitting the model."""
         greg = galpynostatic.model.GalvanostaticRegressor(d=1e-4 * d)
         greg._validate_geometry()
         greg._map = galpynostatic.base.MapSpline(greg.dataset)
         greg.dcoeff_, greg.k0_ = dcoeff, 1e-7
         greg.dcoeff_err_ = None
 
-        value = galpynostatic.metric.umbem(greg)
+        value = galpynostatic.metric.bmxfc(greg)
 
         np.testing.assert_almost_equal(value, ref[0], 6)
 
-    def test_umbem_fit(self, d, dcoeff, ref):
-        """Test the UMBEM metric using the fit argument."""
+    def test_bmxfc_fit(self, d, dcoeff, ref):
+        """Test the BMXFC metric using the fit argument."""
         greg = {"d": 1e-4 * d, "dcoeff_": dcoeff, "k0_": 1e-7}
 
-        value = galpynostatic.metric.umbem(greg)
+        value = galpynostatic.metric.bmxfc(greg)
 
         np.testing.assert_almost_equal(value, ref[0], 6)
