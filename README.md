@@ -58,7 +58,7 @@ you could cite the main article of the package:
 > F. Fernandez, E. M. Gavilán-Arriazu, D. E. Barraco, A. Visintin, Y. Ein-Eli and 
 > E. P. M. Leiva. "Towards a fast-charging of LIBs electrode materials: a 
 > heuristic model based on galvanostatic simulations." _Electrochimica Acta 464_
-> (2023): 142951. 
+> (2023): 142951. DOI: https://doi.org/10.1016/j.electacta.2023.142951
 
 For certain modules of the code, please refer to other works:
 - `galpynostatic.metric`: TODO DOI
