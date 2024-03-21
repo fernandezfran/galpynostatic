@@ -27,9 +27,18 @@ galpynostatic
    :target: https://github.com/fernandezfran/galpynostatic/blob/main/LICENSE
    :alt: mit license
 
+.. image:: https://img.shields.io/badge/doi-10.1016/j.electacta.2023.142951-36abe8
+   :target: https://doi.org/10.1016/j.electacta.2023.142951
+   :alt: doi
+
 
 **galpynostatic** is a Python package with physics-based models to predict
 optimal conditions for fast-charging lithium-ion batteries
+
+Contact
+-------
+
+If you have any questions, you can contact me at ffernandev@gmail.com
 
 
 Requirements
@@ -69,11 +78,7 @@ Citations
 ---------
 
 If you use galpynostatic in a scientific publication, we would appreciate it if 
-you could cite the following article:
-
-.. image:: https://img.shields.io/badge/doi-10.1016/j.electacta.2023.142951-36abe8
-   :target: https://doi.org/10.1016/j.electacta.2023.142951
-   :alt: doi
+you could cite the main article of the package:
 
 .. pull-quote::
 
@@ -82,29 +87,14 @@ you could cite the following article:
    heuristic model based on galvanostatic simulations." `Electrochimica Acta 464`
    (2023): 142951.
 
-For the theoretical framework and the universal map datasets 
-(``galpynostatic.datasets`` submodule) refer to:
+For certain modules of the code, please refer to other works:
 
-.. image:: https://img.shields.io/badge/doi-10.1002/cphc.202200665-2f4995
-   :target: https://doi.org/10.1002/cphc.202200665
-   :alt: datasets
-
-.. pull-quote::
-
-   E. M. Gavilán‐Arriazu, D. E. Barraco, Y. Ein‐Eli and E. P. M. Leiva. 
-   "Galvanostatic Fast Charging of Alkali‐Ion Battery Materials at the 
-   Single‐Particle Level: A Map‐Driven Diagnosis". `ChemPhysChem, 24`.6 (2023): 
-   e202200665.
-
+* `galpynostatic.metric`: TODO DOI
+* `galpynostatic.datasets`: https://doi.org/10.1002/cphc.202200665
 
 BibTeX entries can be found in the 
 `CITATIONS.bib <https://github.com/fernandezfran/galpynostatic/blob/main/CITATIONS.bib>`__ 
 file.
-
-Contact
--------
-
-If you have any questions, you can contact me at ffernandev@gmail.com
 
 
 Indices and tables
