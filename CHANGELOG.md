@@ -1,5 +1,10 @@
 # Changelog of galpynostatic
 
+## v0.4.1 (2023-03-21)
+
+- In the `bmxfc` metric, the argument `minutes` was changed to `c_rate`, like in the `make_prediction` module functions.
+
+
 ## v0.4.0 (2023-03-20)
 
 - Change the name of the metric `umbem` (thesis version) to `bmxfc` (paper version).

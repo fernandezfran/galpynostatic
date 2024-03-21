@@ -27,7 +27,7 @@ from .model import GalvanostaticRegressor
 # ============================================================================
 
 
-def bmxfc(greg, minutes=15, loaded=0.8, full_output=False, **kwargs):
+def bmxfc(greg, c_rate=4, loaded=0.8, full_output=False, **kwargs):
     r"""Metric for benchmarking an extreme fast charging of Li-ion materials.
 
     This universal metric for Benchmarking battery electrode Materials for an
@@ -45,8 +45,9 @@ def bmxfc(greg, minutes=15, loaded=0.8, full_output=False, **kwargs):
         (particle size), `dcoeff_` in :math:`cm^2/s` (diffusion coefficient)
         and `k0_` in :math:`cm/s` (kinetic rate constant).
 
-    minutes : int or float, default=15
-        Minutes of loading.
+    c_rate : int or float, default=4
+        Galvanostatic charging rate (:math:`60 minutes / 15 minutes`, for
+        example, for the default case).
 
     loaded : float, default=0.8
         Criteria for considering the electrode material with fast charging
@@ -88,7 +89,7 @@ def bmxfc(greg, minutes=15, loaded=0.8, full_output=False, **kwargs):
     else:
         greg_ = greg
 
-    soc = greg_.predict(np.reshape([60.0 / minutes], (-1, 1)))[0]
+    soc = greg_.predict(np.reshape([c_rate], (-1, 1)))[0]
 
     return (
         soc
