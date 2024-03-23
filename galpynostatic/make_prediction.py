@@ -115,7 +115,7 @@ def optimal_charging_rate(greg, c0=1.0, loaded=0.8, **kwargs):
             frac * greg.dcoeff_err_, 2 * greg.k0_err_
         )
 
-        return c_rate, c_rate_err
+        return (c_rate, c_rate_err)
 
 
 def optimal_particle_size(
@@ -189,7 +189,7 @@ def optimal_particle_size(
         )
         factor = np.sqrt((3600 * greg.z * optimal_ell) / c_rate)
         particle_size_err = (
-            cm_to * factor * greg.dcoeff_err_ / (2 * np.sqrt(greg.dcoeff_))
+            factor * greg.dcoeff_err_ / (2 * np.sqrt(greg.dcoeff_))
         )
 
-        return (cm_to * particle_size, particle_size_err)
+        return (cm_to * particle_size, cm_to * particle_size_err)
