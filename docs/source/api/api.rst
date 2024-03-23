@@ -15,4 +15,5 @@ galpynostatic package
    preprocessing
    utils
    datasets
+   datasets_params
    base

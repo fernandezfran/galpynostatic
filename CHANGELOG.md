@@ -1,5 +1,10 @@
 # Changelog of galpynostatic
 
+## Unrealeased
+
+- Add the `datasets.params` submodule with typical densities and specific capacities of lithium-ion battery electrode materials required for simulations.
+
+
 ## v0.4.1 (2023-03-21)
 
 - In the `bmxfc` metric, the argument `minutes` was changed to `c_rate`, like in the `make_prediction` module functions.

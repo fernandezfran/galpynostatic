@@ -1,0 +1,42 @@
+Graphite:
+  density: 2.2
+  specific_capacity: 370
+Graphite-Silicon:
+  density: 1.25
+  specific_capacity: 1000
+Silicon:
+  density: 2.33
+  specific_capacity: 3500
+LTO:
+  density: 4.5
+  specific_capacity: 170
+LCO:
+  density: 5.0
+  specific_capacity: 140
+LFP:
+  density: 3.55
+  specific_capacity: 170
+LMO:
+  density: 4.0
+  specific_capacity: 120
+NCA:
+  density: 4.4
+  specific_capacity: 200
+NCO46:
+  density: 4.5
+  specific_capacity: 200
+NMC:
+  density: 4.5
+  specific_capacity: 175
+NMC111:
+  density: 4.8
+  specific_capacity: 200
+NMC523:
+  density: 4.8
+  specific_capacity: 190
+NMC622:
+  density: 4.7
+  specific_capacity: 200
+NMC811:
+  density: 4.8
+  specific_capacity: 220

@@ -22,6 +22,7 @@ import importlib_metadata
 
 from . import datasets
 from .base import MapSpline
+from .datasets import params
 from .make_prediction import optimal_charging_rate, optimal_particle_size
 from .metric import bmxfc, fom
 from .model import GalvanostaticRegressor
@@ -41,6 +42,7 @@ __all__ = [
     "MapSpline",
     "optimal_charging_rate",
     "optimal_particle_size",
+    "params",
 ]
 
 
