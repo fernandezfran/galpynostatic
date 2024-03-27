@@ -23,7 +23,7 @@ authors = [
 ]
 readme = "README.md"
 license = {file = "LICENSE"}
-description = "A Python package with physics-based models to predict optimal conditions for fast-charging lithium-ion batteries."
+description = "A Python/C++ package with physics-based models to predict optimal conditions for fast-charging lithium-ion batteries."
 keywords = [
     "battery",
     "physics-based",
