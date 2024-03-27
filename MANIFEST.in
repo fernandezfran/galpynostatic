@@ -9,6 +9,7 @@ recursive-include galpynostatic *.csv
 recursive-include galpynostatic *.py
 recursive-include galpynostatic *.yml
 
+exclude .clang-format
 exclude .readthedocs.yaml
 exclude requirements_dev.txt
 exclude tox.ini
