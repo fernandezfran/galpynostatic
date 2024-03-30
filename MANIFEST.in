@@ -3,6 +3,7 @@ include CITATIONS.bib
 include LICENSE
 include README.md
 include pyproject.toml
+include setup.py
 
 recursive-include galpynostatic *.cpp
 recursive-include galpynostatic *.csv
@@ -16,4 +17,3 @@ exclude tox.ini
 
 recursive-exclude docs *
 recursive-exclude tests *
-recursive-exclude papers *

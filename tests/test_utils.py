@@ -4,6 +4,7 @@
 # This file is part of galpynostatic
 #   https://github.com/fernandezfran/galpynostatic/
 # Copyright (c) 2022-2023, Francisco Fernandez
+# Copyright (c) 2024, Francisco Fernandez, Maximilano Gavilán, Andres Ruderman
 # License: MIT
 #   https://github.com/fernandezfran/galpynostatic/blob/master/LICENSE
 
