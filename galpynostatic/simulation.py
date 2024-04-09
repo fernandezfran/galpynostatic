@@ -111,9 +111,6 @@ class GalvanostaticMap:
     temperature : float, default=298.0
         Working temperature of the cell.
 
-    resistance : float, default=0.0
-        Cell's resistance.
-
     logxi_lle : float, default=2.0
         Initial value of the :math:`\log(\Xi)`.
 
@@ -149,12 +146,10 @@ class GalvanostaticMap:
         isotherm=None,
         specific_capacity=None,
         mass=1.0,
-        #        veq=None,
         vcut=-0.15,
         g=0.0,
         geometrical_param=2,
         temperature=298.0,
-        resistance=0.0,
         logxi_lle=2.0,
         logxi_ule=-4.0,
         num_xi=32,
@@ -170,7 +165,6 @@ class GalvanostaticMap:
         self.specific_capacity = specific_capacity
         self.mass = mass
         self.temperature = temperature
-        self.resistance = resistance
         self.g = g
         self.geometrical_param = geometrical_param
         #        self.veq = veq
@@ -272,7 +266,6 @@ class GalvanostaticMap:
             self.temperature,
             self.mass,
             self.density,
-            self.resistance,
             self.isotherm.vcut,
             self.isotherm.specific_capacity,
             self.geometrical_param,
@@ -519,9 +512,6 @@ class GalvanostaticProfile:
     temperature : float, default=298.0
         Working temperature of the cell.
 
-    resistance : float, default=0.0
-        Cell's resistance.
-
     grid_size : int, default=1000
         Size of the spatial grid in wich the Fick's equation will be
         solved.
@@ -558,7 +548,6 @@ class GalvanostaticProfile:
         g=0.0,
         profile_soc=0.5,
         temperature=298.0,
-        resistance=0.0,
         grid_size=1_000,
         time_steps=100_000,
         each=100,
@@ -574,7 +563,6 @@ class GalvanostaticProfile:
         self.g = g
         self.profile_soc = profile_soc
         self.temperature = temperature
-        self.resistance = resistance
         self.grid_size = grid_size
         self.time_steps = time_steps
         self.each = each
@@ -659,7 +647,6 @@ class GalvanostaticProfile:
             self.temperature,
             self.mass,
             self.density,
-            self.resistance,
             self.isotherm.vcut,
             self.isotherm.specific_capacity,
             self.geometrical_param,

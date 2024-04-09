@@ -12,12 +12,11 @@ extern "C" void
 galva(bool model, const double g_pot, const int nthreads, const int grid_size,
       const int time_steps, const int isotherm_len, const int num_logell,
       const int num_logxi, const double temperature, const double mass,
-      const double density, const double resistance, const double vcut,
-      const double specific_capacity, const double geometry_param,
-      const double *logell_grid, const double *logxi_grid,
-      const double *spl_ai, const double *spl_bi, const double *spl_ci,
-      const double *spl_di, const double *soc_eq, double *res_logell,
-      double *res_logxi, double *res_socmax)
+      const double density, const double vcut, const double specific_capacity,
+      const double geometry_param, const double *logell_grid,
+      const double *logxi_grid, const double *spl_ai, const double *spl_bi,
+      const double *spl_ci, const double *spl_di, const double *soc_eq,
+      double *res_logell, double *res_logxi, double *res_socmax)
 {
     const double faraday = 96484.5561;
     const double gas_constant = 8.314472;
@@ -48,11 +47,8 @@ galva(bool model, const double g_pot, const int nthreads, const int grid_size,
                 double ccd = -c_rate * specific_capacity * mass /
                              (1000.0 * surface_area);
 
-                double ir_drop = resistance * ccd * surface_area;
-
-                // TODO: change c1 name
-                double c1 = specific_capacity * density * 3.6 / faraday;
-                // end TODO
+                double maximum_capacity =
+                    specific_capacity * density * 3.6 / faraday;
 
                 double time_step = -specific_capacity * mass * 3.6 /
                                    (ccd * surface_area) /
@@ -65,8 +61,6 @@ galva(bool model, const double g_pot, const int nthreads, const int grid_size,
                     position[i] = i * space_step;
                 }
 
-                // TODO: review names of Crank Nicholson parameters and
-                // Constant Thomas coefficients
                 double intercepts[grid_size], coefs[grid_size],
                     gamma[grid_size], previous_soc[grid_size],
                     actual_soc[grid_size];
@@ -91,7 +85,6 @@ galva(bool model, const double g_pot, const int nthreads, const int grid_size,
                     add[i] = alpha + (beta / position[i]);
                     sub[i] = alpha - (beta / position[i]);
                 }
-                // end TODO
 
                 if (model) {
                     for (int i = 0; i < grid_size; i++) {
@@ -145,12 +138,11 @@ galva(bool model, const double g_pot, const int nthreads, const int grid_size,
                                  ai * dsocs * dsocs * dsocs;
                     }
 
-                    double i0 = faraday * c1 *
+                    double i0 = faraday * maximum_capacity *
                                 sqrt(actual_soc[grid_size - 1] *
                                      (1.0 - actual_soc[grid_size - 1]));
 
-                    pot_i = pot_eq + ir_drop +
-                            2.0 * rfaraday * asinh(ccd / (2.0 * i0));
+                    pot_i = pot_eq + 2.0 * rfaraday * asinh(ccd / (2.0 * i0));
 
                     for (int i = 0; i < grid_size; i++) {
                         previous_soc[i] = actual_soc[i];
@@ -163,7 +155,7 @@ galva(bool model, const double g_pot, const int nthreads, const int grid_size,
                         gamma0 * previous_soc[grid_size - 1] +
                         2 * alpha * previous_soc[grid_size - 2] -
                         add[grid_size - 1] * 4.0 * space_step *
-                            (ccd / (faraday * c1));
+                            (ccd / (faraday * maximum_capacity));
                     for (int i = 1; i < grid_size - 1; i++) {
                         gamma[i] = gamma0 * previous_soc[i] +
                                    add[i] * previous_soc[i + 1] +
