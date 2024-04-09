@@ -146,17 +146,6 @@ class GalvanostaticMap:
     nthreads : int, default=-1
         Number of threads in which the diagram calculation will be performed.
         -1 means use all available threads.
-
-    Notes
-    -----
-
-    References
-    ----------
-
-
-    Attributes
-    ----------
-
     """
 
     def __init__(
@@ -238,6 +227,7 @@ class GalvanostaticMap:
         self.logxi_ = np.linspace(self.logxi_lle, self.logxi_ule, self.num_xi)
 
     def run(self):
+        """Run the diagram simulation."""
         lib_galva = _MAPS_LIBS
 
         lib_galva.galva.argtypes = [
@@ -327,18 +317,14 @@ class GalvanostaticMap:
         )
 
     def to_dataframe(self):
-        """
-        A function that returns the diagram dataset.
-        """
+        """Convert the diagram dataset into a dataframe."""
         return self.df
 
     def plot(self, ax=None, plt_kws=None, clb=True, clb_label="SoC$_{max}$"):
-        """
-        A function that returns the axis of the two dimensional diagram
-        for a given axis.
+        """Plot the two dimensional diagram.
 
         Parameters
-        -----
+        ----------
         ax : axis, default=None
             Axis of wich the diagram plot.
 
@@ -402,12 +388,10 @@ class GalvanostaticMap:
         clb=True,
         clb_label="$SoC_{max}$",
     ):
-        """
-        A function that returns the axis of the real diagram
-        for a given axis.
-
+        """Plot the real diagram.
+        
         Parameters
-        -----
+        ----------
         dcoeff : float
             Diffusion coefficient, :math:`D`, in :math:`cm^2/s`.
 
