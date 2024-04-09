@@ -409,7 +409,7 @@ class GalvanostaticMap:
         ax = plt.gca() if ax is None else ax
         plt_kws = {} if plt_kws is None else plt_kws
 
-        l_log = self.df.L
+        l_log = self.df.ell
         xi_log = self.df.xi
 
         x = logcrate(xi_log, dcoeff, k0)
