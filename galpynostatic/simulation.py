@@ -41,6 +41,7 @@ PATH = pathlib.Path(os.path.abspath(os.path.dirname(__file__)))
 
 # TODO: modify to sysconfig
 _PROFILE_LIBS = ct.CDLL(PATH / "lib" / "profile.so")
+_MAPS_LIBS = ct.CDLL(PATH / "lib" / "map.so")
 # end TODO
 
 # ============================================================================
@@ -50,9 +51,6 @@ _PROFILE_LIBS = ct.CDLL(PATH / "lib" / "profile.so")
 
 class GalvanostaticMap:
     r"""Diagnostic map tool for galvanostatic intercalation material analysis.
-
-    A tool to build a diagnostic map intercalation materials under galvanostatic conditions.
-
 
     The present software performs a series of galvanostatic simulations [1]_
     to systematically investigate the maximum state of charge (SoC) that a
@@ -78,8 +76,9 @@ class GalvanostaticMap:
     /// This simulation code was written to simulate the charging process of a
     /// single-particle electrode of a lithium-ion battery. To solve the Fick
     /// diffusion equation the Crank-Nicolson method was applied. The
-    /// electrode/electrolyte interface kinetics is simulated by the Butler-Volmer
-    /// equation using experimental curves for the equilibrium potential. The
+    /// electrode/electrolyte interface kinetics is simulated by the
+    /// Butler-Volmer equation using experimental curves for the equilibrium
+    potential. The
     /// programm generates a potential profile for a (L,Xi) point.
     ///------------------------------------------------------------------------
 
@@ -111,7 +110,7 @@ class GalvanostaticMap:
         the equilibrium potential if isotherm=False.
 
     geometrical_param : int default=2
-        Active material particle geometrical_parammetry. 0=planar, 
+        Active material particle geometrical_parammetry. 0=planar,
         1=cylindrical, 2=spherical.
 
     temperature : float, default=298.0
@@ -166,7 +165,7 @@ class GalvanostaticMap:
         isotherm=None,
         specific_capacity=None,
         mass=1.0,
-#        veq=None,
+        #        veq=None,
         vcut=-0.15,
         g=0.0,
         geometrical_param=2,
@@ -190,7 +189,7 @@ class GalvanostaticMap:
         self.resistance = resistance
         self.g = g
         self.geometrical_param = geometrical_param
-#        self.veq = veq
+        #        self.veq = veq
         self.vcut = vcut
         self.logxi_lle = logxi_lle
         self.logxi_ule = logxi_ule
@@ -212,28 +211,18 @@ class GalvanostaticMap:
 
         if isinstance(self.isotherm, pd.DataFrame):
             self.frumkin = False
-            self.isotherm = SplineCoef(self.isotherm)
+            self.isotherm = SplineCoeff(self.isotherm)
             # self.isotherm = SplineParams(df)
             self.isotherm.get_params()
             self.isotherm.vcut = self.vcut
-           # if self.veq is not None:
-            #    if self.vcut is not None:
-             #       self.isotherm.vcut = self.vcut
-              #  else:
-               #     raise ValueError(
-                #        "vcut must be defined if the equilibrium isotherm is given"
-                #    )
-            #else:
-            #    raise ValueError(
-             #       "veq must be defined if the equilibrium isotherm is given"
-              #  )
 
         else:
-         #   if self.vcut is None:
-          #      self.vcut = -0.15
-            self.isotherm = SplineCoef(
+            self.isotherm = SplineCoeff(
                 pd.DataFrame(
-                    {"capacity": [self.specific_capacity], "potential": [self.vcut]}
+                    {
+                        "capacity": [self.specific_capacity],
+                        "potential": [self.vcut],
+                    }
                 )
             )
             self.isotherm.spl_ai = np.array(0)
@@ -243,7 +232,9 @@ class GalvanostaticMap:
             self.isotherm.capacity = np.array(0)
             self.frumkin = True
 
-        self.logL_ = np.linspace(self.logell_lle, self.logell_ule, self.num_ell)
+        self.logL_ = np.linspace(
+            self.logell_lle, self.logell_ule, self.num_ell
+        )
         self.logxi_ = np.linspace(self.logxi_lle, self.logxi_ule, self.num_xi)
 
     def run(self):
@@ -311,11 +302,17 @@ class GalvanostaticMap:
             res_socmax,
         )
 
-        self.logL = np.asarray(np.frombuffer(res_logell, dtype=np.double, count=N))
+        self.logL = np.asarray(
+            np.frombuffer(res_logell, dtype=np.double, count=N)
+        )
 
-        self.logxi = np.asarray(np.frombuffer(res_logxi, dtype=np.double, count=N))
+        self.logxi = np.asarray(
+            np.frombuffer(res_logxi, dtype=np.double, count=N)
+        )
 
-        self.SOC = np.asarray(np.frombuffer(res_socmax, dtype=np.double, count=N))
+        self.SOC = np.asarray(
+            np.frombuffer(res_socmax, dtype=np.double, count=N)
+        )
 
         self.SOC = np.clip(self.SOC, 0, 1)
 
@@ -325,7 +322,9 @@ class GalvanostaticMap:
                 "xi": self.logxi,
                 "SOC": self.SOC,
             }
-        ).sort_values(by=["ell", "xi"], ascending=[True, True], ignore_index=True)
+        ).sort_values(
+            by=["ell", "xi"], ascending=[True, True], ignore_index=True
+        )
 
     def to_dataframe(self):
         """
@@ -362,7 +361,9 @@ class GalvanostaticMap:
         logxis_ = np.unique(y)
         socs = self.df.SOC.to_numpy().reshape(logells_.size, logxis_.size)
 
-        spline_ = scipy.interpolate.RectBivariateSpline(logells_, logxis_, socs)
+        spline_ = scipy.interpolate.RectBivariateSpline(
+            logells_, logxis_, socs
+        )
 
         xeval = np.linspace(x.min(), x.max(), 1000)
         yeval = np.linspace(y.min(), y.max(), 1000)
@@ -392,14 +393,27 @@ class GalvanostaticMap:
 
         return ax
 
-
-    def real_plot(self, ax=None, plt_kws=None, clb=True, clb_label="$SoC_{max}$", dcoeff, k0):
+    def real_plot(
+        self,
+        dcoeff,
+        k0,
+        ax=None,
+        plt_kws=None,
+        clb=True,
+        clb_label="$SoC_{max}$",
+    ):
         """
         A function that returns the axis of the real diagram
         for a given axis.
 
         Parameters
         -----
+        dcoeff : float
+            Diffusion coefficient, :math:`D`, in :math:`cm^2/s`.
+
+        k0 : float
+            Kinetic rate constant, :math:`k^0`, in :math:`cm/s`.
+
         ax : axis, default=None
             Axis of wich the diagram plot.
 
@@ -411,12 +425,6 @@ class GalvanostaticMap:
 
         clb_label : str, default="SOC"
             Name of the color bar.
-
-        dcoeff : float
-            Diffusion coefficient, :math:`D`, in :math:`cm^2/s`.
-
-        k0 : float
-            Kinetic rate constant, :math:`k^0`, in :math:`cm/s`.
         """
         ax = plt.gca() if ax is None else ax
         plt_kws = {} if plt_kws is None else plt_kws

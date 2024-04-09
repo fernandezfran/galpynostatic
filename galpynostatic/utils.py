@@ -109,7 +109,7 @@ def logcrate(xi_log, dcoeff, k0):
     log_crate : float or array-like
         The log 10 value of theC-rate.
     """
-    return np.log10(3600 / dcoeff * k0 ** 2) - 2 * xi_log
+    return np.log10(3600 / dcoeff * k0**2) - 2 * xi_log
 
 
 def logd(xi_log, l_log, dcoeff, k0, z):
@@ -144,8 +144,6 @@ def logd(xi_log, l_log, dcoeff, k0, z):
     logxi : float or array-like
         The log 10 value of :math:`\Xi` internal parameter.
     """
-    cr_log = log_crate(xi_log, dcoeff, k0)
+    cr_log = logcrate(xi_log, dcoeff, k0)
 
-    return 0.5* (l_log + np.log10(3600 * z * D) - cr_log)
-
-    
+    return 0.5 * (l_log + np.log10(3600 * z * dcoeff) - cr_log)
