@@ -1,271 +1,205 @@
-///------------------------------------------------------------------------------------///
-///             Code for simulating a diagram diagnosis ///
-///------------------------------------------------------------------------------------///
+// This file is part of galpynostatic
+//    https://github.com/fernandezfran/galpynostatic/
+// Copyright (c) 2024, Francisco Fernandez, Maximiliano Gavilán, Andrés
+// Ruderman License: MIT
+//    https://github.com/fernandezfran/galpynostatic/blob/master/LICENSE
 
-#include <limits.h>
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-//#include <conio.h>
 #include <omp.h>
-#include <time.h>
 
-const int Npx = 1000;
-const int Npt = 100000;
-const int NPOINT = 100;         /// Numero de puntos del voltagrama
-const int NMOD = Npt / NPOINT;  /// Modulo para imprimir
-const double NX = Npx;
-const double NT = Npt;
+#include <cmath>
 
-FILE *archivo, *archivo1, *archivo2, *archivo3;
-
-#define salida_en "VProfile-2-1-6-g0.dat"
-#define salida_diag_en "Diagrma-TEST-profile.dat"
-#define salida_perf_en "CProfile-SOC-0-7.dat"
-/* ======================  VARIABLES GLOBALES  =========================  */
-
-int i, j, k, K;
-double tita0[Npx], tita1[Npx], x[Npx], l, ieqI, ieqII, E0II, titaTot0,
-    titaTot1, ti, Ei, BmasII[Npx], AmasII[Npx], AmenosII[Npx], BmenosII[Npx];
-double I, i0, i1, KK, titT0, titT1, E00I, E00II, tiempo, r[Npx], alfaII[Npx],
-    betaII[Npx], bN[Npx];
-double AII, BII, AkII, BkII, A0II, B0II, Dx, d, lambda, L, Vol, m, S, ic, phi,
-    phi2, logL, ttot, utot, dt, Dt, Dd;
-/* ===================   CAJAS   ====================== */
-
-void
-graba();
-
-/*---------------------------------------------------------------------------*/
-
-int
-main()
+extern "C" void
+galva(bool model, const double g_pot, const int nthreads, const int grid_size,
+      const int time_steps, const int isotherm_len, const int num_logell,
+      const int num_logxi, const double temperature, const double mass,
+      const double density, const double resistance, const double vcut,
+      const double specific_capacity, const double geometry_param,
+      const double *logell_grid, const double *logxi_grid,
+      const double *spl_ai, const double *spl_bi, const double *spl_ci,
+      const double *spl_di, const double *soc_eq, double *res_logell,
+      double *res_logxi, double *res_socmax)
 {
-    const int NMOD = Npt / NPOINT;  /// Printing Module
-    const double geo =
-        2.0;  /// geometry parameter 0: plane, 1: cylinder, 2: sphere
-    const double F = 96484.5561;  // faraday constant
-    const double R = 8.314472;
-    const double th = 3600.0;
-    const double T = 298.0;
-    const double Qmax = 372.0;
-    const double rho = 2.26;
-    const double f = R * T / F;
-    const int NXi = 12;
-    const int NL = 12;
-    const double Xi0 = 4.0;
-    const double Xif = -3.3;
-    const double L0 = -4.0;
-    const double Lf = 1.2;
-    const double deltaXi = (Xif - Xi0) / (NXi - 1);
-    const double deltaL = (Lf - L0) / (NL - 1);
-    const double D = 1.69e-10;
-    const double ks =
-        3.07e-7;  // c<konstante heterogenea de velocidad aparente en cm.s-1
-    const double Mr = 72.0;
-    const double m = 1.0;
-    const double Eoff = -0.15;
-    const double g = 0.0;  /// frumkin parameter
+    const double faraday = 96484.5561;
+    const double gas_constant = 8.314472;
+    const double t_hour = 3600.0;
+    const double rfaraday = gas_constant * temperature / faraday;
 
-    const double SOCperf = 0.7;
-    const double paso = 1e-4;
+    (nthreads == -1 ? omp_set_num_threads(omp_get_num_procs())
+                    : omp_set_num_threads(nthreads));
 
-    // Diagram parameters
-    double logXi[NXi];
-    double logL[NL];
-    double ii = 0.0;
-    for (int i = 0; i < NXi; i++) {
-        logXi[i] = Xi0 + deltaXi * ii;
-        ii++;
-    }
-    ii = 0.0;
-    for (int i = 0; i < NL; i++) {
-        logL[i] = L0 + deltaL * ii;
-        ii++;
-    }
-    int pp = 0;
-
-    /// Threads define
-    int num_threads = omp_get_num_procs();
-    omp_set_num_threads(num_threads);
-    // if(N_THREADS==0){int num_threads =
-    // omp_get_num_procs();omp_set_num_threads(num_threads);}
-    // else{omp_set_num_threads(N_THREADS);}
-
-/// DIAGRAM LOOP
-/// STEP-----------------------------------------------------------------------------------------
 #pragma omp parallel
     {
-#pragma omp for collapse(2) firstprivate(logXi, logL)
-        for (int EL = 0; EL < NL; EL++) {  /// L Loop
-            for (int XI = 0; XI < NXi; XI++) {
-                int thread_id = omp_get_thread_num();
-                // printf("id=%d",thread_id);///Xi Loop
-                /// Actualization of the parameters
-                double L = pow(10, logL[EL]);
-                double Xi = pow(10, logXi[XI]);
-                double Cr = (ks / Xi) * (ks / Xi) * (th / D);  /// C-rate
-                double d = 2.0 * sqrt((L * (1.0 + geo) * D * th) /
-                                      Cr);  /// particle diameter, cm
-                double S =
-                    2.0 * (1.0 + geo) * m / (rho * d);  /// Surface area, cm2
-                // double	Vol=m/rho; 						      	///Volume
-                // of active mass, cm3
-                double Rohm = 0.0;
-                double ic = -Cr * Qmax * m /
-                            (1000 * S);     /// constant current density, A/cm2
-                double iR = Rohm * ic * S;  /// IR drop, A*ohm=V
-                double c1 = rho / Mr;
-                double iN = 1.0 / (F * D * c1);
-                //  double ttot = 0.5 * 0.5 * d * (rho / Mr) * F / (-ic); ///
-                //  total time, s CHEQUEAAARRRR
-                double ttot = abs(Qmax * m * 3.6 / (ic * S));
-                double NT = Npt;
-                double NX = Npx;
-                double Dt = ttot / (NT - 1.0);     /// time step, s
-                double Dd = 0.5 * d / (NX - 1.0);  /// space step, cm
+        int index;
+#pragma omp for collapse(2) firstprivate(logxi_grid, logell_grid)
+        for (int logell = 0; logell < num_logell; logell++) {
+            for (int logxi = 0; logxi < num_logxi; logxi++) {
+                index = logell * num_logxi + logxi;
 
-                // Cleaning vectors
-                double betaT[Npx], alfaT[Npx], bN[Npx], tita0[Npx], tita1[Npx];
+                double c_rate = t_hour / pow(pow(10, logxi_grid[logxi]), 2);
 
-                for (int i = 0; i < Npx; i++) {
-                    betaT[i] = alfaT[i] = bN[i] = tita0[i] = tita1[i] = 0.0;
-                }
-                double ii = 0.0;
-                double r[Npx];
-                for (int i = 0; i < Npx; i++) {
-                    r[i] = ii * Dd;
-                    ii++;
+                double particle_size =
+                    2.0 * sqrt((pow(10, logell_grid[logell]) *
+                                (1.0 + geometry_param) * t_hour) /
+                               c_rate);
+
+                double surface_area = 2.0 * (1.0 + geometry_param) * mass /
+                                      (density * particle_size);
+
+                double ccd = -c_rate * specific_capacity * mass /
+                             (1000.0 * surface_area);
+
+                double ir_drop = resistance * ccd * surface_area;
+
+                // TODO: change c1 name
+                double c1 = specific_capacity * density * 3.6 / faraday;
+                // end TODO
+
+                double time_step = -specific_capacity * mass * 3.6 /
+                                   (ccd * surface_area) /
+                                   static_cast<double>(time_steps - 1);
+                double space_step =
+                    0.5 * particle_size / static_cast<double>(grid_size - 1);
+
+                double position[grid_size];
+                for (int i = 0; i < grid_size; i++) {
+                    position[i] = i * space_step;
                 }
 
-                ////Crank Nicholson parameters and Constant Thomas coefficients
-                double Abi = D * Dt / (2.0 * Dd * Dd);
-                double Bbi = geo * D * Dt / (4.0 * Dd);
-                double A0bi = 1.0 + (2.0 * Abi);
-                double A0nbi = 1.0 - (2.0 * Abi);  /// NUEVO
-                alfaT[1] = 2.0 * Abi / A0bi;
-                for (int i = 2; i < Npx; i++) {
-                    alfaT[i] =
-                        (Abi + (Bbi / (r[i - 1]))) /
-                        (A0bi - (Abi - (Bbi / (r[i - 1]))) * alfaT[i - 1]);
+                // TODO: review names of Crank Nicholson parameters and
+                // Constant Thomas coefficients
+                double intercepts[grid_size], coefs[grid_size],
+                    gamma[grid_size], previous_soc[grid_size],
+                    actual_soc[grid_size];
+                for (int i = 0; i < grid_size; i++) {
+                    intercepts[i] = coefs[i] = gamma[i] = previous_soc[i] =
+                        actual_soc[i] = 0.0;
                 }
-                double ABmas[Npx];
-                double ABmenos[Npx];
-                for (int i = 0; i < Npx; i++) {
-                    ABmas[i] = Abi + (Bbi / (r[i]));
-                    ABmenos[i] = Abi - (Bbi / (r[i]));
+
+                double alpha = time_step / (2.0 * space_step * space_step);
+                double beta = geometry_param * time_step / (4.0 * space_step);
+                double alpha_0 = 1.0 + (2.0 * alpha);
+                double gamma0 = 1.0 - (2.0 * alpha);
+                coefs[1] = 2.0 * alpha / alpha_0;
+                for (int i = 2; i < grid_size; i++) {
+                    coefs[i] = (alpha + (beta / position[i - 1])) /
+                               (alpha_0 - (alpha - (beta / position[i - 1])) *
+                                              coefs[i - 1]);
                 }
-                /// Initial Point
-                double ti = 0.0;
-                for (int i = 0; i < Npx; i++) {
-                    tita1[i] = 1e-4;
+                double add[grid_size];
+                double sub[grid_size];
+                for (int i = 0; i < grid_size; i++) {
+                    add[i] = alpha + (beta / position[i]);
+                    sub[i] = alpha - (beta / position[i]);
                 }
-                double Ei = Eoff + 1.0;  // any value just that Ei>Eoff
-                double E0 = 0.0;
+                // end TODO
 
-                int Npot = 0;
-                int TP = 0;
-                int out = 0;
-
-                /// TIME
-                /// LOOP------------------------------------------------------------------------
-
-                while (Ei > Eoff) {
-                    /// POTENTIAL CALCULATION STEP
-                    // Search range of experimental points where superficial
-                    // concentration (tita1) belongs
-
-                    double i0 = F * c1 * ks *
-                                sqrt(tita1[Npx - 1] * (1.0 - tita1[Npx - 1]));
-                    double Eg = E0 + f * (g * (0.5 - tita1[Npx - 1]) +
-                                          log((1.0 - tita1[Npx - 1]) /
-                                              tita1[Npx - 1]));  /// Frumkin
-                    // Potential calculation
-                    Ei = Eg + 2.0 * f * asinh(ic / (2.0 * i0));
-                    // printf("dtit=%f Ai=%f Bi=%f Ci=%f Di=%f E0=%f i0=%f
-                    // Ei=%f",dtitas, Ai, Bi, Ci, Di, E0, i0, Ei);
-
-                    /// PRINT POTENTIAL PROFILE POINT
-
-                    double SOC = 0.0;
-                    for (int i = 0; i < Npx; i++) {
-                        SOC += tita1[i];
+                if (model) {
+                    for (int i = 0; i < grid_size; i++) {
+                        actual_soc[i] = 1.0e-4;
                     }
-                    SOC /= (Npx - 1);
+                }
+                else {
+                    for (int i = 0; i < grid_size; i++) {
+                        actual_soc[i] = (soc_eq[0] == 0.0) ? 1e-4 : soc_eq[0];
+                    }
+                }
 
-                    /// Potential Profile
-                    /* if(TP%NMOD==0){(archivo =fopen (salida_en,"a"));
-                        fprintf(archivo,"%f %f %f %f %f %f %f
-                 \n",(float)(SOC),(float)(Ei)); fclose(archivo);
-                 }
-                    */
-                    /*
-                    ///Concentration profile
-                if((SOC>SOCperf-paso)&&(SOC<SOCperf+paso)){
-                    if(out==0){
-                        (archivo1 =fopen (salida_perf_en,"a"));
-                            for(int i=0;i<Npx;i++){
-                                    fprintf(archivo1,"%f %f
-                %f\n",(float)(r[i]/(d*0.5)),(float)(tita1[i]),(float)(SOC));
+                double pot_i = vcut + 1.0;
+
+                while (pot_i > vcut) {
+                    double pot_eq = 0.0;
+
+                    if (model) {
+                        pot_eq = rfaraday *
+                                 (g_pot * (0.5 - actual_soc[grid_size - 1]) +
+                                  log((1.0 - actual_soc[grid_size - 1]) /
+                                      actual_soc[grid_size - 1]));
+                    }
+                    else {
+                        double ai = 0.0;
+                        double bi = 0.0;
+                        double ci = 0.0;
+                        double di = 0.0;
+                        double socd = 0.0;
+                        for (int i = 0; i < isotherm_len; i++) {
+                            if ((actual_soc[grid_size - 1] >= soc_eq[i]) &&
+                                (actual_soc[grid_size - 1] < soc_eq[i + 1])) {
+                                ai = spl_ai[i];
+                                bi = spl_bi[i];
+                                ci = spl_ci[i];
+                                di = spl_di[i];
+                                socd = soc_eq[i];
+                                break;
                             }
-                        fclose(archivo1);
-                        out++;
+                            else {
+                                ai = spl_ai[isotherm_len - 1];
+                                bi = spl_bi[isotherm_len - 1];
+                                ci = spl_ci[isotherm_len - 1];
+                                di = spl_di[isotherm_len - 1];
+                                socd = soc_eq[isotherm_len - 1];
+                            }
                         }
+                        double dsocs = actual_soc[grid_size - 1] - socd;
 
-                    }*/
-
-                    /// ACTUALIZATION STEP
-                    for (int i = 0; i < Npx; i++) {
-                        tita0[i] = tita1[i];
-                        betaT[i] = bN[i] = tita1[i] = 0.0;
+                        pot_eq = di + ci * dsocs + bi * dsocs * dsocs +
+                                 ai * dsocs * dsocs * dsocs;
                     }
 
-                    // Vector of solutions and Thomas coefficients calculation
-                    // ESTO CAMBIA CON CN
-                    bN[0] = A0nbi * tita0[0] + 2.0 * Abi * tita0[1];  /// CN
-                    bN[Npx - 1] =
-                        A0nbi * tita0[Npx - 1] + 2 * Abi * tita0[Npx - 2] -
-                        ABmas[Npx - 1] * 4.0 * Dd * (ic * iN);  /// CN
-                    for (int i = 1; i < Npx - 1; i++) {
-                        bN[i] = A0nbi * tita0[i] + ABmas[i] * tita0[i + 1] +
-                                ABmenos[i] * tita0[i - 1];
-                    }  /// CN
+                    double i0 = faraday * c1 *
+                                sqrt(actual_soc[grid_size - 1] *
+                                     (1.0 - actual_soc[grid_size - 1]));
 
-                    betaT[1] = bN[0] / A0bi;
-                    for (int i = 2; i < Npx; i++) {
-                        betaT[i] =
-                            (bN[i - 1] + ABmenos[i - 1] * betaT[i - 1]) /
-                            (A0bi - ABmenos[i - 1] * alfaT[i - 1]);
+                    pot_i = pot_eq + ir_drop +
+                            2.0 * rfaraday * asinh(ccd / (2.0 * i0));
+
+                    for (int i = 0; i < grid_size; i++) {
+                        previous_soc[i] = actual_soc[i];
+                    }
+
+                    // Vector of solutions and Thomas coefficients
+                    gamma[0] = gamma0 * previous_soc[0] +
+                               2.0 * alpha * previous_soc[1];
+                    gamma[grid_size - 1] =
+                        gamma0 * previous_soc[grid_size - 1] +
+                        2 * alpha * previous_soc[grid_size - 2] -
+                        add[grid_size - 1] * 4.0 * space_step *
+                            (ccd / (faraday * c1));
+                    for (int i = 1; i < grid_size - 1; i++) {
+                        gamma[i] = gamma0 * previous_soc[i] +
+                                   add[i] * previous_soc[i + 1] +
+                                   sub[i] * previous_soc[i - 1];
+                    }
+
+                    intercepts[1] = gamma[0] / alpha_0;
+                    for (int i = 2; i < grid_size; i++) {
+                        intercepts[i] =
+                            (gamma[i - 1] + sub[i - 1] * intercepts[i - 1]) /
+                            (alpha_0 - sub[i - 1] * coefs[i - 1]);
                     }
 
                     // Concentration calculation
-                    tita1[Npx - 1] =
-                        (bN[Npx - 1] + 2.0 * Abi * betaT[Npx - 1]) /
-                        (A0bi - 2.0 * Abi * alfaT[Npx - 1]);
-                    for (int i = 2; i < Npx + 1; i++) {
-                        tita1[Npx - i] =
-                            (alfaT[Npx - (i - 1)] * tita1[Npx - (i - 1)]) +
-                            betaT[Npx - (i - 1)];
+                    actual_soc[grid_size - 1] =
+                        (gamma[grid_size - 1] +
+                         2.0 * alpha * intercepts[grid_size - 1]) /
+                        (alpha_0 - 2.0 * alpha * coefs[grid_size - 1]);
+                    for (int i = 2; i < grid_size + 1; i++) {
+                        actual_soc[grid_size - i] =
+                            (coefs[grid_size - (i - 1)] *
+                             actual_soc[grid_size - (i - 1)]) +
+                            intercepts[grid_size - (i - 1)];
                     }
-                    ti += Dt;
-                    TP++;  /// time increment
                 }
-                // printf("STOP");
-                // getchar();
 
-                /// PRINT POTENTIAL PROFILE POINT AFTER WHILE LOOP ENDS
-                double SOC = 0.0;
-                for (int i = 0; i < Npx; i++) {
-                    SOC += tita0[i];
+                double socmax = 0.0;
+                for (int i = 0; i < grid_size; i++) {
+                    socmax += previous_soc[i];
                 }
-                SOC /= (Npx - 1);
+                socmax /= static_cast<double>(grid_size);
 
-                (archivo = fopen(salida_diag_en, "a"));
-                fprintf(archivo, "%f %f %f \n", (float)(logL[EL]),
-                        (float)(logXi[XI]), (float)(SOC));
-                fclose(archivo);
-
-            }  /// En of Xi loop
-        }      /// End of L loop
-    }          /// PARALLELIZATION
+                res_logell[index] = logell_grid[logell];
+                res_logxi[index] = logxi_grid[logxi];
+                res_socmax[index] = socmax;
+            }
+        }
+    }
 }
