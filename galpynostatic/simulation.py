@@ -39,11 +39,6 @@ from .utils import logcrate, logd
 
 PATH = pathlib.Path(os.path.abspath(os.path.dirname(__file__)))
 
-# TODO: modify to sysconfig
-_PROFILE_LIBS = ct.CDLL(PATH / "lib" / "profile.so")
-_MAPS_LIBS = ct.CDLL(PATH / "lib" / "map.so")
-# end TODO
-
 # ============================================================================
 # CLASSES
 # ============================================================================
@@ -52,7 +47,7 @@ _MAPS_LIBS = ct.CDLL(PATH / "lib" / "map.so")
 class GalvanostaticMap:
     r"""Diagnostic map tool for galvanostatic intercalation material analysis.
 
-    The present software performs a series of galvanostatic simulations [1]_
+    The present software performs a series of galvanostatic simulations
     to systematically investigate the maximum state of charge (SoC) that a
     material is capable of accommodating at the single particle level under
     different experimental conditions. These simulations are used to produce
@@ -189,6 +184,7 @@ class GalvanostaticMap:
         self.grid_size = grid_size
         self.time_steps = time_steps
         self.nthreads = nthreads
+        self._MAPS_LIBS = ct.CDLL(PATH / "lib" / "map.so")  # TODO sysconfig
 
         if (
             not isinstance(self.isotherm, pd.DataFrame)
@@ -228,7 +224,7 @@ class GalvanostaticMap:
 
     def run(self):
         """Run the diagram simulation."""
-        lib_galva = _MAPS_LIBS
+        lib_galva = self._MAPS_LIBS
 
         lib_galva.galva.argtypes = [
             ct.c_bool,
@@ -389,7 +385,7 @@ class GalvanostaticMap:
         clb_label="$SoC_{max}$",
     ):
         """Plot the real diagram.
-        
+
         Parameters
         ----------
         dcoeff : float
@@ -582,6 +578,9 @@ class GalvanostaticProfile:
         self.grid_size = grid_size
         self.time_steps = time_steps
         self.each = each
+        self._PROFILE_LIBS = ct.CDLL(
+            PATH / "lib" / "profile.so"
+        )  # TODO sysconfig
 
         if (
             not isinstance(self.isotherm, pd.DataFrame)
@@ -613,7 +612,7 @@ class GalvanostaticProfile:
 
     def run(self):
         """Run the isotherm simulation."""
-        lib_galva = _PROFILE_LIBS
+        lib_galva = self._PROFILE_LIBS
 
         lib_galva.galva.argtypes = [
             ct.c_bool,
@@ -706,7 +705,7 @@ class GalvanostaticProfile:
         )
 
     @property
-    def isotherm_df(self):
+    def to_dataframe(self):
         """Simulated isotherm data set in a pandas format."""
         return self.isotherm_df
 

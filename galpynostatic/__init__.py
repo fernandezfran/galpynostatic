@@ -28,6 +28,7 @@ from .make_prediction import optimal_charging_rate, optimal_particle_size
 from .metric import bmxfc, fom
 from .model import GalvanostaticRegressor
 from .preprocessing import GetDischargeCapacities
+from .simulation import GalvanostaticMap, GalvanostaticProfile
 
 
 # =============================================================================
@@ -38,6 +39,8 @@ __all__ = [
     "bmxfc",
     "datasets",
     "fom",
+    "GalvanostaticMap",
+    "GalvanostaticProfile",
     "GalvanostaticRegressor",
     "GetDischargeCapacities",
     "MapSpline",

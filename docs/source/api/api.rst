@@ -13,6 +13,7 @@ galpynostatic package
    model
    plot
    preprocessing
+   simulation
    utils
    datasets
    datasets_params
