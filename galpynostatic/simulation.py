@@ -31,6 +31,8 @@ import pandas as pd
 
 import scipy.interpolate
 
+from .utils import logcrate, logd
+
 # ============================================================================
 # CONSTANTS
 # ============================================================================
@@ -44,6 +46,421 @@ _PROFILE_LIBS = ct.CDLL(PATH / "lib" / "profile.so")
 # ============================================================================
 # CLASSES
 # ============================================================================
+
+
+class GalvanostaticMap:
+    r"""Diagnostic map tool for galvanostatic intercalation material analysis.
+
+    A tool to build a diagnostic map intercalation materials under galvanostatic conditions.
+
+
+    The present software performs a series of galvanostatic simulations [1]_
+    to systematically investigate the maximum state of charge (SoC) that a
+    material is capable of accommodating at the single particle level under
+    different experimental conditions. These simulations are used to produce
+    a diagnostic map or zone diagram [2, 3]_.
+    A similar concept is used here to construct level diagrams for
+    galvanostatic simulations using two variables:
+
+    :math:`\Xi = k^{0}\left (\frac{t_{h}}{C_{r}D}  \right )^{1/2}` and
+    :math:`\ell=\frac{r^{2}C_{r}}{zt_{h}D}`
+    at constant :math:`D` and :math:`k_0`.
+
+    The SOC are calculated by means of the interpolation of the experimental
+    or theoretical isotherm, the Fick's diffusion law and the Butler-Volmer
+    charge transfer equation with a transfer coefficient of 0.5.
+
+    ///-------------------------------------------------------------------------
+    ///              Galvanostatic simulation code for generating potential
+    ///         profiles ///
+    ///-------------------------------------------------------------------------
+    ///-------------------------------------------------------------------------
+    /// This simulation code was written to simulate the charging process of a
+    /// single-particle electrode of a lithium-ion battery. To solve the Fick
+    /// diffusion equation the Crank-Nicolson method was applied. The
+    /// electrode/electrolyte interface kinetics is simulated by the Butler-Volmer
+    /// equation using experimental curves for the equilibrium potential. The
+    /// programm generates a potential profile for a (L,Xi) point.
+    ///------------------------------------------------------------------------
+
+
+    Parameters
+    ----------
+    density : float
+        Density of the electrode active material in :math:`g/cm^3`.
+
+    isotherm : bool or pandas.DataFrame, default=False
+        A dataset containing the experimental isotherm values in the
+        format potential vs capacity. The isotherm is used to calculate
+        the equilibrium potential for a given SOC. If False the
+        equilibrium potential is calculated using the theroretical model
+        ... [].
+
+    specific_capacity : bool or float, default=None
+        Specific capacity of the material in `mAh/g`. If isotherm
+        is None the specific capacity must be defined.
+
+    mass : float
+        Total mass of the electrode active material in :math:`g`.
+
+    vcut : float, default=-0.15
+        Cut potential of the simulation.
+
+    g : float, default=0.0
+        Interaction parameter of the theroretical model used to obtain
+        the equilibrium potential if isotherm=False.
+
+    geometrical_param : int default=2
+        Active material particle geometrical_parammetry. 0=planar, 
+        1=cylindrical, 2=spherical.
+
+    temperature : float, default=298.0
+        Working temperature of the cell.
+
+    resistance : float, default=0.0
+        Cell's resistance.
+
+    logxi_lle : float, default=2.0
+        Initial value of the :math:`\log(\Xi)`.
+
+    logxi_ule : float, default=-4.0
+        Final value of the :math:`\log(\Xi)`.
+
+    num_xi : int, default=5
+        Number of :math:`\log(\Xi)` values.
+
+    logell_lle : float, default=2.0
+        Initial value of the :math:`\log(\ell)`.
+
+    logell_ule : float, default=-4.0
+        Final value of the :math:`\log(\ell)`.
+
+    num_ell : int, default=5
+        Number of :math:`\log(\ell)` values.
+
+    grid_size : int, default=1000
+        Size of the spatial grid in wich the Fick's equation will be solved.
+
+    time_steps : int, default=3000000
+        Size of the time grid in wich the Fick's equation will be solved.
+
+    nthreads : int, default=-1
+        Number of threads in which the diagram calculation will be performed.
+        -1 means use all available threads.
+
+    Notes
+    -----
+
+    References
+    ----------
+
+
+    Attributes
+    ----------
+
+    """
+
+    def __init__(
+        self,
+        density,
+        isotherm=None,
+        specific_capacity=None,
+        mass=1.0,
+#        veq=None,
+        vcut=-0.15,
+        g=0.0,
+        geometrical_param=2,
+        temperature=298.0,
+        resistance=0.0,
+        logxi_lle=2.0,
+        logxi_ule=-4.0,
+        num_xi=32,
+        logell_lle=2.0,
+        logell_ule=-4.0,
+        num_ell=32,
+        grid_size=1_000,
+        time_steps=100_000,
+        nthreads=-1,
+    ):
+        self.density = density
+        self.isotherm = isotherm
+        self.specific_capacity = specific_capacity
+        self.mass = mass
+        self.temperature = temperature
+        self.resistance = resistance
+        self.g = g
+        self.geometrical_param = geometrical_param
+#        self.veq = veq
+        self.vcut = vcut
+        self.logxi_lle = logxi_lle
+        self.logxi_ule = logxi_ule
+        self.num_xi = num_xi
+        self.logell_lle = logell_lle
+        self.logell_ule = logell_ule
+        self.num_ell = num_ell
+        self.grid_size = grid_size
+        self.time_steps = time_steps
+        self.nthreads = nthreads
+
+        if (
+            not isinstance(self.isotherm, pd.DataFrame)
+            and self.specific_capacity is None
+        ):
+            raise ValueError(
+                "If no isotherm is given, specific_capacity must be defined"
+            )
+
+        if isinstance(self.isotherm, pd.DataFrame):
+            self.frumkin = False
+            self.isotherm = SplineCoef(self.isotherm)
+            # self.isotherm = SplineParams(df)
+            self.isotherm.get_params()
+            self.isotherm.vcut = self.vcut
+           # if self.veq is not None:
+            #    if self.vcut is not None:
+             #       self.isotherm.vcut = self.vcut
+              #  else:
+               #     raise ValueError(
+                #        "vcut must be defined if the equilibrium isotherm is given"
+                #    )
+            #else:
+            #    raise ValueError(
+             #       "veq must be defined if the equilibrium isotherm is given"
+              #  )
+
+        else:
+         #   if self.vcut is None:
+          #      self.vcut = -0.15
+            self.isotherm = SplineCoef(
+                pd.DataFrame(
+                    {"capacity": [self.specific_capacity], "potential": [self.vcut]}
+                )
+            )
+            self.isotherm.spl_ai = np.array(0)
+            self.isotherm.spl_bi = np.array(0)
+            self.isotherm.spl_ci = np.array(0)
+            self.isotherm.spl_di = np.array(0)
+            self.isotherm.capacity = np.array(0)
+            self.frumkin = True
+
+        self.logL_ = np.linspace(self.logell_lle, self.logell_ule, self.num_ell)
+        self.logxi_ = np.linspace(self.logxi_lle, self.logxi_ule, self.num_xi)
+
+    def run(self):
+        lib_galva = _MAPS_LIBS
+
+        lib_galva.galva.argtypes = [
+            ct.c_bool,
+            ct.c_double,
+            ct.c_int,
+            ct.c_int,
+            ct.c_int,
+            ct.c_int,
+            ct.c_int,
+            ct.c_int,
+            ct.c_double,
+            ct.c_double,
+            ct.c_double,
+            ct.c_double,
+            ct.c_double,
+            ct.c_double,
+            ct.c_double,
+            ct.POINTER(ct.c_double),
+            ct.POINTER(ct.c_double),
+            ct.POINTER(ct.c_double),
+            ct.POINTER(ct.c_double),
+            ct.POINTER(ct.c_double),
+            ct.POINTER(ct.c_double),
+            ct.POINTER(ct.c_double),
+            ct.POINTER(ct.c_double),
+            ct.POINTER(ct.c_double),
+            ct.POINTER(ct.c_double),
+        ]
+
+        N = int(self.num_ell * self.num_xi)
+
+        res_logell = (ct.c_double * N)()
+        res_logxi = (ct.c_double * N)()
+        res_socmax = (ct.c_double * N)()
+
+        lib_galva.galva(
+            self.frumkin,
+            self.g,
+            self.nthreads,
+            self.grid_size,
+            self.time_steps,
+            self.isotherm.isotherm_len,
+            self.num_ell,
+            self.num_xi,
+            self.temperature,
+            self.mass,
+            self.density,
+            self.resistance,
+            self.isotherm.vcut,
+            self.isotherm.specific_capacity,
+            self.geometrical_param,
+            self.logL_.ctypes.data_as(ct.POINTER(ct.c_double)),
+            self.logxi_.ctypes.data_as(ct.POINTER(ct.c_double)),
+            self.isotherm.spl_ai.ctypes.data_as(ct.POINTER(ct.c_double)),
+            self.isotherm.spl_bi.ctypes.data_as(ct.POINTER(ct.c_double)),
+            self.isotherm.spl_ci.ctypes.data_as(ct.POINTER(ct.c_double)),
+            self.isotherm.spl_di.ctypes.data_as(ct.POINTER(ct.c_double)),
+            self.isotherm.capacity.ctypes.data_as(ct.POINTER(ct.c_double)),
+            res_logell,
+            res_logxi,
+            res_socmax,
+        )
+
+        self.logL = np.asarray(np.frombuffer(res_logell, dtype=np.double, count=N))
+
+        self.logxi = np.asarray(np.frombuffer(res_logxi, dtype=np.double, count=N))
+
+        self.SOC = np.asarray(np.frombuffer(res_socmax, dtype=np.double, count=N))
+
+        self.SOC = np.clip(self.SOC, 0, 1)
+
+        self.df = pd.DataFrame(
+            {
+                "ell": self.logL,
+                "xi": self.logxi,
+                "SOC": self.SOC,
+            }
+        ).sort_values(by=["ell", "xi"], ascending=[True, True], ignore_index=True)
+
+    def to_dataframe(self):
+        """
+        A function that returns the diagram dataset.
+        """
+        return self.df
+
+    def plot(self, ax=None, plt_kws=None, clb=True, clb_label="SoC$_{max}$"):
+        """
+        A function that returns the axis of the two dimensional diagram
+        for a given axis.
+
+        Parameters
+        -----
+        ax : axis, default=None
+            Axis of wich the diagram plot.
+
+        plt_kws : dict, default=None
+            A dictionary containig the parameters to be passed to the axis.
+
+        clb : bool, default=True
+            Parameter that determines if the color bar will be displayed.
+
+        clb_label : str, default="SOC"
+            Name of the color bar.
+        """
+        ax = plt.gca() if ax is None else ax
+        plt_kws = {} if plt_kws is None else plt_kws
+
+        x = self.df.ell
+        y = self.df.xi
+
+        logells_ = np.unique(x)
+        logxis_ = np.unique(y)
+        socs = self.df.SOC.to_numpy().reshape(logells_.size, logxis_.size)
+
+        spline_ = scipy.interpolate.RectBivariateSpline(logells_, logxis_, socs)
+
+        xeval = np.linspace(x.min(), x.max(), 1000)
+        yeval = np.linspace(y.min(), y.max(), 1000)
+
+        z = spline_(xeval, yeval, grid=True)
+
+        im = ax.imshow(
+            z.T,
+            extent=[
+                xeval.min(),
+                xeval.max(),
+                yeval.min(),
+                yeval.max(),
+            ],
+            origin="lower",
+            **plt_kws,
+        )
+
+        if clb:
+            clb = plt.colorbar(im)
+            clb.ax.set_ylabel(clb_label)
+            clb.ax.set_ylim((0, 1))
+
+        ax.set_xlabel(r"log($\ell$)")
+        ax.set_ylabel(r"log($\Xi$)")
+        # ax.set_title(f"Diagram, g={self.g}")
+
+        return ax
+
+
+    def real_plot(self, ax=None, plt_kws=None, clb=True, clb_label="$SoC_{max}$", dcoeff, k0):
+        """
+        A function that returns the axis of the real diagram
+        for a given axis.
+
+        Parameters
+        -----
+        ax : axis, default=None
+            Axis of wich the diagram plot.
+
+        plt_kws : dict, default=None
+            A dictionary containig the parameters to be passed to the axis.
+
+        clb : bool, default=True
+            Parameter that determines if the color bar will be displayed.
+
+        clb_label : str, default="SOC"
+            Name of the color bar.
+
+        dcoeff : float
+            Diffusion coefficient, :math:`D`, in :math:`cm^2/s`.
+
+        k0 : float
+            Kinetic rate constant, :math:`k^0`, in :math:`cm/s`.
+        """
+        ax = plt.gca() if ax is None else ax
+        plt_kws = {} if plt_kws is None else plt_kws
+
+        l_log = self.df.L
+        xi_log = self.df.xi
+
+        x = logcrate(xi_log, dcoeff, k0)
+        y = logd(xi_log, l_log, dcoeff, k0, self.geometrical_param + 1)
+
+        logells_ = np.unique(x)
+        logxis_ = np.unique(y)
+        socs = self.df.SOC.to_numpy().reshape(logells_.size, logxis_.size)
+
+        spline_ = scipy.interpolate.RectBivariateSpline(
+            logells_, logxis_, socs
+        )
+
+        xeval = np.linspace(x.min(), x.max(), 1000)
+        yeval = np.linspace(y.min(), y.max(), 1000)
+
+        z = spline_(xeval, yeval, grid=True)
+
+        im = ax.imshow(
+            z.T,
+            extent=[
+                xeval.min(),
+                xeval.max(),
+                yeval.min(),
+                yeval.max(),
+            ],
+            origin="lower",
+            **plt_kws,
+        )
+
+        if clb:
+            clb = plt.colorbar(im)
+            clb.ax.set_ylabel(clb_label)
+            clb.ax.set_ylim((0, 1))
+
+        ax.set_xlabel(r"\log($C_r$)")
+        ax.set_ylabel(r"\log($d$)")
+
+        return ax
 
 
 class GalvanostaticProfile:
@@ -60,7 +477,7 @@ class GalvanostaticProfile:
     of 0.5.
 
     ///------------------------------------------------------------------------
-    ///         	 Galvanostatic simulation code for diagram construction
+    ///              Galvanostatic simulation code for diagram construction
     ///------------------------------------------------------------------------
     ///------------------------------------------------------------------------
     /// This simulation code was written to simulate the charging process of a

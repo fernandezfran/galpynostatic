@@ -81,3 +81,71 @@ def logxi(c_rate, dcoeff, k0):
         The log 10 value of :math:`\Xi` internal parameter.
     """
     return np.log10(k0 * np.sqrt(3600 / (np.asarray(c_rate) * dcoeff)))
+
+
+def logcrate(xi_log, dcoeff, k0):
+    r"""Obtain log value in base 10 of the C-rate.
+
+    TODO
+    :math:`\Xi = k^0 \sqrt{\frac{t_h}{C_{rate} D}}` where :math:`k^0` is the
+    kinetic rate constant, :math:`t_h` is the time equivalent to one hour in
+    suitable time units, here 3600 seconds, :math:`C_{rate}` is the
+    galvanostatic charging rate and :math:`D` is the diffusion coefficient.
+    END TODO
+
+    Parameters
+    ----------
+    xi_log : float or int or array-like
+        The log 10 value of :math:`\Xi`.
+
+    dcoeff : float
+        Diffusion coefficient, :math:`D`, in :math:`cm^2/s`.
+
+    k0 : float
+        Kinetic rate constant, :math:`k^0`, in :math:`cm/s`.
+
+    Returns
+    -------
+    log_crate : float or array-like
+        The log 10 value of theC-rate.
+    """
+    return np.log10(3600 / dcoeff * k0 ** 2) - 2 * xi_log
+
+
+def logd(xi_log, l_log, dcoeff, k0, z):
+    r"""Obtain log value in base 10 of the characteristic diffusion length d.
+
+    TODO
+    :math:`\Xi = k^0 \sqrt{\frac{t_h}{C_{rate} D}}` where :math:`k^0` is the
+    kinetic rate constant, :math:`t_h` is the time equivalent to one hour in
+    suitable time units, here 3600 seconds, :math:`C_{rate}` is the
+    galvanostatic charging rate and :math:`D` is the diffusion coefficient.
+    END TODO
+
+    Parameters
+    ----------
+    xi_log : float or int or array-like
+        The log 10 value of :math:`\Xi`.
+
+    l_log : float or int or array-like
+        The log 10 value of :math:`\ell`.
+
+    dcoeff : float
+        Diffusion coefficient, :math:`D`, in :math:`cm^2/s`.
+
+    k0 : float
+        Kinetic rate constant, :math:`k^0`, in :math:`cm/s`.
+
+    z : int
+        Geometric factor: 1 for planar, 2 for cylinder and 3 for sphere.
+
+    Returns
+    -------
+    logxi : float or array-like
+        The log 10 value of :math:`\Xi` internal parameter.
+    """
+    cr_log = log_crate(xi_log, dcoeff, k0)
+
+    return 0.5* (l_log + np.log10(3600 * z * D) - cr_log)
+
+    
