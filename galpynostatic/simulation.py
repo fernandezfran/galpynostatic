@@ -809,3 +809,129 @@ class SplineCoeff:
         self.spl_bi = isotherm_spl.c[1, :]
         self.spl_ci = isotherm_spl.c[2, :]
         self.spl_di = isotherm_spl.c[3, :]
+
+
+class fit:
+    r"""Tool to fit :math:`k^0` and :math:`D` for non equilibrium isotherms.
+
+    :math:`k^0` and :math:`D` are obtained using a simulated isotherm
+    as imput of a scipy.optimize.curve_fit considering an experimental
+    equilibrium isotherm and an out equilibrium isotherm.
+
+    Parameters
+    ----------
+    equilibrium_iso : pandas.DataFrame
+        A dataset containing the experimental equilibrium isotherm values 
+        in the format SOC vs potential.
+
+    objective_iso : pandas.DataFrame
+        A dataset containing the experimental no equilibrium isotherm 
+        values in the format SOC vs potential.
+
+    density : float
+        Density of the electrode active material in :math:`g/cm^3`.
+
+    crate : int or float
+        Crate of the non equilibrium isotherm.
+
+    particle_size : float
+        Experimental active material particle size in :math:`cm`.
+
+    geometrical_param : int, default=2
+        Active material particle geometrical_parammetry. 0=planar, 
+        1=cylindrical, 2=spherical.
+
+    Attributes
+    ----------
+    logxi : float
+        Fitted log value in base 10 of :math:`\Xi`.
+
+    logell : float
+        Fitted log value in base 10 of :math:`\ell`.
+
+    dcoeff : float
+        Diffusion coefficient, :math:`D`, in :math:`cm^2/s`.
+
+    k0 : float
+        Kinetic rate constant, :math:`k^0`, in :math:`cm/s`.
+    """
+    def __init__(
+        self,
+        equilibrium_iso, 
+        objective_iso, 
+        density, 
+        crate, 
+        particle_size, 
+        geometrical_param=2
+        ):
+
+        self.equilibrium_iso = equilibrium_iso
+        self.objective_iso = objective_iso
+        self.density = density
+        self.crate = crate
+        self.particle_size = particle_size
+        self.geometrical_param = geometrical_param
+
+
+    def fit_data(self):
+        """Fit the non equilibrium isotherm"""
+        def fit_function(xdata, xi, l):
+            iso = GalvanostaticProfile(self.density, xi, l, isotherm=self.equilibrium_iso)
+            iso.run()
+            soc = iso.isotherm_df.SOC
+            pot = iso.isotherm_df.Potential
+            spl = scipy.interpolate.CubicSpline(soc, pot)
+            return spl(xdata)
+
+        maximum = self.equilibrium_iso.iloc[:,0].max()
+        fit = scipy.optimize.curve_fit(
+            fit_function,
+            self.objective_iso.iloc[:,0]/maximum, 
+            self.objective_iso.iloc[:,1],
+            p0=[-1, -1],
+            bounds=([[-4, -4], [2, 2]]),
+            )
+
+        self.logxi, self.logell = fit[0]
+
+        self.dcoeff = self.particle_size ** 2 * self.crate / ((self.geometrical_param + 1) * 3600 * 10 ** self.logell)
+
+        self.k0 = 10 ** self.logxi * self.crate * self.particle_size / 3600 * np.sqrt(1 / (self.geometrical_param * 10 ** self.logell))
+
+        return [self.dcoeff, self.k0]
+
+
+    def plot_fit(self, ax=None, plt_kws=None):
+        """Plot the fitted non equilibrium isotherm.
+
+        Parameters
+        ----------
+        ax : axis, default=None
+            Axis of wich the diagram plot.
+
+        plt_kws : dict, default=None
+            A dictionary containig the parameters to be passed to the axis.
+        """
+        ax = plt.gca() if ax is None else ax
+        plt_kws = {} if plt_kws is None else plt_kws
+
+        iso = GalvanostaticProfile(
+            self.density,
+            self.logxi, 
+            self.logell, 
+            isotherm=self.equilibrium_iso)
+        iso.run()
+
+        df = iso.isotherm_df
+        x = df["SOC"]
+        y = df["Potential"]
+
+
+        ax.plot(x, y, **plt_kws)
+
+        ax.set_xlabel("SoC")
+        ax.set_ylabel("Potential / V")
+        #
+        # ax.legend()
+
+        return ax
