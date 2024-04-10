@@ -188,4 +188,8 @@ galva(const bool model, const double g_pot, const int grid_size,
         }
         steps++;
     }
+
+    res_soc[res_index + 1] = soc;
+    res_pot[res_index + 1] = pot_i;
+
 }
