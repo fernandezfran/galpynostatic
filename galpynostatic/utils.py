@@ -107,7 +107,7 @@ def logcrate(xi_log, dcoeff, k0):
     Returns
     -------
     log_crate : float or array-like
-        The log 10 value of theC-rate.
+        The log 10 value of the C-rate.
     """
     return np.log10(3600 / dcoeff * k0**2) - 2 * xi_log
 
@@ -141,8 +141,8 @@ def logd(xi_log, l_log, dcoeff, k0, z):
 
     Returns
     -------
-    logxi : float or array-like
-        The log 10 value of :math:`\Xi` internal parameter.
+    logd : float or array-like
+        The log 10 value of the diffusion length.
     """
     cr_log = logcrate(xi_log, dcoeff, k0)
 
