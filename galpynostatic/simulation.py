@@ -20,8 +20,7 @@
 import ctypes as ct
 import os
 import pathlib
-
-# import sysconfig
+import sysconfig
 
 import matplotlib.pyplot as plt
 
@@ -178,7 +177,6 @@ class GalvanostaticMap:
         self.grid_size = grid_size
         self.time_steps = time_steps
         self.nthreads = nthreads
-        self._MAPS_LIBS = ct.CDLL(PATH / "lib" / "map.so")  # TODO sysconfig
 
         if (
             not isinstance(self.isotherm, pd.DataFrame)
@@ -218,9 +216,11 @@ class GalvanostaticMap:
 
     def run(self):
         """Run the diagram simulation."""
-        lib_galva = self._MAPS_LIBS
+        lib_map = ct.CDLL(
+            PATH / "lib" / "map" + sysconfig.get_config_var("EXT_SUFFIX")
+        )
 
-        lib_galva.galva.argtypes = [
+        lib_map.run_map.argtypes = [
             ct.c_bool,
             ct.c_double,
             ct.c_int,
@@ -254,7 +254,7 @@ class GalvanostaticMap:
         res_logxi = (ct.c_double * N)()
         res_socmax = (ct.c_double * N)()
 
-        lib_galva.galva(
+        lib_map.run_map(
             self.frumkin,
             self.g,
             self.nthreads,
@@ -566,9 +566,6 @@ class GalvanostaticProfile:
         self.grid_size = grid_size
         self.time_steps = time_steps
         self.each = each
-        self._PROFILE_LIBS = ct.CDLL(
-            PATH / "lib" / "profile.so"
-        )  # TODO sysconfig
 
         if (
             not isinstance(self.isotherm, pd.DataFrame)
@@ -600,9 +597,11 @@ class GalvanostaticProfile:
 
     def run(self):
         """Run the isotherm simulation."""
-        lib_galva = self._PROFILE_LIBS
+        lib_profile = ct.CDLL(
+            PATH / "lib" / "profile" + sysconfig.get_config_var("EXT_SUFFIX")
+        )
 
-        lib_galva.galva.argtypes = [
+        lib_profile.run_profile.argtypes = [
             ct.c_bool,
             ct.c_double,
             ct.c_int,
@@ -637,7 +636,7 @@ class GalvanostaticProfile:
         res_norm = (ct.c_double * self.grid_size)()
         res_cons = (ct.c_double * self.grid_size)()
 
-        lib_galva.galva(
+        lib_profile.run_profile(
             self.frumkin,
             self.g,
             self.grid_size,
@@ -746,7 +745,6 @@ class GalvanostaticProfile:
         ax.set_xlabel("$r_{norm}$")
         ax.set_ylabel(r"$\theta$")
         ax.set_title(f"Concentration profile, SOC={self.profile_soc}")
-        # ax.legend()
 
         return ax
 
@@ -811,7 +809,7 @@ class SplineCoeff:
         self.spl_di = isotherm_spl.c[3, :]
 
 
-class fit:
+class ProfileFitting:
     r"""Tool to fit :math:`k^0` and :math:`D` for non equilibrium isotherms.
 
     :math:`k^0` and :math:`D` are obtained using a simulated isotherm
@@ -820,12 +818,12 @@ class fit:
 
     Parameters
     ----------
-    equilibrium_iso : pandas.DataFrame
-        A dataset containing the experimental equilibrium isotherm values 
+    isotherm : pandas.DataFrame
+        A dataset containing the experimental equilibrium isotherm values
         in the format SOC vs potential.
 
     objective_iso : pandas.DataFrame
-        A dataset containing the experimental no equilibrium isotherm 
+        A dataset containing the experimental no equilibrium isotherm
         values in the format SOC vs potential.
 
     density : float
@@ -838,7 +836,7 @@ class fit:
         Experimental active material particle size in :math:`cm`.
 
     geometrical_param : int, default=2
-        Active material particle geometrical_parammetry. 0=planar, 
+        Active material particle geometrical_parammetry. 0=planar,
         1=cylindrical, 2=spherical.
 
     Attributes
@@ -855,51 +853,62 @@ class fit:
     k0 : float
         Kinetic rate constant, :math:`k^0`, in :math:`cm/s`.
     """
+
     def __init__(
         self,
-        equilibrium_iso, 
-        objective_iso, 
-        density, 
-        crate, 
-        particle_size, 
-        geometrical_param=2
-        ):
-
-        self.equilibrium_iso = equilibrium_iso
+        isotherm,
+        objective_iso,
+        density,
+        crate,
+        particle_size,
+        geometrical_param=2,
+    ):
+        self.isotherm = isotherm
         self.objective_iso = objective_iso
         self.density = density
         self.crate = crate
         self.particle_size = particle_size
         self.geometrical_param = geometrical_param
 
-
     def fit_data(self):
-        """Fit the non equilibrium isotherm"""
-        def fit_function(xdata, xi, l):
-            iso = GalvanostaticProfile(self.density, xi, l, isotherm=self.equilibrium_iso)
+        """Fit the non equilibrium isotherm."""
+
+        def fit_function(xdata, xi, ell):
+            iso = GalvanostaticProfile(
+                self.density, xi, ell, isotherm=self.isotherm
+            )
             iso.run()
             soc = iso.isotherm_df.SOC
             pot = iso.isotherm_df.Potential
             spl = scipy.interpolate.CubicSpline(soc, pot)
             return spl(xdata)
 
-        maximum = self.equilibrium_iso.iloc[:,0].max()
+        maximum = self.isotherm.iloc[:, 0].max()
         fit = scipy.optimize.curve_fit(
             fit_function,
-            self.objective_iso.iloc[:,0]/maximum, 
-            self.objective_iso.iloc[:,1],
+            self.objective_iso.iloc[:, 0] / maximum,
+            self.objective_iso.iloc[:, 1],
             p0=[-1, -1],
             bounds=([[-4, -4], [2, 2]]),
-            )
+        )
 
         self.logxi, self.logell = fit[0]
 
-        self.dcoeff = self.particle_size ** 2 * self.crate / ((self.geometrical_param + 1) * 3600 * 10 ** self.logell)
+        self.dcoeff = (
+            self.particle_size**2
+            * self.crate
+            / ((self.geometrical_param + 1) * 3600 * 10**self.logell)
+        )
 
-        self.k0 = 10 ** self.logxi * self.crate * self.particle_size / 3600 * np.sqrt(1 / (self.geometrical_param * 10 ** self.logell))
+        self.k0 = (
+            10**self.logxi
+            * self.crate
+            * self.particle_size
+            / 3600
+            * np.sqrt(1 / (self.geometrical_param * 10**self.logell))
+        )
 
         return [self.dcoeff, self.k0]
-
 
     def plot_fit(self, ax=None, plt_kws=None):
         """Plot the fitted non equilibrium isotherm.
@@ -917,21 +926,19 @@ class fit:
 
         iso = GalvanostaticProfile(
             self.density,
-            self.logxi, 
-            self.logell, 
-            isotherm=self.equilibrium_iso)
+            self.logxi,
+            self.logell,
+            isotherm=self.isotherm,
+        )
         iso.run()
 
         df = iso.isotherm_df
         x = df["SOC"]
         y = df["Potential"]
 
-
         ax.plot(x, y, **plt_kws)
 
         ax.set_xlabel("SoC")
         ax.set_ylabel("Potential / V")
-        #
-        # ax.legend()
 
         return ax

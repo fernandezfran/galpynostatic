@@ -9,14 +9,15 @@
 #include <cmath>
 
 extern "C" void
-galva(bool model, const double g_pot, const int nthreads, const int grid_size,
-      const int time_steps, const int isotherm_len, const int num_logell,
-      const int num_logxi, const double temperature, const double mass,
-      const double density, const double vcut, const double specific_capacity,
-      const double geometry_param, const double *logell_grid,
-      const double *logxi_grid, const double *spl_ai, const double *spl_bi,
-      const double *spl_ci, const double *spl_di, const double *soc_eq,
-      double *res_logell, double *res_logxi, double *res_socmax)
+run_map(bool model, const double g_pot, const int nthreads,
+        const int grid_size, const int time_steps, const int isotherm_len,
+        const int num_logell, const int num_logxi, const double temperature,
+        const double mass, const double density, const double vcut,
+        const double specific_capacity, const double geometry_param,
+        const double *logell_grid, const double *logxi_grid,
+        const double *spl_ai, const double *spl_bi, const double *spl_ci,
+        const double *spl_di, const double *soc_eq, double *res_logell,
+        double *res_logxi, double *res_socmax)
 {
     const double faraday = 96484.5561;
     const double gas_constant = 8.314472;

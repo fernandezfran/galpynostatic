@@ -10,14 +10,15 @@
 #include <cmath>
 
 extern "C" void
-galva(const bool model, const double g_pot, const int grid_size,
-      const int time_steps, const int each, const int isotherm_len,
-      const double temperature, const double mass, const double density,
-      const double vcut, const double specific_capacity,
-      const double geometry_param, const double logxi, const double logell,
-      const double profile_soc, const double *spl_ai, const double *spl_bi,
-      const double *spl_ci, const double *spl_di, const double *soceq,
-      double *res_soc, double *res_pot, double *res_r_norm, double *res_cons)
+run_profile(const bool model, const double g_pot, const int grid_size,
+            const int time_steps, const int each, const int isotherm_len,
+            const double temperature, const double mass, const double density,
+            const double vcut, const double specific_capacity,
+            const double geometry_param, const double logxi,
+            const double logell, const double profile_soc,
+            const double *spl_ai, const double *spl_bi, const double *spl_ci,
+            const double *spl_di, const double *soceq, double *res_soc,
+            double *res_pot, double *res_r_norm, double *res_cons)
 {
     const double faraday = 96484.5561;
     const double gas_constant = 8.314472;
@@ -80,7 +81,8 @@ galva(const bool model, const double g_pot, const int grid_size,
             actual_soc[i] = (soceq[0] == 0.0) ? 1e-4 : soceq[0];
         }
     }
-
+    
+    double soc;
     double pot_i = vcut + 1.0;
 
     int steps = 0;
@@ -129,7 +131,7 @@ galva(const bool model, const double g_pot, const int grid_size,
 
         pot_i = pot_eq + 2.0 * rfaraday * asinh(ccd / (2.0 * i0));
 
-        double soc = 0.0;
+        soc = 0.0;
         for (int i = 0; i < grid_size; i++) {
             soc += actual_soc[i];
         }
@@ -191,5 +193,4 @@ galva(const bool model, const double g_pot, const int grid_size,
 
     res_soc[res_index + 1] = soc;
     res_pot[res_index + 1] = pot_i;
-
 }
