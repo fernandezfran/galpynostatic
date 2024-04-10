@@ -13,3 +13,5 @@ result_images/
 .coverage
 
 dist/
+
+galpynostatic/lib/*.so
