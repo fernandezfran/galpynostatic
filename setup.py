@@ -8,7 +8,9 @@
 # License: MIT
 #   https://github.com/fernandezfran/galpynostatic/blob/master/LICENSE
 
-from setuptools import setup, Extension
+"""Compile C++ modules when `pip install galpynostatic`."""
+
+from setuptools import Extension, setup
 
 _flags = ["-fPIC", "-O3", "-ftree-vectorize", "-march=native"]
 
