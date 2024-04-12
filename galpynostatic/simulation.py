@@ -430,6 +430,65 @@ class GalvanostaticMap:
         return ax
 
 
+    def real_plot(self, dcoeff, k0, ax=None, plt_kws=None, clb=True, clb_label="$SoC_{max}$"):
+        """
+        A function that returns the axis of the real diagram
+        for a given axis.
+
+        Parameters
+        -----
+        dcoeff : float
+            Diffusion coefficient, :math:`D`, in :math:`cm^2/s`.
+
+        k0 : float
+            Kinetic rate constant, :math:`k^0`, in :math:`cm/s`.
+        ax : axis, default=None
+            Axis of wich the diagram plot.
+
+        plt_kws : dict, default=None
+            A dictionary containig the parameters to be passed to the axis.
+
+        clb : bool, default=True
+            Parameter that determines if the color bar will be displayed.
+
+        clb_label : str, default="SOC"
+            Name of the color bar.
+        """
+        ax = plt.gca() if ax is None else ax
+        plt_kws = {} if plt_kws is None else plt_kws
+
+        l_log = self.df.ell.values
+        xi_log = self.df.xi.values
+
+        logcrate_ = logcrate(xi_log, dcoeff, k0)
+        logd_ = logd(xi_log, l_log, dcoeff, k0, self.geometrical_param + 1)
+
+        self.df['log_crate'] = logcrate_
+        self.df['log_d'] = logd_
+        
+        x = np.linspace(self.df['log_crate'].min(), 
+            self.df['log_crate'].max(), 
+            1000)
+        y = np.linspace(self.df['log_d'].min(), self.df['log_d'].max(), 1000)
+        
+        X, Y = np.meshgrid(x, y)
+
+        # Interpolar los datos en la malla uniforme
+        Z = np.clip(scipy.interpolate.griddata(
+            (
+            self.df['log_crate'], 
+            self.df['log_d']
+            ), 
+        self.df['SOC'], (X, Y), method='linear'), 0, 1)
+
+        ax.contourf(X, Y, Z)
+
+        ax.set_xlabel(r"log($C_r$)")
+        ax.set_ylabel(r"log($d$)")
+
+        return ax
+
+
 class GalvanostaticProfile:
     r"""A tool to extrapolate isotherms varing C-rate and particle size.
 
