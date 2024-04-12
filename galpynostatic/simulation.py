@@ -60,22 +60,8 @@ class GalvanostaticMap:
 
     The SOC are calculated by means of the interpolation of the experimental
     or theoretical isotherm, the Fick's diffusion law and the Butler-Volmer
-    charge transfer equation with a transfer coefficient of 0.5.
-
-    ///-------------------------------------------------------------------------
-    ///              Galvanostatic simulation code for generating potential
-    ///         profiles ///
-    ///-------------------------------------------------------------------------
-    ///-------------------------------------------------------------------------
-    /// This simulation code was written to simulate the charging process of a
-    /// single-particle electrode of a lithium-ion battery. To solve the Fick
-    /// diffusion equation the Crank-Nicolson method was applied. The
-    /// electrode/electrolyte interface kinetics is simulated by the
-    /// Butler-Volmer equation using experimental curves for the equilibrium
-    potential. The
-    /// programm generates a potential profile for a (L,Xi) point.
-    ///------------------------------------------------------------------------
-
+    charge transfer equation with a transfer coefficient of 0.5. The Fick 
+    diffusion equation is solved using the Crank-Nicolson method.
 
     Parameters
     ----------
@@ -455,21 +441,8 @@ class GalvanostaticProfile:
     resulting isotherms are calculated by means of the interpolation of
     the experimental or theoretical isotherm, the Fick's diffusion law and
     the Butler-Volmer charge transfer equation with a transfer coefficient
-    of 0.5.
-
-    ///------------------------------------------------------------------------
-    ///              Galvanostatic simulation code for diagram construction
-    ///------------------------------------------------------------------------
-    ///------------------------------------------------------------------------
-    /// This simulation code was written to simulate the charging process of a
-    /// single-particle electrode of a lithium-ion battery. To solve the Fick
-    /// diffusion equation the Backward-Implicit method was applied. The
-    /// electrode/electrolyte interface kinetics is simulated by the
-    /// Butler-Volmer equation using experimental curves for the equilibrium
-    /// potential. The programm generates a diagram consisting in N (Xi,L)
-    /// data points. The present codes was parallelized with OpenMP at the
-    /// level of a point in L for different Xi.
-    ///---------------------------------------------------------------------------
+    of 0.5. The Fick diffusion equation is solved using the Crank-Nicolson 
+    method.
 
     Parameters
     ----------

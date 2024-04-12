@@ -86,12 +86,12 @@ def logxi(c_rate, dcoeff, k0):
 def logcrate(xi_log, dcoeff, k0):
     r"""Obtain log value in base 10 of the C-rate.
 
-    TODO
-    :math:`\Xi = k^0 \sqrt{\frac{t_h}{C_{rate} D}}` where :math:`k^0` is the
-    kinetic rate constant, :math:`t_h` is the time equivalent to one hour in
-    suitable time units, here 3600 seconds, :math:`C_{rate}` is the
-    galvanostatic charging rate and :math:`D` is the diffusion coefficient.
-    END TODO
+    :math:`C_{rate} = \dfrac{t_h}{D}(\dfrac{k^0}{\Xi})` where :math:`k^0` 
+    is the kinetic rate constant, :math:`t_h` is the time equivalent to 
+    one hour in suitable time units, here 3600 seconds, :math:`\Xi` is 
+    the kinetic parameter of the model and :math:`D` is the diffusion 
+    coefficient.
+    
 
     Parameters
     ----------
@@ -115,12 +115,12 @@ def logcrate(xi_log, dcoeff, k0):
 def logd(xi_log, l_log, dcoeff, k0, z):
     r"""Obtain log value in base 10 of the characteristic diffusion length d.
 
-    TODO
-    :math:`\Xi = k^0 \sqrt{\frac{t_h}{C_{rate} D}}` where :math:`k^0` is the
+    :math:`d = \sqrt(\dfrac{\ell z t_h D}{C_{rate}})` where :math:`k^0` is the
     kinetic rate constant, :math:`t_h` is the time equivalent to one hour in
     suitable time units, here 3600 seconds, :math:`C_{rate}` is the
-    galvanostatic charging rate and :math:`D` is the diffusion coefficient.
-    END TODO
+    galvanostatic charging rate, :math:`\Xi` and :math:`\ell` are the kinetic 
+    parameter and finite diffusion parameter of the model, z the geometric 
+    factor of the particle and :math:`D` is the diffusion coefficient.
 
     Parameters
     ----------
