@@ -406,7 +406,22 @@ class GalvanostaticMap:
             ), 
         self.df['SOC'], (X, Y), method='linear'), 0, 1)
 
-        ax.contourf(X, Y, Z)
+        im = ax.imshow(
+            Z,
+            extent=[
+                X.min(),
+                X.max(),
+                Y.min(),
+                Y.max(),
+            ],
+            origin="lower",
+            **plt_kws,
+        )
+
+        if clb:
+            clb = plt.colorbar(im)
+            clb.ax.set_ylabel(clb_label)
+            clb.ax.set_ylim((0, 1))
 
         ax.set_xlabel(r"log($C_r$)")
         ax.set_ylabel(r"log($d$)")
