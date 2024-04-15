@@ -775,26 +775,26 @@ class ProfileFitting:
 
     Parameters
     ----------
-    isotherm : pandas.DataFrame
-        A dataset containing the experimental equilibrium isotherm values
+    equilibrium_iso : pandas.DataFrame
+        A dataset containing the experimental equilibrium isotherm values 
         in the format SOC vs potential.
 
     objective_iso : pandas.DataFrame
-        A dataset containing the experimental no equilibrium isotherm
+        A dataset containing the experimental no equilibrium isotherm 
         values in the format SOC vs potential.
 
     density : float
-        Density of the electrode active material in :math:`g/cm^3`.
+        Density of the material in :math: `g/cm^3`.
 
     crate : int or float
         Crate of the non equilibrium isotherm.
 
     particle_size : float
-        Experimental active material particle size in :math:`cm`.
+        Experimental active material diffusion length in :math: `cm`.
 
     geometrical_param : int, default=2
-        Active material particle geometrical_parammetry. 0=planar,
-        1=cylindrical, 2=spherical.
+        Active material particle geometrical_parammetry. 0=planar, 1=cylindrical,
+        2=spherical.
 
     Attributes
     ----------
