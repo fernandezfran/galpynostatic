@@ -296,7 +296,7 @@ class GalvanostaticMap:
         """Convert the diagram dataset into a dataframe."""
         return self.df
 
-    def plot(self, ax=None, plt_kws=None, clb=True, clb_label="SoC$_{max}$"):
+    def map_plot(self, ax=None, plt_kws=None, clb=True, clb_label="SoC$_{max}$"):
         """Plot the two dimensional diagram.
 
         Parameters
