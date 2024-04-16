@@ -291,7 +291,8 @@ class GalvanostaticMap:
             by=["ell", "xi"], ascending=[True, True], ignore_index=True
         )
 
-    def to_dataframe(self):
+    @property    
+    def map_dataframe(self):
         """Convert the diagram dataset into a dataframe."""
         return self.df
 
@@ -663,7 +664,7 @@ class GalvanostaticProfile:
         )
 
     @property
-    def to_dataframe(self):
+    def profile_dataframe(self):
         """Simulated isotherm data set in a pandas format."""
         return self.isotherm_df
 
