@@ -89,9 +89,9 @@ class GalvanostaticMap:
         Interaction parameter of the theroretical model used to obtain
         the equilibrium potential if isotherm=False.
 
-    geometrical_param : int default=2
-        Active material particle geometrical_parammetry. 0=planar,
-        1=cylindrical, 2=spherical.
+    geometrical_param : int default=3
+        Active material particle geometrical_parammetry. 1=planar,
+        1=cylindrical, 3=spherical.
 
     temperature : float, default=298.0
         Working temperature of the cell.
@@ -133,7 +133,7 @@ class GalvanostaticMap:
         mass=1.0,
         vcut=-0.15,
         g=0.0,
-        geometrical_param=2,
+        geometrical_param=3,
         temperature=298.0,
         logxi_lle=2.0,
         logxi_ule=-4.0,
@@ -471,9 +471,9 @@ class GalvanostaticProfile:
     vcut : float, default=-0.15
         Cut potential if isotherm=False.
 
-    geometrical_param : int default=2
-        Active material particle geometrical_parammetry. 0=planar,
-        1=cylindrical, 2=spherical.
+    geometrical_param : int default=3
+        Active material particle geometrical_parammetry. 1=planar,
+        1=cylindrical, 3=spherical.
 
     g : float, default=0.0
         Interaction parameter of the theroretical model used to obtain
@@ -517,7 +517,7 @@ class GalvanostaticProfile:
         specific_capacity=None,
         mass=1.0,
         vcut=-0.15,
-        geometrical_param=2,
+        geometrical_param=3,
         g=0.0,
         profile_soc=0.5,
         temperature=298.0,

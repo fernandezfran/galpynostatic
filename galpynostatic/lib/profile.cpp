@@ -81,7 +81,7 @@ run_profile(const bool model, const double g_pot, const int grid_size,
             actual_soc[i] = (soceq[0] == 0.0) ? 1e-4 : soceq[0];
         }
     }
-    
+
     double soc;
     double pot_i = vcut + 1.0;
 
