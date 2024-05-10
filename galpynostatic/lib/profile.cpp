@@ -31,7 +31,7 @@ run_profile(const bool model, const double g_pot, const int grid_size,
         2.0 * sqrt((pow(10, logell) * 2.0 * t_hour) / c_rate);
 
     double surface_area =
-        2.0 * (1.0 + geometry_param) * mass / (density * particle_size);
+        2.0 * geometry_param * mass / (density * particle_size);
 
     double ccd = -c_rate * specific_capacity * mass / (1000.0 * surface_area);
 
@@ -52,7 +52,7 @@ run_profile(const bool model, const double g_pot, const int grid_size,
     }
 
     double alpha = time_step / (2.0 * space_step * space_step);
-    double beta = geometry_param * time_step / (4.0 * space_step);
+    double beta = (geometry_param -1) * time_step / (4.0 * space_step);
 
     double alpha_0 = 1.0 + (2.0 * alpha);
     double gamma0 = 1.0 - (2.0 * alpha);
