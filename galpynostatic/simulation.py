@@ -176,7 +176,7 @@ class GalvanostaticMap:
             self.frumkin = False
             self.isotherm = SplineCoeff(self.isotherm)
             # self.isotherm = SplineParams(df)
-            self.isotherm.get_params()
+            self.isotherm.get_coeffs()
             self.isotherm.vcut = self.vcut
 
         else:
@@ -203,7 +203,7 @@ class GalvanostaticMap:
     def run(self):
         """Run the diagram simulation."""
         lib_map = ct.CDLL(
-            PATH / "lib" / "map" + sysconfig.get_config_var("EXT_SUFFIX")
+            str(PATH / "lib" / "map") + sysconfig.get_config_var("EXT_SUFFIX")
         )
 
         lib_map.run_map.argtypes = [
@@ -215,7 +215,6 @@ class GalvanostaticMap:
             ct.c_int,
             ct.c_int,
             ct.c_int,
-            ct.c_double,
             ct.c_double,
             ct.c_double,
             ct.c_double,
@@ -571,7 +570,7 @@ class GalvanostaticProfile:
     def run(self):
         """Run the isotherm simulation."""
         lib_profile = ct.CDLL(
-            PATH / "lib" / "profile" + sysconfig.get_config_var("EXT_SUFFIX")
+            str(PATH / "lib" / "profile") + sysconfig.get_config_var("EXT_SUFFIX")
         )
 
         lib_profile.run_profile.argtypes = [
@@ -581,7 +580,6 @@ class GalvanostaticProfile:
             ct.c_int,
             ct.c_int,
             ct.c_int,
-            ct.c_double,
             ct.c_double,
             ct.c_double,
             ct.c_double,
@@ -657,7 +655,7 @@ class GalvanostaticProfile:
 
         self.isotherm_df = self.isotherm_df.loc[
             (self.isotherm_df != 0).any(axis=1)
-        ].reset_index()
+        ].reset_index(drop=True)
 
         self.concentration_df = pd.DataFrame(
             {"r_norm": self.r_norm, "theta": self.tita1}
@@ -766,7 +764,7 @@ class SplineCoeff:
     def get_coeffs(self):
         """Calculate the spline coefficients.
 
-        The function get_params takes the  normalized experimental
+        The function get_coeffs takes the  normalized experimental
         capacity or the smooth isotherm.
         It returns the parameters ai, bi, ci, and di of the cubic
         spline of the isotherm. These parameters can be used to
