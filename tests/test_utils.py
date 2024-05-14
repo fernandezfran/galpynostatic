@@ -14,6 +14,8 @@
 
 import galpynostatic.utils
 
+import galpynostatic.simulation as si
+
 import numpy as np
 
 import pytest
@@ -49,5 +51,26 @@ def test_logell(c_rate, ref):
 def test_logxi(c_rate, ref):
     """Test the log Xi values."""
     res = galpynostatic.utils.logxi(c_rate, 1e-9, 1e-7)
+
+    np.testing.assert_array_almost_equal(res, ref, 6)
+
+
+def test_logcrate():
+    xi_log = [-2, -1, 1, 2, 3]
+    res = si.logcrate(xi_log, 6.085284e-14, 1.099165e-8)
+    ref = np.asarray([ 
+        4.85414743,  2.85414743, -1.14585257, -3.14585257, -5.14585257
+        ]
+        )
+
+    np.testing.assert_array_almost_equal(res, ref, 6)
+
+
+def test_logd():
+    logs = [-2, -1, 1, 2, 3]
+    res = si.logd(logs, logs, 6.085284e-14, 1.099165e-8, 3)
+    ref = np.asarray(
+        [-8.01822141, -6.51822141, -3.51822141, -2.01822141, -0.51822141]
+        )
 
     np.testing.assert_array_almost_equal(res, ref, 6)

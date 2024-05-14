@@ -689,7 +689,7 @@ class GalvanostaticProfile:
         y = self.isotherm_df["Potential"]
 
         ax.plot(x, y, **plt_kws)
-        ax.set_xlabel("SOC")
+        ax.set_xlabel("SoC")
         ax.set_ylabel("Potential")
 
         return ax
@@ -715,7 +715,6 @@ class GalvanostaticProfile:
 
         ax.set_xlabel("$r_{norm}$")
         ax.set_ylabel(r"$\theta$")
-        ax.set_title(f"Concentration profile, SOC={self.profile_soc}")
 
         return ax
 
@@ -807,8 +806,8 @@ class ProfileFitting:
         Experimental active material diffusion length in :math: `cm`.
 
     geometrical_param : int, default=2
-        Active material particle geometrical_parammetry. 0=planar, 1=cylindrical,
-        2=spherical.
+        Active material particle geometrical_parammetry. 1=planar, 2=cylindrical,
+        3=spherical.
 
     Attributes
     ----------
@@ -832,7 +831,7 @@ class ProfileFitting:
         density,
         crate,
         particle_size,
-        geometrical_param=2,
+        geometrical_param=3,
     ):
         self.isotherm = isotherm
         self.objective_iso = objective_iso
@@ -868,7 +867,7 @@ class ProfileFitting:
         self.dcoeff = (
             self.particle_size**2
             * self.crate
-            / ((self.geometrical_param + 1) * 3600 * 10**self.logell)
+            / (self.geometrical_param * 3600 * 10**self.logell)
         )
 
         self.k0 = (
@@ -876,7 +875,7 @@ class ProfileFitting:
             * self.crate
             * self.particle_size
             / 3600
-            * np.sqrt(1 / (self.geometrical_param * 10**self.logell))
+            * np.sqrt(1 / ((self.geometrical_param - 1) * 10**self.logell))
         )
 
         return [self.dcoeff, self.k0]

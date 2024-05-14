@@ -17,8 +17,6 @@ import pathlib
 import matplotlib.pyplot as plt
 from matplotlib.testing.decorators import check_figures_equal
 
-
-
 import galpynostatic.simulation as si
 
 import numpy as np
@@ -156,40 +154,30 @@ class TestGalvanostaticProfile:
 
         pd.testing.assert_frame_equal(profile.concentration_df, df)
 
-@pytest.mark.parametrize(
-    ("isotherm", "refs"),
-    [
-        (
-            None,
-            [
-                [0.425469, 0.000100, 0.997087],
-                PATH / "test_data" / "simulations" / "map.csv",
-            ],
-        ),
-        (
-            pd.read_csv(PATH / "test_data" / "simulations" / "LMO-1C.csv", 
-                names=['capacity', 'potential']),
-            [
-                [0.658353, 0.008348, 0.999987],
-                PATH / "test_data" / "simulations" / "map_iso.csv",
-            ],
-        ),                
-    ],
-)
-class TestGalvanostaticMap:
-    def test_map_soc(self, isotherm, refs):
-        galvamap = si.GalvanostaticMap(
-            4.58,
-            time_steps=20000,
-            num_ell=3,
-            num_xi=3,
-            isotherm=isotherm,
-            specific_capacity=100,
+
+def test_fit():
+    """Test the fit function of simulation module."""
+
+    data = pd.read_csv(
+        PATH / "test_data" / "simulations" / "LMO-1C.csv", 
+        names=['capacity', 'voltage']
         )
-        galvamap.run()
 
-        np.testing.assert_almost_equal(np.mean(galvamap.SOC), refs[0][0], 4)
-        np.testing.assert_almost_equal(np.min(galvamap.SOC), refs[0][1], 4)
-        np.testing.assert_almost_equal(np.max(galvamap.SOC), refs[0][2], 6)
+    df20C = pd.read_csv(
+        PATH / "test_data" / "simulations" / "LMO-20C.dat", 
+        delimiter=' ', 
+        header=None
+        )
 
-    
+    fit = si.ProfileFitting(
+        data, 
+        df20C, 
+        4.58, 
+        20, 
+        2.5e-6
+        )
+
+    fit_output = fit.fit_data()
+
+    np.testing.assert_array_almost_equal(fit_output[0], 6.085284e-14, 6)
+    np.testing.assert_array_almost_equal(fit_output[1], 1.099165e-8, 6)

@@ -109,7 +109,7 @@ def logcrate(xi_log, dcoeff, k0):
     log_crate : float or array-like
         The log 10 value of the C-rate.
     """
-    return np.log10(3600 / dcoeff * k0**2) - 2 * xi_log
+    return np.log10(3600 / dcoeff * k0**2) - 2 * np.asarray(xi_log)
 
 
 def logd(xi_log, l_log, dcoeff, k0, z):
@@ -146,4 +146,4 @@ def logd(xi_log, l_log, dcoeff, k0, z):
     """
     cr_log = logcrate(xi_log, dcoeff, k0)
 
-    return 0.5 * (l_log + np.log10(3600 * z * dcoeff) - cr_log)
+    return 0.5 * (np.asarray(l_log) + np.log10(3600 * z * dcoeff) - cr_log)
