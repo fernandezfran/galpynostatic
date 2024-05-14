@@ -60,7 +60,7 @@ class GalvanostaticMap:
 
     The SOC are calculated by means of the interpolation of the experimental
     or theoretical isotherm, the Fick's diffusion law and the Butler-Volmer
-    charge transfer equation with a transfer coefficient of 0.5. The Fick 
+    charge transfer equation with a transfer coefficient of 0.5. The Fick
     diffusion equation is solved using the Crank-Nicolson method.
 
     Parameters
@@ -290,12 +290,14 @@ class GalvanostaticMap:
             by=["ell", "xi"], ascending=[True, True], ignore_index=True
         )
 
-    @property    
+    @property
     def map_dataframe(self):
         """Convert the diagram dataset into a dataframe."""
         return self.df
 
-    def map_plot(self, ax=None, plt_kws=None, clb=True, clb_label="SoC$_{max}$"):
+    def map_plot(
+        self, ax=None, plt_kws=None, clb=True, clb_label="SoC$_{max}$"
+    ):
         """Plot the two dimensional diagram.
 
         Parameters
@@ -354,8 +356,15 @@ class GalvanostaticMap:
 
         return ax
 
-    
-    def real_plot(self, dcoeff, k0, ax=None, plt_kws=None, clb=True, clb_label="$SoC_{max}$"):
+    def real_plot(
+        self,
+        dcoeff,
+        k0,
+        ax=None,
+        plt_kws=None,
+        clb=True,
+        clb_label="$SoC_{max}$",
+    ):
         """
         A function that returns the axis of the real diagram
         for a given axis.
@@ -388,23 +397,27 @@ class GalvanostaticMap:
         logcrate_ = logcrate(xi_log, dcoeff, k0)
         logd_ = logd(xi_log, l_log, dcoeff, k0, self.geometrical_param + 1)
 
-        self.df['log_crate'] = logcrate_
-        self.df['log_d'] = logd_
-        
-        x = np.linspace(self.df['log_crate'].min(), 
-            self.df['log_crate'].max(), 
-            1000)
-        y = np.linspace(self.df['log_d'].min(), self.df['log_d'].max(), 1000)
-        
+        self.df["log_crate"] = logcrate_
+        self.df["log_d"] = logd_
+
+        x = np.linspace(
+            self.df["log_crate"].min(), self.df["log_crate"].max(), 1000
+        )
+        y = np.linspace(self.df["log_d"].min(), self.df["log_d"].max(), 1000)
+
         X, Y = np.meshgrid(x, y)
 
         # Interpolar los datos en la malla uniforme
-        Z = np.clip(scipy.interpolate.griddata(
-            (
-            self.df['log_crate'], 
-            self.df['log_d']
-            ), 
-        self.df['SOC'], (X, Y), method='linear'), 0, 1)
+        Z = np.clip(
+            scipy.interpolate.griddata(
+                (self.df["log_crate"], self.df["log_d"]),
+                self.df["SOC"],
+                (X, Y),
+                method="linear",
+            ),
+            0,
+            1,
+        )
 
         im = ax.imshow(
             Z,
@@ -440,7 +453,7 @@ class GalvanostaticProfile:
     resulting isotherms are calculated by means of the interpolation of
     the experimental or theoretical isotherm, the Fick's diffusion law and
     the Butler-Volmer charge transfer equation with a transfer coefficient
-    of 0.5. The Fick diffusion equation is solved using the Crank-Nicolson 
+    of 0.5. The Fick diffusion equation is solved using the Crank-Nicolson
     method.
 
     Parameters
@@ -570,7 +583,8 @@ class GalvanostaticProfile:
     def run(self):
         """Run the isotherm simulation."""
         lib_profile = ct.CDLL(
-            str(PATH / "lib" / "profile") + sysconfig.get_config_var("EXT_SUFFIX")
+            str(PATH / "lib" / "profile")
+            + sysconfig.get_config_var("EXT_SUFFIX")
         )
 
         lib_profile.run_profile.argtypes = [
@@ -789,11 +803,11 @@ class ProfileFitting:
     Parameters
     ----------
     equilibrium_iso : pandas.DataFrame
-        A dataset containing the experimental equilibrium isotherm values 
+        A dataset containing the experimental equilibrium isotherm values
         in the format SOC vs potential.
 
     objective_iso : pandas.DataFrame
-        A dataset containing the experimental no equilibrium isotherm 
+        A dataset containing the experimental no equilibrium isotherm
         values in the format SOC vs potential.
 
     density : float
