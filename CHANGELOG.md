@@ -1,16 +1,17 @@
 # Changelog of galpynostatic
 
-## Unrealeased
+## v0.5.0 (2024-07-15)
 
+- Add new module `galpynostatic.simulation` that calulates galvanostatic maps from Frumkin or experimental isotherms, simulates isotherms at different Crates and fits equilibrium and non-equilibrium isotherms to obtain the diffusion coefficients and the kinetic rate constant.
 - Add the `datasets.params` submodule with typical densities and specific capacities of lithium-ion battery electrode materials required for simulations.
 
 
-## v0.4.1 (2023-03-21)
+## v0.4.1 (2024-03-21)
 
 - In the `bmxfc` metric, the argument `minutes` was changed to `c_rate`, like in the `make_prediction` module functions.
 
 
-## v0.4.0 (2023-03-20)
+## v0.4.0 (2024-03-20)
 
 - Change the name of the metric `umbem` (thesis version) to `bmxfc` (paper version).
 
