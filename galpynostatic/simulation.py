@@ -804,8 +804,8 @@ class ProfileFitting:
         Experimental active material diffusion length in :math: `cm`.
 
     geometrical_param : int, default=2
-        Active material particle geometrical_parammetry. 1=planar, 2=cylindrical,
-        3=spherical.
+        Active material particle geometrical_parammetry. 1=planar,
+        2=cylindrical, 3=spherical.
 
     Attributes
     ----------

@@ -16,8 +16,8 @@ import os
 import pathlib
 
 import galpynostatic.model
+import galpynostatic.simulation
 from galpynostatic.utils import logell, logxi
-import galpynostatic.simulation as si
 
 import matplotlib.pyplot as plt
 from matplotlib.testing.decorators import check_figures_equal
@@ -167,7 +167,7 @@ class TestPlots:
 )
 @check_figures_equal(extensions=["png", "pdf"], tol=0.000001)
 def test_isotherm_plot(fig_test, fig_ref, isotherm):
-    profile = si.GalvanostaticProfile(
+    profile = galpynostatic.simulation.GalvanostaticProfile(
         4.58,
         ell=-1,
         xi=1,
@@ -181,10 +181,7 @@ def test_isotherm_plot(fig_test, fig_ref, isotherm):
     profile.isotherm_plot(ax=test_ax)
 
     ref_ax = fig_ref.subplots()
-    ref_ax.plot(
-        profile.isotherm_df["SOC"], 
-        profile.isotherm_df["Potential"]
-        )
+    ref_ax.plot(profile.isotherm_df["SOC"], profile.isotherm_df["Potential"])
 
     ref_ax.set_xlabel("SoC")
     ref_ax.set_ylabel("Potential")
@@ -199,7 +196,7 @@ def test_isotherm_plot(fig_test, fig_ref, isotherm):
 )
 @check_figures_equal(extensions=["png", "pdf"], tol=0.000001)
 def test_consentration_plot(fig_test, fig_ref, isotherm):
-    profile = si.GalvanostaticProfile(
+    profile = galpynostatic.simulation.GalvanostaticProfile(
         4.58,
         ell=-1,
         xi=1,
@@ -214,9 +211,10 @@ def test_consentration_plot(fig_test, fig_ref, isotherm):
 
     ref_ax = fig_ref.subplots()
     ref_ax.plot(
-        profile.concentration_df["r_norm"], 
+        profile.concentration_df["r_norm"],
         profile.concentration_df["theta"],
-        color="tab:red")
+        color="tab:red",
+    )
 
     ref_ax.set_xlabel("$r_{norm}$")
     ref_ax.set_ylabel(r"$\theta$")
@@ -225,29 +223,31 @@ def test_consentration_plot(fig_test, fig_ref, isotherm):
 @check_figures_equal(extensions=["png", "pdf"], tol=0.000001)
 def test_fit_plot(fig_test, fig_ref):
     data = pd.read_csv(
-        PATH / "test_data" / "simulations" / "LMO-1C.csv", 
-        names=['capacity', 'voltage']
-        )
+        PATH / "test_data" / "simulations" / "LMO-1C.csv",
+        names=["capacity", "voltage"],
+    )
 
     df20C = pd.read_csv(
-        PATH / "test_data" / "simulations" / "LMO-20C.dat", 
-        delimiter=' ', 
-        header=None
-        )
+        PATH / "test_data" / "simulations" / "LMO-20C.dat",
+        delimiter=" ",
+        header=None,
+    )
 
-    fit = si.ProfileFitting(data, df20C, 4.58, 20, 2.5e-6)
+    fit = galpynostatic.simulation.ProfileFitting(
+        data, df20C, 4.58, 20, 2.5e-6
+    )
     _, _ = fit.fit_data()
 
     test_ax = fig_test.subplots()
     fit.plot_fit(ax=test_ax)
 
-    iso = si.GalvanostaticProfile(
-            fit.density,
-            fit.logxi,
-            fit.logell,
-            isotherm=fit.isotherm,
-        )
-    iso.run()        
+    iso = galpynostatic.simulation.GalvanostaticProfile(
+        fit.density,
+        fit.logxi,
+        fit.logell,
+        isotherm=fit.isotherm,
+    )
+    iso.run()
 
     ref_ax = fig_ref.subplots()
     ref_ax.plot(iso.isotherm_df["SOC"], iso.isotherm_df["Potential"])

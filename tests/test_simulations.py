@@ -14,18 +14,13 @@
 import os
 import pathlib
 
-import matplotlib.pyplot as plt
-from matplotlib.testing.decorators import check_figures_equal
-
-import galpynostatic.simulation as si
+import galpynostatic.simulation
 
 import numpy as np
 
 import pandas as pd
 
 import pytest
-
-import scipy
 
 # ============================================================================
 # CONSTANTS
@@ -58,7 +53,7 @@ def test_spline(capacity, potential, refs):
 
     df = pd.DataFrame({"capacity": capacity, "potential": potential})
 
-    spl = si.SplineCoeff(df)
+    spl = galpynostatic.simulation.SplineCoeff(df)
 
     spl.get_coeffs()
 
@@ -81,8 +76,10 @@ def test_spline(capacity, potential, refs):
             ],
         ),
         (
-            pd.read_csv(PATH / "test_data" / "simulations" / "LMO-1C.csv", 
-                names=['capacity', 'potential']),
+            pd.read_csv(
+                PATH / "test_data" / "simulations" / "LMO-1C.csv",
+                names=["capacity", "potential"],
+            ),
             [
                 [0.243121, 0.0, 0.976017],
                 [2.012031, 0.0, 4.388962],
@@ -94,8 +91,8 @@ def test_spline(capacity, potential, refs):
 )
 class TestGalvanostaticProfile:
     def test_profile_soc(self, isotherm, refs):
-        profile = si.GalvanostaticProfile(
-            4.58,
+        profile = galpynostatic.simulation.GalvanostaticProfile(
+            density=4.58,
             ell=-1,
             xi=1,
             time_steps=20000,
@@ -107,15 +104,15 @@ class TestGalvanostaticProfile:
         np.testing.assert_almost_equal(np.mean(profile.SOC), refs[0][0], 6)
         np.testing.assert_almost_equal(np.min(profile.SOC), refs[0][1], 6)
         np.testing.assert_almost_equal(np.max(profile.SOC), refs[0][2], 6)
-    
+
     def test_profile_potential(self, isotherm, refs):
-        profile = si.GalvanostaticProfile(  
-            4.58,
+        profile = galpynostatic.simulation.GalvanostaticProfile(
+            density=4.58,
             ell=-1,
             xi=1,
             time_steps=20000,
             isotherm=isotherm,
-            specific_capacity=100, 
+            specific_capacity=100,
         )
         profile.run()
 
@@ -123,17 +120,16 @@ class TestGalvanostaticProfile:
         np.testing.assert_almost_equal(np.min(profile.E), refs[1][1], 6)
         np.testing.assert_almost_equal(np.max(profile.E), refs[1][2], 6)
 
-        
     def test_profile_dataframe(self, isotherm, refs):
         df = pd.read_csv(refs[2])
 
-        profile = si.GalvanostaticProfile(
-            4.58,
+        profile = galpynostatic.simulation.GalvanostaticProfile(
+            density=4.58,
             ell=-1,
             xi=1,
             time_steps=20000,
             isotherm=isotherm,
-            specific_capacity=100, 
+            specific_capacity=100,
         )
         profile.run()
 
@@ -142,13 +138,13 @@ class TestGalvanostaticProfile:
     def test_concentration_dataframe(self, isotherm, refs):
         df = pd.read_csv(refs[3])
 
-        profile = si.GalvanostaticProfile(
-            4.58,
+        profile = galpynostatic.simulation.GalvanostaticProfile(
+            density=4.58,
             ell=-1,
             xi=1,
             time_steps=20000,
             isotherm=isotherm,
-            specific_capacity=100, 
+            specific_capacity=100,
         )
         profile.run()
 
@@ -159,25 +155,20 @@ def test_fit():
     """Test the fit function of simulation module."""
 
     data = pd.read_csv(
-        PATH / "test_data" / "simulations" / "LMO-1C.csv", 
-        names=['capacity', 'voltage']
-        )
+        PATH / "test_data" / "simulations" / "LMO-1C.csv",
+        names=["capacity", "voltage"],
+    )
 
     df20C = pd.read_csv(
-        PATH / "test_data" / "simulations" / "LMO-20C.dat", 
-        delimiter=' ', 
-        header=None
-        )
+        PATH / "test_data" / "simulations" / "LMO-20C.dat",
+        delimiter=" ",
+        header=None,
+    )
 
-    fit = si.ProfileFitting(
-        data, 
-        df20C, 
-        4.58, 
-        20, 
-        2.5e-6
-        )
+    _ = galpynostatic.simulation.ProfileFitting(data, df20C, 4.58, 20, 2.5e-6)
 
-    #fit_output = fit.fit_data()
+    # fit_output = fit.fit_data()
+    # TODO: mock fit_data
     fit_output = [6.085284e-14, 1.099165e-8]
 
     np.testing.assert_array_almost_equal(fit_output[0], 6.085284e-14, 6)
@@ -196,20 +187,20 @@ def test_fit():
         ),
         (
             pd.read_csv(
-                    PATH / "test_data" / "simulations" / "LMO-1C.csv", 
-                            names=['capacity', 'voltage']
-                                    ),
+                PATH / "test_data" / "simulations" / "LMO-1C.csv",
+                names=["capacity", "voltage"],
+            ),
             [
                 [0.599868, 7.44792e-7, 1.000937],
                 PATH / "test_data" / "simulations" / "map_iso.csv",
             ],
-        ),        
+        ),
     ],
 )
 class TestGalvanostaticMap:
     def test_map_soc(self, isotherm, refs):
-        galvamap = si.GalvanostaticMap(
-            4.58,
+        galvamap = galpynostatic.simulation.GalvanostaticMap(
+            density=4.58,
             time_steps=20000,
             num_ell=3,
             num_xi=3,
@@ -225,8 +216,8 @@ class TestGalvanostaticMap:
     def test_map_dataframe(self, isotherm, refs):
         df = pd.read_csv(refs[1])
 
-        galvamap = si.GalvanostaticMap(
-            4.58,
+        galvamap = galpynostatic.simulation.GalvanostaticMap(
+            density=4.58,
             time_steps=20000,
             num_ell=3,
             num_xi=3,
@@ -235,4 +226,6 @@ class TestGalvanostaticMap:
         )
         galvamap.run()
 
-        pd.testing.assert_frame_equal(galvamap.to_dataframe().reset_index(drop=True), df)
+        pd.testing.assert_frame_equal(
+            galvamap.to_dataframe().reset_index(drop=True), df
+        )
