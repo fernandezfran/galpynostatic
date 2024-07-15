@@ -514,9 +514,9 @@ class GalvanostaticProfile:
 
     def __init__(
         self,
-        density=1.0,
         xi,
         ell,
+        density=1.0,
         isotherm=False,
         specific_capacity=1.0,
         mass=1.0,
