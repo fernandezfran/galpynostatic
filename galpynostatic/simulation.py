@@ -65,7 +65,7 @@ class GalvanostaticMap:
 
     Parameters
     ----------
-    density : float
+    density : float, default=1.0
         Density of the electrode active material in :math:`g/cm^3`.
 
     isotherm : bool or pandas.DataFrame, default=False
@@ -75,7 +75,7 @@ class GalvanostaticMap:
         equilibrium potential is calculated using the theroretical model
         ... [].
 
-    specific_capacity : bool or float, default=None
+    specific_capacity : bool or float, default=1.0
         Specific capacity of the material in `mAh/g`. If isotherm
         is None the specific capacity must be defined.
 
@@ -117,7 +117,7 @@ class GalvanostaticMap:
     grid_size : int, default=1000
         Size of the spatial grid in wich the Fick's equation will be solved.
 
-    time_steps : int, default=3000000
+    time_steps : int, default=100000
         Size of the time grid in wich the Fick's equation will be solved.
 
     nthreads : int, default=-1
@@ -127,9 +127,9 @@ class GalvanostaticMap:
 
     def __init__(
         self,
-        density,
+        density=1.0,
         isotherm=None,
-        specific_capacity=None,
+        specific_capacity=1.0,
         mass=1.0,
         vcut=-0.15,
         g=0.0,
@@ -163,14 +163,6 @@ class GalvanostaticMap:
         self.grid_size = grid_size
         self.time_steps = time_steps
         self.nthreads = nthreads
-
-        if (
-            not isinstance(self.isotherm, pd.DataFrame)
-            and self.specific_capacity is None
-        ):
-            raise ValueError(
-                "If no isotherm is given, specific_capacity must be defined"
-            )
 
         if isinstance(self.isotherm, pd.DataFrame):
             self.frumkin = False
@@ -458,7 +450,7 @@ class GalvanostaticProfile:
 
     Parameters
     ----------
-    density : float
+    density : float, default=1.0
         Density of the electrode active material in :math:`g/cm^3`.
 
     xi : float, default=2.0
@@ -473,7 +465,7 @@ class GalvanostaticProfile:
         equilibrium potential for a given SOC. If False the equilibrium
         potential is calculated using the theroretical model ... [].
 
-    specific_capacity : bool or float, default=None
+    specific_capacity : bool or float, default=1.0
         Specific capacity of the material in `mAh/g`. If isotherm
         is None the specific capacity must be defined.
 
@@ -501,7 +493,7 @@ class GalvanostaticProfile:
         Size of the spatial grid in wich the Fick's equation will be
         solved.
 
-    time_steps : int, default=3000000
+    time_steps : int, default=100000
         Size of the time grid in wich the Fick's equation will be solved.
 
     each : int, default=100
@@ -522,11 +514,11 @@ class GalvanostaticProfile:
 
     def __init__(
         self,
-        density,
+        density=1.0,
         xi,
         ell,
         isotherm=False,
-        specific_capacity=None,
+        specific_capacity=1.0,
         mass=1.0,
         vcut=-0.15,
         geometrical_param=3,
@@ -551,14 +543,6 @@ class GalvanostaticProfile:
         self.grid_size = grid_size
         self.time_steps = time_steps
         self.each = each
-
-        if (
-            not isinstance(self.isotherm, pd.DataFrame)
-            and not self.specific_capacity
-        ):
-            raise ValueError(
-                "If no isotherm is given specific_capacity must be defined"
-            )
 
         if isinstance(isotherm, pd.DataFrame):
             self.frumkin = False
