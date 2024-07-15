@@ -357,12 +357,10 @@ class GalvanostaticMap:
         clb=True,
         clb_label="$SoC_{max}$",
     ):
-        """
-        A function that returns the axis of the real diagram
-        for a given axis.
+        """Real diagram axis.
 
         Parameters
-        -----
+        ----------
         dcoeff : float
             Diffusion coefficient, :math:`D`, in :math:`cm^2/s`.
 
