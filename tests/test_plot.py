@@ -168,7 +168,7 @@ class TestPlots:
 @check_figures_equal(extensions=["png", "pdf"], tol=0.000001)
 def test_isotherm_plot(fig_test, fig_ref, isotherm):
     profile = galpynostatic.simulation.GalvanostaticProfile(
-        4.58,
+        density=4.58,
         ell=-1,
         xi=1,
         time_steps=20000,
@@ -197,7 +197,7 @@ def test_isotherm_plot(fig_test, fig_ref, isotherm):
 @check_figures_equal(extensions=["png", "pdf"], tol=0.000001)
 def test_consentration_plot(fig_test, fig_ref, isotherm):
     profile = galpynostatic.simulation.GalvanostaticProfile(
-        4.58,
+        density=4.58,
         ell=-1,
         xi=1,
         time_steps=20000,
