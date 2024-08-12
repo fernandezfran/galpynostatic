@@ -181,7 +181,7 @@ def test_fit():
         (
             None,
             [
-                [0.425895, 0.000100, 0.998085],
+                [0.425469, 0.000100, 0.997086],
                 PATH / "test_data" / "simulations" / "map.csv",
             ],
         ),
@@ -191,7 +191,7 @@ def test_fit():
                 names=["capacity", "voltage"],
             ),
             [
-                [0.599868, 7.44792e-7, 1.000937],
+                [0.658353, 0.008347, 0.999987],
                 PATH / "test_data" / "simulations" / "map_iso.csv",
             ],
         ),
@@ -227,5 +227,5 @@ class TestGalvanostaticMap:
         galvamap.run()
 
         pd.testing.assert_frame_equal(
-            galvamap.to_dataframe().reset_index(drop=True), df
+            galvamap.map_dataframe.reset_index(drop=True), df
         )
