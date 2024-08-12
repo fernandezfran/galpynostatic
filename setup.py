@@ -25,6 +25,7 @@ setup_args = dict(
             name="galpynostatic.lib.map",
             sources=["galpynostatic/lib/map.cpp"],
             extra_compile_args=_flags + ["-fopenmp"],
+            extra_link_args=["-lgomp"],
         ),
     ]
 )
