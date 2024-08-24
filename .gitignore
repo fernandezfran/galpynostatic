@@ -15,3 +15,5 @@ result_images/
 dist/
 
 galpynostatic/lib/*.so
+
+.venv/

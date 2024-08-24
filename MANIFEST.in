@@ -14,6 +14,7 @@ exclude .clang-format
 exclude .readthedocs.yaml
 exclude requirements_dev.txt
 exclude tox.ini
+exclude TODO.md
 
 recursive-exclude docs *
 recursive-exclude tests *

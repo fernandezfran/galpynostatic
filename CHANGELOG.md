@@ -2,7 +2,8 @@
 
 ## v0.5.1 (2024-08-12)
 
-- Fixing omp.
+- Fix the compilation of the OpenMP functions in `lib/map.cpp` by adding the `-lgomp` flag in the `setup.py`.
+
 
 ## v0.5.0 (2024-07-15)
 
