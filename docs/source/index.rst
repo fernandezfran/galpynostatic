@@ -32,8 +32,8 @@ galpynostatic
    :alt: doi
 
 
-**galpynostatic** is a Python/C++ package with physics-based models to predict
-optimal conditions for fast-charging lithium-ion batteries
+**galpynostatic** is a Python/C++ package with physics-based and data-driven 
+models to predict optimal conditions for fast-charging lithium-ion batteries.
 
 Contact
 -------

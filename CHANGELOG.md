@@ -1,5 +1,10 @@
 # Changelog of galpynostatic
 
+## v0.5.2 (2024-08-24)
+
+- New Python version specification required to use galpynostatic.
+
+
 ## v0.5.1 (2024-08-12)
 
 - Fix the compilation of the OpenMP functions in `lib/map.cpp` by adding the `-lgomp` flag in the `setup.py`.

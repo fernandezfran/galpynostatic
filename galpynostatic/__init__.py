@@ -12,8 +12,8 @@
 # DOCS
 # =============================================================================
 
-"""A Python package with physics-based models to predict optimal conditions \
-for fast-charging lithium-ion batteries."""
+"""A Python package with physics-based and data-driven models to predict \
+optimal conditions for fast-charging lithium-ion batteries."""
 
 # =============================================================================
 # IMPORTS

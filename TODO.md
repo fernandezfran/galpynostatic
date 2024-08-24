@@ -1,5 +1,6 @@
 # TODO
 
+- [ ] Update the `CITATIONS.bib` file with BibTeX citations when the papers are published, and also the DOI links in the README and in the documentation index.
 - [ ] Add Jupyter Notebook tutorial for `simulation.py` module to documentation.
 - [ ] Review documentation for `simulation.py`.
 - [ ] Fix warnings in `test_plot.py` and `test_make_prediction.py` tests.
