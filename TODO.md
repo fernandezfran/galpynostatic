@@ -1,9 +1,8 @@
 # TODO
 
-- [ ] Fix GHA test failure due to not reading C++ code compilation.
 - [ ] Add Jupyter Notebook tutorial for `simulation.py` module to documentation.
 - [ ] Review documentation for `simulation.py`.
-- [ ] Check warning in `test_plot.py` tests.
+- [ ] Fix warnings in `test_plot.py` and `test_make_prediction.py` tests.
 - [ ] In `utils.py` replace `l` with `ell` and simplify the last function to be a one-line return.
 - [ ] In `test_plot.py`, mock the slowest test, or give as args initial parameters closer to the minimum.
 - [ ] In `simulation.py` classes, move the args that relate to the specifics of the simulation and not to the system from the instantiation to the `run()` method.

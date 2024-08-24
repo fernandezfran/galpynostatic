@@ -2,9 +2,6 @@
 line-length = 79
 target-version = ["py39"]
 
-[tool.pytest.ini_options]
-filterwarnings = ["ignore::RuntimeWarning"]
-
 # =============================================================================
 # PACKAGING
 # =============================================================================
@@ -39,9 +36,6 @@ classifiers = [
     "Intended Audience :: Science/Research",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Topic :: Scientific/Engineering",
 ]

@@ -19,7 +19,7 @@ galpynostatic
    :target: https://pypi.org/project/galpynostatic/
    :alt: PyPI Version
 
-.. image:: https://img.shields.io/badge/python-3.9%2B-4584b6
+.. image:: https://img.shields.io/badge/python-3.12%2B-4584b6
    :target: https://www.python.org/
    :alt: python version
 
@@ -44,7 +44,7 @@ If you have any questions, you can contact me at ffernandev@gmail.com
 Requirements
 ------------
 
-You need Python 3.9+ to run galpynostatic. All other dependencies, which are the 
+You need Python 3.12+ to run galpynostatic. All other dependencies, which are the 
 usual ones of the scientific computing stack
 (`matplotlib <https://matplotlib.org/>`__, `NumPy <https://numpy.org/>`__, 
 `pandas <https://pandas.pydata.org/>`__, `scikit-learn <https://scikit-learn.org>`__
