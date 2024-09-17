@@ -1,5 +1,9 @@
 # Changelog of galpynostatic
 
+## v0.5.3 (2024-09-17)
+
+- Fix the geometry factor in Xi.
+
 ## v0.5.2 (2024-08-24)
 
 - New Python version specification required to use galpynostatic.
