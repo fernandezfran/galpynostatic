@@ -35,15 +35,16 @@ run_map(bool model, const double g_pot, const int nthreads,
             for (int logxi = 0; logxi < num_logxi; logxi++) {
                 index = logell * num_logxi + logxi;
 
-                double c_rate = t_hour / pow(pow(10, logxi_grid[logxi]), 2);
+                double c_rate = t_hour * (geometry_param - 1) /
+                                pow(pow(10, logxi_grid[logxi]), 2);
 
                 double particle_size =
-                    2.0 * sqrt((pow(10, logell_grid[logell]) *
-                                geometry_param * t_hour) /
+                    2.0 * sqrt((pow(10, logell_grid[logell]) * geometry_param *
+                                t_hour) /
                                c_rate);
 
-                double surface_area = 2.0 * geometry_param * mass /
-                                      (density * particle_size);
+                double surface_area =
+                    2.0 * geometry_param * mass / (density * particle_size);
 
                 double ccd = -c_rate * specific_capacity * mass /
                              (1000.0 * surface_area);
@@ -71,7 +72,8 @@ run_map(bool model, const double g_pot, const int nthreads,
                 }
 
                 double alpha = time_step / (2.0 * space_step * space_step);
-                double beta = (geometry_param - 1) * time_step / (4.0 * space_step);
+                double beta =
+                    (geometry_param - 1) * time_step / (4.0 * space_step);
                 double alpha_0 = 1.0 + (2.0 * alpha);
                 double gamma0 = 1.0 - (2.0 * alpha);
                 coefs[1] = 2.0 * alpha / alpha_0;

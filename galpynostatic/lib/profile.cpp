@@ -25,7 +25,7 @@ run_profile(const bool model, const double g_pot, const int grid_size,
     const double t_hour = 3600.0;
     const double rfaraday = gas_constant * temperature / faraday;
 
-    double c_rate = t_hour / pow(pow(10, logxi), 2);
+    double c_rate = t_hour * (geometry_param - 1) / pow(pow(10, logxi), 2);
 
     double particle_size =
         2.0 * sqrt((pow(10, logell) * 2.0 * t_hour) / c_rate);
@@ -52,7 +52,7 @@ run_profile(const bool model, const double g_pot, const int grid_size,
     }
 
     double alpha = time_step / (2.0 * space_step * space_step);
-    double beta = (geometry_param -1) * time_step / (4.0 * space_step);
+    double beta = (geometry_param - 1) * time_step / (4.0 * space_step);
 
     double alpha_0 = 1.0 + (2.0 * alpha);
     double gamma0 = 1.0 - (2.0 * alpha);

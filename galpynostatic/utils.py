@@ -56,7 +56,7 @@ def logell(c_rate, d, z, dcoeff):
     return np.log10((np.asarray(c_rate) * d**2) / (3600 * z * dcoeff))
 
 
-def logxi(c_rate, dcoeff, k0):
+def logxi(c_rate, dcoeff, k0, z):
     r"""Obtain log value in base 10 of :math:`\Xi` internal parameter.
 
     :math:`\Xi = k^0 \sqrt{\frac{t_h}{C_{rate} D}}` where :math:`k^0` is the
@@ -75,12 +75,15 @@ def logxi(c_rate, dcoeff, k0):
     k0 : float
         Kinetic rate constant, :math:`k^0`, in :math:`cm/s`.
 
+    z : int
+        Geometric factor: 1 for planar, 2 for cylinder and 3 for sphere.
+
     Returns
     -------
     logxi : float or array-like
         The log 10 value of :math:`\Xi` internal parameter.
     """
-    return np.log10(k0 * np.sqrt(3600 / (np.asarray(c_rate) * dcoeff)))
+    return np.log10(k0 * np.sqrt(3600 * z / (np.asarray(c_rate) * dcoeff)))
 
 
 def logcrate(xi_log, dcoeff, k0):
