@@ -25,7 +25,7 @@ run_profile(const bool model, const double g_pot, const int grid_size,
     const double t_hour = 3600.0;
     const double rfaraday = gas_constant * temperature / faraday;
 
-    double c_rate = t_hour * (geometry_param - 1) / pow(pow(10, logxi), 2);
+    double c_rate = t_hour * geometry_param / pow(pow(10, logxi), 2);
 
     double particle_size =
         2.0 * sqrt((pow(10, logell) * 2.0 * t_hour) / c_rate);

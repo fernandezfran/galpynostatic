@@ -35,7 +35,7 @@ run_map(bool model, const double g_pot, const int nthreads,
             for (int logxi = 0; logxi < num_logxi; logxi++) {
                 index = logell * num_logxi + logxi;
 
-                double c_rate = t_hour * (geometry_param - 1) /
+                double c_rate = t_hour * geometry_param /
                                 pow(pow(10, logxi_grid[logxi]), 2);
 
                 double particle_size =
