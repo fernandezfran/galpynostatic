@@ -69,8 +69,8 @@ def test_spline(capacity, potential, refs):
         (
             None,
             [
-                [0.243160, 0.0, 0.974116],
-                [-0.00228, -0.150241, 0.096110],
+                [0.243157, 0.0, 0.973515],
+                [-0.002668, -0.150124, 0.094156],
                 PATH / "test_data" / "simulations" / "profile.csv",
                 PATH / "test_data" / "simulations" / "con.csv",
             ],
@@ -81,8 +81,8 @@ def test_spline(capacity, potential, refs):
                 names=["capacity", "potential"],
             ),
             [
-                [0.243121, 0.0, 0.976017],
-                [2.012031, 0.0, 4.388962],
+                [0.243116, 0.0, 0.975216],
+                [2.011642, 0.0, 4.387003],
                 PATH / "test_data" / "simulations" / "profile_iso.csv",
                 PATH / "test_data" / "simulations" / "con_iso.csv",
             ],
@@ -92,12 +92,10 @@ def test_spline(capacity, potential, refs):
 class TestGalvanostaticProfile:
     def test_profile_soc(self, isotherm, refs):
         profile = galpynostatic.simulation.GalvanostaticProfile(
-            density=4.58,
             ell=-1,
             xi=1,
             time_steps=20000,
             isotherm=isotherm,
-            specific_capacity=100,
         )
         profile.run()
 
@@ -107,12 +105,10 @@ class TestGalvanostaticProfile:
 
     def test_profile_potential(self, isotherm, refs):
         profile = galpynostatic.simulation.GalvanostaticProfile(
-            density=4.58,
             ell=-1,
             xi=1,
             time_steps=20000,
             isotherm=isotherm,
-            specific_capacity=100,
         )
         profile.run()
 
@@ -124,12 +120,10 @@ class TestGalvanostaticProfile:
         df = pd.read_csv(refs[2])
 
         profile = galpynostatic.simulation.GalvanostaticProfile(
-            density=4.58,
             ell=-1,
             xi=1,
             time_steps=20000,
             isotherm=isotherm,
-            specific_capacity=100,
         )
         profile.run()
 
@@ -139,12 +133,10 @@ class TestGalvanostaticProfile:
         df = pd.read_csv(refs[3])
 
         profile = galpynostatic.simulation.GalvanostaticProfile(
-            density=4.58,
             ell=-1,
             xi=1,
             time_steps=20000,
             isotherm=isotherm,
-            specific_capacity=100,
         )
         profile.run()
 
@@ -181,7 +173,7 @@ def test_fit():
         (
             None,
             [
-                [0.425469, 0.000100, 0.997086],
+                [0.400532, 0.000100, 0.997086],
                 PATH / "test_data" / "simulations" / "map.csv",
             ],
         ),
@@ -191,7 +183,7 @@ def test_fit():
                 names=["capacity", "voltage"],
             ),
             [
-                [0.658353, 0.008347, 0.999987],
+                [0.643790, 0.008347, 0.999987],
                 PATH / "test_data" / "simulations" / "map_iso.csv",
             ],
         ),
@@ -200,12 +192,10 @@ def test_fit():
 class TestGalvanostaticMap:
     def test_map_soc(self, isotherm, refs):
         galvamap = galpynostatic.simulation.GalvanostaticMap(
-            density=4.58,
             time_steps=20000,
-            num_ell=3,
-            num_xi=3,
+            num_ell=5,
+            num_xi=5,
             isotherm=isotherm,
-            specific_capacity=100,
         )
         galvamap.run()
 
@@ -217,12 +207,10 @@ class TestGalvanostaticMap:
         df = pd.read_csv(refs[1])
 
         galvamap = galpynostatic.simulation.GalvanostaticMap(
-            density=4.58,
             time_steps=20000,
-            num_ell=3,
-            num_xi=3,
+            num_ell=5,
+            num_xi=5,
             isotherm=isotherm,
-            specific_capacity=100,
         )
         galvamap.run()
 

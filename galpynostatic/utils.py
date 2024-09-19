@@ -86,7 +86,7 @@ def logxi(c_rate, dcoeff, k0, z):
     return np.log10(k0 * np.sqrt(3600 * z / (np.asarray(c_rate) * dcoeff)))
 
 
-def logcrate(xi_log, dcoeff, k0):
+def logcrate(xi_log, dcoeff, k0, z):
     r"""Obtain log value in base 10 of the C-rate.
 
     :math:`C_{rate} = \dfrac{t_h}{D}(\dfrac{k^0}{\Xi})` where :math:`k^0`
@@ -107,12 +107,15 @@ def logcrate(xi_log, dcoeff, k0):
     k0 : float
         Kinetic rate constant, :math:`k^0`, in :math:`cm/s`.
 
+    z : int
+        Geometric factor: 1 for planar, 2 for cylinder and 3 for sphere.
+
     Returns
     -------
     log_crate : float or array-like
         The log 10 value of the C-rate.
     """
-    return np.log10(3600 / dcoeff * k0**2) - 2 * np.asarray(xi_log)
+    return np.log10(3600 * z / dcoeff * k0**2) - 2 * np.asarray(xi_log)
 
 
 def logd(xi_log, l_log, dcoeff, k0, z):
@@ -147,6 +150,6 @@ def logd(xi_log, l_log, dcoeff, k0, z):
     logd : float or array-like
         The log 10 value of the diffusion length.
     """
-    cr_log = logcrate(xi_log, dcoeff, k0)
+    cr_log = logcrate(xi_log, dcoeff, k0, z)
 
     return 0.5 * (np.asarray(l_log) + np.log10(3600 * z * dcoeff) - cr_log)
