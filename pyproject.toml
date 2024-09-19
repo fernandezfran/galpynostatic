@@ -12,7 +12,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "galpynostatic"
-version = "0.5.3"
+version = "0.5.4"
 authors = [
     {name = "Francisco Fernandez", email = "ffernandev@gmail.com"},
     {name = "Maximiliano Gavilán", email = "maxigavilan@hotmail.com"},

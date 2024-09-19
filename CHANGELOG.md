@@ -1,5 +1,9 @@
 # Changelog of galpynostatic
 
+## v0.5.4 (2024-09-19)
+
+- Fix the geometry factor.
+
 ## v0.5.3 (2024-09-17)
 
 - Fix the geometry factor in Xi.
