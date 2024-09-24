@@ -146,7 +146,7 @@ class TestPlots:
         # ref data
         ref_ax.plot(
             logell(experiment["C_rates"], greg.d, greg.z, greg.dcoeff_),
-            logxi(experiment["C_rates"], greg.dcoeff_, greg.k0_),
+            logxi(experiment["C_rates"], greg.dcoeff_, greg.k0_, 3),
             color="k",
             marker="o",
             linestyle="--",

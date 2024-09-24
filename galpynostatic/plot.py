@@ -137,7 +137,7 @@ class GalvanostaticPlotter:
 
         ax.plot(
             logell(X.ravel(), self.greg.d, self.greg.z, self.greg.dcoeff_),
-            logxi(X.ravel(), self.greg.dcoeff_, self.greg.k0_),
+            logxi(X.ravel(), self.greg.dcoeff_, self.greg.k0_, self.greg.z),
             **kwargs,
         )
 

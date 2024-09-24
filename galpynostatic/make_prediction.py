@@ -110,7 +110,7 @@ def optimal_charging_rate(greg, c0=1.0, loaded=0.8, **kwargs):
         return c_rate
 
     else:
-        optimal_xi = 10.0 ** logxi(c_rate, greg.dcoeff_, greg.k0_)
+        optimal_xi = 10.0 ** logxi(c_rate, greg.dcoeff_, greg.k0_, greg.z)
         frac = greg.k0_ / greg.dcoeff_
         c_rate_err = (60.0 * np.sqrt(frac) / optimal_xi) * np.hypot(
             frac * greg.dcoeff_err_, 2 * greg.k0_err_

@@ -265,7 +265,7 @@ class GalvanostaticRegressor(BaseEstimator, RegressorMixin):
         X = _skl_validation.check_array(X)
 
         logells = logell(X.ravel(), self.d, self.z, self.dcoeff_)
-        logxis = logxi(X.ravel(), self.dcoeff_, self.k0_)
+        logxis = logxi(X.ravel(), self.dcoeff_, self.k0_, self.z)
 
         mask_logell = self._map._mask_logell(logells)
         mask_logxi = self._map._mask_logxi(logxis)
