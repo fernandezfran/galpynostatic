@@ -1,12 +1,19 @@
 # Changelog of galpynostatic
 
+## v0.5.5 (2024-09-24)
+
+- Missing changes in others galpynostatic modules due to the previous versions changes in the geometry factor in the Xi equation.
+
+
 ## v0.5.4 (2024-09-19)
 
-- Fix the geometry factor.
+- Changes in the geometry factor in the Xi equation.
+
 
 ## v0.5.3 (2024-09-17)
 
-- Fix the geometry factor in Xi.
+- Changes in the geometry factor in the Xi equation.
+
 
 ## v0.5.2 (2024-08-24)
 
