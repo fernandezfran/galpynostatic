@@ -1,5 +1,9 @@
 # Changelog of galpynostatic
 
+## v0.5.6 (2024-10-21)
+
+- Missing changes simulation.ProfileFitting due to the previous versions changes.
+
 ## v0.5.5 (2024-09-24)
 
 - Missing changes in others galpynostatic modules due to the previous versions changes in the geometry factor in the Xi equation.
