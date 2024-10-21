@@ -884,7 +884,6 @@ class ProfileFitting:
         plt_kws = {} if plt_kws is None else plt_kws
 
         iso = GalvanostaticProfile(
-            self.density,
             self.logxi,
             self.logell,
             isotherm=self.isotherm,
