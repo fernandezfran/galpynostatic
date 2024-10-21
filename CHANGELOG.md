@@ -1,5 +1,9 @@
 # Changelog of galpynostatic
 
+## v0.5.7 (2024-10-21)
+
+- Fixing simulation.ProfileFitting due to the previous versions changes.
+
 ## v0.5.6 (2024-10-21)
 
 - Missing changes simulation.ProfileFitting due to the previous versions changes.
