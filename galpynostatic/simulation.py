@@ -792,9 +792,6 @@ class ProfileFitting:
         A dataset containing the experimental no equilibrium isotherm
         values in the format SOC vs potential.
 
-    density : float
-        Density of the material in :math: `g/cm^3`.
-
     crate : int or float
         Crate of the non equilibrium isotherm.
 
@@ -824,14 +821,12 @@ class ProfileFitting:
         self,
         isotherm,
         objective_iso,
-        density,
         crate,
         particle_size,
         geometrical_param=3,
     ):
         self.isotherm = isotherm
         self.objective_iso = objective_iso
-        self.density = density
         self.crate = crate
         self.particle_size = particle_size
         self.geometrical_param = geometrical_param
@@ -840,9 +835,7 @@ class ProfileFitting:
         """Fit the non equilibrium isotherm."""
 
         def fit_function(xdata, xi, ell):
-            iso = GalvanostaticProfile(
-                self.density, xi, ell, isotherm=self.isotherm
-            )
+            iso = GalvanostaticProfile(xi, ell, isotherm=self.isotherm)
             iso.run()
             soc = iso.isotherm_df.SOC
             pot = iso.isotherm_df.Potential
