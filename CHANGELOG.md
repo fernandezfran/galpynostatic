@@ -1,5 +1,9 @@
 # Changelog of galpynostatic
 
+## v0.5.11 (2024-10-29)
+
+- Added more functions to ProfileFitting.
+
 ## v0.5.10 (2024-10-29)
 
 - Fixed doc format.
@@ -23,7 +27,6 @@
 ## v0.5.5 (2024-09-24)
 
 - Missing changes in others galpynostatic modules due to the previous versions changes in the geometry factor in the Xi equation.
-
 
 ## v0.5.4 (2024-09-19)
 
