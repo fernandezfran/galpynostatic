@@ -1,5 +1,9 @@
 # Changelog of galpynostatic
 
+## v0.5.9 (2024-10-29)
+
+- Fixed errors in ProfileFitting.
+
 ## v0.5.8 (2024-10-29)
 
 - Added cut potential to ProfileFitting.
