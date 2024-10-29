@@ -894,6 +894,7 @@ class ProfileFitting:
             self.logxi,
             self.logell,
             isotherm=self.isotherm,
+            vcut=self.vcut,
         )
         iso.run()
 
