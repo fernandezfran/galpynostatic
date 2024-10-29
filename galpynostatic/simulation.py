@@ -798,6 +798,9 @@ class ProfileFitting:
     particle_size : float
         Experimental active material diffusion length in :math: `cm`.
 
+    vcut : float, default=-0.15
+        Cut potential if isotherm=False in :math `V`.
+
     geometrical_param : int, default=2
         Active material particle geometrical_parammetry. 1=planar,
         2=cylindrical, 3=spherical.
@@ -823,19 +826,21 @@ class ProfileFitting:
         objective_iso,
         crate,
         particle_size,
+        vcut=-0.15
         geometrical_param=3,
     ):
         self.isotherm = isotherm
         self.objective_iso = objective_iso
         self.crate = crate
         self.particle_size = particle_size
+        self.vcut = vcut
         self.geometrical_param = geometrical_param
 
     def fit_data(self):
         """Fit the non equilibrium isotherm."""
 
         def fit_function(xdata, xi, ell):
-            iso = GalvanostaticProfile(xi, ell, isotherm=self.isotherm)
+            iso = GalvanostaticProfile(xi, ell, isotherm=self.isotherm, vcut=self.vcut)
             iso.run()
             soc = iso.isotherm_df.SOC
             pot = iso.isotherm_df.Potential
