@@ -546,6 +546,7 @@ class GalvanostaticProfile:
             self.frumkin = False
             self.isotherm = SplineCoeff(isotherm)
             self.isotherm.get_coeffs()
+            self.isotherm.vcut = self.vcut
         else:
             self.isotherm = SplineCoeff(
                 pd.DataFrame(
