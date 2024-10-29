@@ -1,5 +1,9 @@
 # Changelog of galpynostatic
 
+## v0.5.10 (2024-10-29)
+
+- Fixed doc format.
+
 ## v0.5.9 (2024-10-29)
 
 - Fixed errors in ProfileFitting.
