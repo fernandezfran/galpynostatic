@@ -826,7 +826,7 @@ class ProfileFitting:
         objective_iso,
         crate,
         particle_size,
-        vcut=-0.15
+        vcut=-0.15,
         geometrical_param=3,
     ):
         self.isotherm = isotherm
