@@ -840,7 +840,9 @@ class ProfileFitting:
         """Fit the non equilibrium isotherm."""
 
         def fit_function(xdata, xi, ell):
-            iso = GalvanostaticProfile(xi, ell, isotherm=self.isotherm, vcut=self.vcut)
+            iso = GalvanostaticProfile(
+                xi, ell, isotherm=self.isotherm, vcut=self.vcut
+            )
             iso.run()
             soc = iso.isotherm_df.SOC
             pot = iso.isotherm_df.Potential
