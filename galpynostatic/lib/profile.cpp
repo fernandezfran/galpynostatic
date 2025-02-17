@@ -28,7 +28,7 @@ run_profile(const bool model, const double g_pot, const int grid_size,
     double c_rate = t_hour * geometry_param / pow(pow(10, logxi), 2);
 
     double particle_size =
-        2.0 * sqrt((pow(10, logell) * 2.0 * t_hour) / c_rate);
+        2.0 * sqrt((pow(10, logell) * geometry_param * t_hour) / c_rate);
 
     double surface_area =
         2.0 * geometry_param * mass / (density * particle_size);
