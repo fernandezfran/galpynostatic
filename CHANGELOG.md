@@ -1,5 +1,9 @@
 # Changelog of galpynostatic
 
+## v0.5.13 (2025-02-17)
+
+- Fixed particle size geometry param in profile.cpp.
+
 ## v0.5.12 (2024-10-29)
 
 - Fixed errors in ProfileFitting.
