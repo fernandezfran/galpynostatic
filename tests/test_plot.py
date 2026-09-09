@@ -236,16 +236,18 @@ def test_fit_plot(fig_test, fig_ref):
     fit = galpynostatic.simulation.ProfileFitting(
         data, df20C, 4.58, 20, 2.5e-6
     )
-    _, _ = fit.fit_data()
+    # fit_data() runs a slow curve_fit; plot_fit only needs the fitted
+    # parameters, so set them directly (as in test_fit).
+    fit.logxi, fit.logell = -1.0, -1.0
 
     test_ax = fig_test.subplots()
     fit.plot_fit(ax=test_ax)
 
     iso = galpynostatic.simulation.GalvanostaticProfile(
-        fit.density,
         fit.logxi,
         fit.logell,
         isotherm=fit.isotherm,
+        vcut=fit.vcut,
     )
     iso.run()
 
