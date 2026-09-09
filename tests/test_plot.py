@@ -236,16 +236,18 @@ def test_fit_plot(fig_test, fig_ref):
     fit = galpynostatic.simulation.ProfileFitting(
         data, df20C, 4.58, 20, 2.5e-6
     )
-    _, _ = fit.fit_data()
+    # fit_data() runs a slow curve_fit; plot_fit only needs the fitted
+    # parameters, so set them directly (as in test_fit).
+    fit.logxi, fit.logell = -1.0, -1.0
 
     test_ax = fig_test.subplots()
     fit.plot_fit(ax=test_ax)
 
     iso = galpynostatic.simulation.GalvanostaticProfile(
-        fit.density,
         fit.logxi,
         fit.logell,
         isotherm=fit.isotherm,
+        vcut=fit.vcut,
     )
     iso.run()
 
@@ -254,3 +256,22 @@ def test_fit_plot(fig_test, fig_ref):
 
     ref_ax.set_xlabel("SoC")
     ref_ax.set_ylabel("Potential / V")
+
+
+@pytest.mark.parametrize("clb", [True, False])
+def test_map_plot(clb):
+    """Smoke-test the GalvanostaticMap diagram plots."""
+    galvamap = galpynostatic.simulation.GalvanostaticMap(
+        time_steps=20000,
+        num_ell=5,
+        num_xi=5,
+    )
+    galvamap.run()
+
+    ax = galvamap.map_plot(clb=clb)
+    assert galvamap.map_plot(ax=ax, clb=clb) is ax
+
+    ax = galvamap.real_plot(1e-10, 1e-7, clb=clb)
+    assert galvamap.real_plot(1e-10, 1e-7, ax=ax, clb=clb) is ax
+
+    plt.close("all")

@@ -384,7 +384,7 @@ class GalvanostaticMap:
         l_log = self.df.ell.values
         xi_log = self.df.xi.values
 
-        logcrate_ = logcrate(xi_log, dcoeff, k0)
+        logcrate_ = logcrate(xi_log, dcoeff, k0, self.geometrical_param + 1)
         logd_ = logd(xi_log, l_log, dcoeff, k0, self.geometrical_param + 1)
 
         self.df["log_crate"] = logcrate_

@@ -30,7 +30,6 @@ from .model import GalvanostaticRegressor
 from .preprocessing import GetDischargeCapacities
 from .simulation import GalvanostaticMap, GalvanostaticProfile
 
-
 # =============================================================================
 # CONSTANTS
 # =============================================================================

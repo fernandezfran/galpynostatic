@@ -1,5 +1,13 @@
 # Changelog of galpynostatic
 
+## v0.5.14 (2026-09-09)
+
+- Fixed the `GalvanostaticProfile` result buffers and the handling of a
+  non-finite potential in `profile.cpp`.
+- Regenerated the simulation reference data after the `profile.cpp` geometry
+  fix and updated the affected tests.
+- Fixed `test_fit_plot` and the missing argument in `GalvanostaticMap.real_plot`.
+
 ## v0.5.13 (2025-02-17)
 
 - Fixed particle size geometry param in profile.cpp.
