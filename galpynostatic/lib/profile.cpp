@@ -82,8 +82,15 @@ run_profile(const bool model, const double g_pot, const int grid_size,
         }
     }
 
-    double soc;
+    double soc = 0.0;
     double pot_i = vcut + 1.0;
+
+    double last_soc = 0.0;
+    double last_pot = 0.0;
+    bool have_last = false;
+
+    const int res_size = time_steps / each;
+    const int sample_every = time_steps / each;
 
     int steps = 0;
     int res_index = 0;
@@ -137,15 +144,21 @@ run_profile(const bool model, const double g_pot, const int grid_size,
         }
         soc /= static_cast<double>(grid_size);
 
-        if (steps % (time_steps / each) == 0) {
-            if (res_index == 0) {
-                res_index++;
-            }
-            else {
-                res_soc[res_index] = soc;
-                res_pot[res_index] = pot_i;
-                res_index++;
-            }
+        // Once the surface concentration leaves the [0, 1] range the
+        // Butler-Volmer exchange current density becomes non-finite; the
+        // discharge is over, so stop before storing a spurious point.
+        if (!std::isfinite(pot_i)) {
+            break;
+        }
+
+        last_soc = soc;
+        last_pot = pot_i;
+        have_last = true;
+
+        if ((steps % sample_every == 0) && (res_index < res_size)) {
+            res_soc[res_index] = soc;
+            res_pot[res_index] = pot_i;
+            res_index++;
         }
 
         if ((soc > profile_soc - 1.0e-4) && (soc < profile_soc + 1.0e-4)) {
@@ -191,6 +204,10 @@ run_profile(const bool model, const double g_pot, const int grid_size,
         steps++;
     }
 
-    res_soc[res_index + 1] = soc;
-    res_pot[res_index + 1] = pot_i;
+    // Append the last finite point (the one that crossed the cut potential)
+    // right after the last stored sample.
+    if (have_last && res_index < res_size) {
+        res_soc[res_index] = last_soc;
+        res_pot[res_index] = last_pot;
+    }
 }

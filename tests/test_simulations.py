@@ -69,8 +69,8 @@ def test_spline(capacity, potential, refs):
         (
             None,
             [
-                [0.243157, 0.0, 0.973515],
-                [-0.002668, -0.150124, 0.094156],
+                [0.236142, 0.0, 0.962124],
+                [-0.002039, -0.150314, 0.172884],
                 PATH / "test_data" / "simulations" / "profile.csv",
                 PATH / "test_data" / "simulations" / "con.csv",
             ],
@@ -81,8 +81,8 @@ def test_spline(capacity, potential, refs):
                 names=["capacity", "potential"],
             ),
             [
-                [0.243116, 0.0, 0.975216],
-                [2.011642, 0.0, 4.387003],
+                [0.236117, 0.0, 0.966675],
+                [2.011233, 0.0, 4.375661],
                 PATH / "test_data" / "simulations" / "profile_iso.csv",
                 PATH / "test_data" / "simulations" / "con_iso.csv",
             ],
